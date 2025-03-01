@@ -47,11 +47,11 @@
   services.caddy = {
     enable = true;
     package = pkgs.caddy.withPlugins {
-        # update time to time
-        # last update: 2025-03-02
-        plugins = [ "github.com/caddy-dns/cloudflare@v0.0.0-20250228175314-1fb64108d4de" ];
-        hash = "sha256-3nvVGW+ZHLxQxc1VCc/oTzCLZPBKgw4mhn+O3IoyiSs=";
-      };
+      # update time to time
+      # last update: 2025-03-02
+      plugins = ["github.com/caddy-dns/cloudflare@v0.0.0-20250228175314-1fb64108d4de"];
+      hash = "sha256-3nvVGW+ZHLxQxc1VCc/oTzCLZPBKgw4mhn+O3IoyiSs=";
+    };
     email = "contact@osbm.dev";
     virtualHosts = {
       "git.osbm.dev" = {
@@ -66,7 +66,7 @@
   };
 
   # now, for the ports of the caddy server
-  networking.firewall.allowedTCPPorts = [ 80 443 3000 ];
+  networking.firewall.allowedTCPPorts = [80 443 3000];
 
   networking.hostName = "pochita";
   # log of shame: osbm blamed nix when he wrote "hostname" instead of "hostName"
