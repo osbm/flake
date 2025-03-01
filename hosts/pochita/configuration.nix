@@ -28,8 +28,32 @@
   # enable forgejo
   services.forgejo = {
     enable = true;
-    # port = 8080;
+    settings = {
+      server = {
+        DOMAIN = "git.osbm.dev";
+        ROOT_URL = "https://git.osbm.dev";
+      };
+      service = {
+        DISABLE_REGISTRATION = false;
+      };
+    };
   };
+
+  # i configured so that the git.osbm.dev domain points to tailscale domain
+  # git.osbm.dev -> pochita.curl-boga.ts.net
+  # and i want everyone to see the repositories in the git.osbm.dev domain
+  # but only i want to make changes, login, etc
+  # so i disabled registration
+  services.caddy = {
+    enable = true;
+    email = "contact@osbm.dev";
+    config = ''
+      git.osbm.dev {
+        reverse_proxy localhost:3000
+      }
+    '';
+  };
+
   networking.hostName = "pochita";
   # log of shame: osbm blamed nix when he wrote "hostname" instead of "hostName"
 
