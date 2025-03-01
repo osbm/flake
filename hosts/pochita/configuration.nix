@@ -53,11 +53,16 @@
         hash = "sha256-3nvVGW+ZHLxQxc1VCc/oTzCLZPBKgw4mhn+O3IoyiSs=";
       };
     email = "contact@osbm.dev";
-    config = ''
-      git.osbm.dev {
-        reverse_proxy localhost:3000
-      }
-    '';
+    virtualHosts = {
+      "git.osbm.dev" = {
+        # serverAliases = [ "www.git.osbm.dev" ];
+        # hostname = "git.osbm.dev";
+        # listenAddresses = [ "0.0.0.0" ];
+        extraConfig = ''
+          reverse_proxy http://localhost:3000
+        '';
+      };
+    };
   };
 
   # now, for the ports of the caddy server
