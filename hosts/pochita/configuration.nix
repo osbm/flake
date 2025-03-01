@@ -46,6 +46,12 @@
   # so i disabled registration
   services.caddy = {
     enable = true;
+    package = pkgs.caddy.withPlugins {
+        # update time to time
+        # last update: 2025-03-02
+        plugins = [ "github.com/caddy-dns/cloudflare@1fb64108d4debf196b19d7398e763cb78c8a0f41" ];
+        hash = "";
+      };
     email = "contact@osbm.dev";
     config = ''
       git.osbm.dev {
