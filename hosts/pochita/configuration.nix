@@ -54,6 +54,9 @@
     '';
   };
 
+  # now, for the ports of the caddy server
+  networking.firewall.allowedTCPPorts = [ 80 443 3000 ];
+
   networking.hostName = "pochita";
   # log of shame: osbm blamed nix when he wrote "hostname" instead of "hostName"
 
