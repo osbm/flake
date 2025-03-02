@@ -2,11 +2,13 @@
   imports = [
     ./adb.nix
     ./arduino.nix
+    ./caddy.nix
     ./common-packages.nix
     ./concentration.nix
     ./disable-hibernation.nix
     ./emulation.nix
     ./fonts.nix
+    ./forgejo.nix
     ./graphical-interface.nix
     ./i18n.nix
     ./jellyfin.nix

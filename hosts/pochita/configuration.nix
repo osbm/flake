@@ -21,52 +21,12 @@
     blockYoutube = false;
     blockTwitter = false;
     enableTailscale = true;
+    enableForgejo = true;
+    enableCaddy = true;
   };
 
   i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method
 
-  # enable forgejo
-  services.forgejo = {
-    enable = true;
-    settings = {
-      server = {
-        DOMAIN = "git.osbm.dev";
-        ROOT_URL = "https://git.osbm.dev";
-      };
-      service = {
-        DISABLE_REGISTRATION = false;
-      };
-    };
-  };
-
-  # i configured so that the git.osbm.dev domain points to tailscale domain
-  # git.osbm.dev -> pochita.curl-boga.ts.net
-  # and i want everyone to see the repositories in the git.osbm.dev domain
-  # but only i want to make changes, login, etc
-  # so i disabled registration
-  services.caddy = {
-    enable = true;
-    package = pkgs.caddy.withPlugins {
-      # update time to time
-      # last update: 2025-03-02
-      plugins = ["github.com/caddy-dns/cloudflare@v0.0.0-20250228175314-1fb64108d4de"];
-      hash = "sha256-3nvVGW+ZHLxQxc1VCc/oTzCLZPBKgw4mhn+O3IoyiSs=";
-    };
-    email = "contact@osbm.dev";
-    virtualHosts = {
-      "git.osbm.dev" = {
-        # serverAliases = [ "www.git.osbm.dev" ];
-        # hostname = "git.osbm.dev";
-        # listenAddresses = [ "0.0.0.0" ];
-        extraConfig = ''
-          reverse_proxy http://localhost:3000
-        '';
-      };
-    };
-  };
-
-  # now, for the ports of the caddy server
-  networking.firewall.allowedTCPPorts = [80 443 3000];
 
   networking.hostName = "pochita";
   # log of shame: osbm blamed nix when he wrote "hostname" instead of "hostName"
