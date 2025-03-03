@@ -30,7 +30,8 @@
     (lib.mkIf (config.myModules.enableForgejo && config.myModules.enableCaddy) {
       services.caddy.virtualHosts."git.osbm.dev" = {
         extraConfig = ''
-          reverse_proxy http://localhost:3000
+          reverse_proxy http://pochita.curl-boga.ts.net:3000
+          import cloudflare
         '';
       };
     })
