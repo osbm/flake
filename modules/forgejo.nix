@@ -31,7 +31,7 @@
       services.caddy.virtualHosts."git.osbm.dev" = {
         extraConfig = ''
           reverse_proxy http://localhost:3000
-          import cloudflare
+          tls internal
         '';
       };
     })
