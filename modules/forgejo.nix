@@ -31,6 +31,7 @@
       services.caddy.virtualHosts."git.osbm.dev" = {
         extraConfig = ''
           reverse_proxy pochita.curl-boga.ts.net:3000
+          import cloudflare
         '';
       };
     })
