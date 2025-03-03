@@ -31,10 +31,6 @@
       services.caddy.virtualHosts."git.osbm.dev" = {
         extraConfig = ''
           reverse_proxy http://localhost:3000
-          transport http {
-            tls
-            tls_insecure_skip_verify
-          }
         '';
       };
     })
