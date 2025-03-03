@@ -18,7 +18,7 @@
           settings = {
             server = {
               DOMAIN = "git.osbm.dev";
-              ROOT_URL = "https://git.osbm.dev";
+              ROOT_URL = "https://git.osbm.dev/";
             };
             service = {
               DISABLE_REGISTRATION = false;
@@ -31,7 +31,7 @@
       services.caddy.virtualHosts."git.osbm.dev" = {
         extraConfig = ''
           reverse_proxy http://localhost:3000
-          tls internal
+          import cloudflare
         '';
       };
     })
