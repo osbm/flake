@@ -30,6 +30,10 @@
 
       networking.firewall.allowedTCPPorts = [80 443 3000];
 
+      environment.systemPackages = with pkgs; [
+        nssTools
+      ];
+
       systemd.services.caddy.serviceConfig = {
         LoadCredential = "CLOUDFLARE_API_TOKEN:${config.age.secrets.cloudflare.path}";
         EnvironmentFile = "-%t/caddy/secrets.env";
