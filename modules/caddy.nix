@@ -22,9 +22,10 @@
         extraConfig = ''
           (cloudflare) {
               tls {
-                dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+                dns cloudflare {env.CF_API_TOKEN}
               }
             }
+          # acme_dns cloudflare {env.CF_API_TOKEN}
         '';
       };
 
