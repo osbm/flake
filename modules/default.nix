@@ -13,6 +13,7 @@
     ./i18n.nix
     ./jellyfin.nix
     ./nix-settings.nix
+    ./ollama.nix
     ./remote-builds.nix
     ./secrets.nix
     ./sound.nix
