@@ -31,7 +31,7 @@
       services.caddy.virtualHosts."git.osbm.dev" = {
         extraConfig = ''
           reverse_proxy pochita.curl-boga.ts.net:3000
-          acme_dns cloudflare {env.CF_API_TOKEN}
+          # acme_dns cloudflare {env.CF_API_TOKEN}
         '';
       };
     })
