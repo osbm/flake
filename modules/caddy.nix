@@ -31,6 +31,18 @@
           #   }
           # acme_dns cloudflare {env.CF_API_TOKEN}
         '';
+        virtualHosts = {
+          "jellyfin.ts.osbm.dev" = {
+            extraConfig = ''
+              reverse_proxy ymir.curl-boga.ts.net:8096
+            '';
+          };
+          "chat.ts.osbm.dev" = {
+            extraConfig = ''
+              reverse_proxy ymir.curl-boga.ts.net:3000
+            '';
+          };
+        };
       };
 
       networking.firewall.allowedTCPPorts = [80 443 3000];
