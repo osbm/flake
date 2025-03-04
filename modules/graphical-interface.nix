@@ -37,7 +37,6 @@
       environment.systemPackages = with pkgs; [
         sddm-sugar-dark
         vscode
-        discord # discord sucks
         alacritty
         obsidian
         mpv
