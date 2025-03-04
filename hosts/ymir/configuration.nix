@@ -97,6 +97,5 @@
     nixd
   ];
 
-
   system.stateVersion = "25.05"; # great taboo of the nixos world
 }

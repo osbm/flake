@@ -1,5 +1,9 @@
-{pkgs, lib, config, ...}: {
-
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
     myModules.enableCaddy = lib.mkOption {
       type = lib.types.bool;

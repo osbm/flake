@@ -13,7 +13,6 @@
     };
   };
 
-
   config = lib.mkMerge [
     (lib.mkIf config.myModules.enableOllama {
       services.ollama = {
