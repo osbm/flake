@@ -52,9 +52,6 @@
     #   git commit -m "Android sync"
     #   git push
     # '')
-    (pkgs.writeShellScriptBin "cd-rerouting" ''
-      cd /storage/emulated/0/Documents/rerouting
-    '')
     (pkgs.writeShellScriptBin "rerouting-status" ''
       cd /storage/emulated/0/Documents/rerouting
       git fetch
