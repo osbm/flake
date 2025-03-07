@@ -34,6 +34,7 @@
     ripgrep
     nh
     comma
+    nix-inspect
     bat
   ];
 
