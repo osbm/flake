@@ -26,6 +26,7 @@
     jq
     onefetch
     just
+    nixd
     gh
     starship
     tree
