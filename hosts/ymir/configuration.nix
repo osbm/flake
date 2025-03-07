@@ -94,7 +94,6 @@
   environment.systemPackages = with pkgs; [
     nvidia-container-toolkit
     inputs.osbm-nvim.packages.x86_64-linux.default
-    nixd
   ];
 
   system.stateVersion = "25.05"; # great taboo of the nixos world
