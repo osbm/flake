@@ -35,7 +35,10 @@ collect-garbage:
   sudo nix-collect-garbage --delete-older-than 3d
 
 build-sd-image-harmonica: check-git
-  nix build -L .#nixosConfigurations.harmonica.config.system.build.sdImage
+  nix build -L .#nixosConfigurations.harmonica-sd.config.system.build.sdImage
+
+build-sd-image-pochita: check-git
+  nix build -L .#nixosConfigurations.pochita-sd.config.system.build.sdImage
 
 build-iso: check-git
   nix build -L .#nixosConfigurations.myISO.config.system.build.isoImage
@@ -43,6 +46,6 @@ build-iso: check-git
 flash-sd-image-harmonica:
   # raise error because this command should be edited before running
   false
-  nix build -L .#nixosConfigurations.harmonica.config.system.build.sdImage
+  nix build -L .#nixosConfigurations.harmonica-sd.config.system.build.sdImage
   sudo dd if=result/sd-image/nixos-image-sd-card-25.05.20250224.0196c01-aarch64-linux.img of=/dev/sda bs=4M status=progress conv=fsync
 
