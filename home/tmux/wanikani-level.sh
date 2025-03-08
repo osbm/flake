@@ -7,6 +7,7 @@ get_wanikani()
     wanikani_level=$(echo $wanikani_level_data | jq '.data[-1].data.level')
     wanikani_level_start_date_string=$(echo $wanikani_level_data | jq '.data[-1].data.started_at')
     wanikani_level_start_timestamp=$(date -d "${wanikani_level_start_date_string//\"/}" +%s)
+
     current_timestamp=$(date +%s)
     difference=$((current_timestamp - wanikani_level_start_timestamp))
     wanikani_level_creation_date=$((difference / 86400))
@@ -21,3 +22,4 @@ main()
 }
 
 main
+
