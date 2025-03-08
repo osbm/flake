@@ -13,12 +13,11 @@
   ];
 
   myModules = {
-    blockYoutube = false;
+    blockYoutube = true;
     blockTwitter = true;
     blockBluesky = false;
     enableKDE = true;
     enableTailscale = true;
-    # jellyfin is unnecessary for now
     enableJellyfin = true;
     enableAarch64Emulation = true;
     disableHibernation = true;
