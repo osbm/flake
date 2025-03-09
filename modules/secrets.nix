@@ -34,12 +34,6 @@
           owner = "osbm";
           mode = "0644";
         };
-        cloudflare = {
-          file = ../secrets/cloudflare.age;
-          path = "/etc/caddy/.env";
-          owner = "caddy";
-          mode = "0600";
-        };
       };
     })
   ];
