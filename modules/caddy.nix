@@ -51,11 +51,11 @@
         nssTools
       ];
       age.secrets.cloudflare = {
-          file = ../secrets/cloudflare.age;
-          path = "/etc/caddy/.env";
-          owner = "caddy";
-          mode = "0600";
-        };
+        file = ../secrets/cloudflare.age;
+        path = "/etc/caddy/.env";
+        owner = "caddy";
+        mode = "0600";
+      };
 
       systemd.services.caddy.serviceConfig = {
         EnvironmentFile = "/etc/caddy/.env";
