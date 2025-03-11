@@ -41,11 +41,11 @@
           (extension "bitwarden-password-manager" "{446900e4-71c2-419f-a6a7-df9c091e268b}")
           (extension "motivation-new-tab" "")
           (extension "return-youtube-dislikes" "{762f9885-5a13-4abd-9c77-433dcd38b8fd}")
-
+          (extension "violentmonkey" "{aecec67f-0d10-4fa7-b7c7-609a2db280cf}")
           # (extension "tabliss" "extension@tabliss.io")
           # (extension "umatrix" "uMatrix@raymondhill.net")
           # (extension "libredirect" "7esoorv3@alefvanoon.anonaddy.me")
-          # (extension "clearurls" "{74145f27-f039-47ce-a470-a662b129930a}")
+          (extension "clearurls" "{74145f27-f039-47ce-a470-a662b129930a}")
         ];
       # To add additional extensions, find it on addons.mozilla.org, find
       # the short ID in the url (like https://addons.mozilla.org/en-US/firefox/addon/!SHORT_ID!/)
