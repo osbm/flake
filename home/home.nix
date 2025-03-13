@@ -1,5 +1,6 @@
 {config, ...}: {
   imports = [
+    ./alacritty.nix
     ./tmux
     ./git.nix
     ./ssh.nix
