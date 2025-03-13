@@ -6,8 +6,10 @@
     ./ssh.nix
     ./bash.nix
     ./direnv.nix
-    ./tlrc.nix
     ./firefox.nix
+    ./tlrc.nix
+    ./starship.nix
+    ./zoxide.nix
   ];
 
   home.username = "osbm";
