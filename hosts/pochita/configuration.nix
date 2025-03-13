@@ -44,6 +44,11 @@
     wheelNeedsPassword = false;
   };
 
+  security.acme.defaults = {
+    email = "osmanfbayram@gmail.com";
+    acceptTerms = true;
+  };
+
   services.getty.autologinUser = "osbm";
 
   # The board and wanted kernel version
