@@ -7,6 +7,7 @@
     ./bash.nix
     ./direnv.nix
     ./firefox.nix
+    ./fish.nix
     ./tlrc.nix
     ./starship.nix
     ./zoxide.nix
