@@ -5,6 +5,7 @@
     ./git.nix
     ./ssh.nix
     ./bash.nix
+    ./direnv.nix
     ./tlrc.nix
     ./firefox.nix
   ];
