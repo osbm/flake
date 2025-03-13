@@ -1,4 +1,4 @@
-{config, ...}: {
+{config, pkgs, ...}: {
   imports = [
     ./alacritty.nix
     ./tmux
@@ -17,7 +17,7 @@
   home.homeDirectory = "/home/osbm";
 
   home.packages = [
-    # dont install packages here, just use normal nixpkgs
+    pkgs.lazygit
   ];
 
   home.stateVersion = config.system.stateVersion;
