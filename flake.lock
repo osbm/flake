@@ -526,11 +526,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1741807247,
-        "narHash": "sha256-/Y5ytJK7u6yS6k6aC97IFUFCdGE7kU6s/ySJkxQcydY=",
+        "lastModified": 1741958838,
+        "narHash": "sha256-2t4DTjIzII0HFLH/ECSwG0crmdaHKHIqdMQkNH9Ns4g=",
         "owner": "osbm",
         "repo": "osbm-nvim",
-        "rev": "1f2042d897eb65419a72933a15c5e5ba481ca1da",
+        "rev": "341d0cc713d4b4ace717a59f6be6e6becbd271ac",
         "type": "github"
       },
       "original": {
