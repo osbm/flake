@@ -3,7 +3,7 @@
     enable = true;
     settings = {
       font = {
-        size = 12.0;
+        size = 17.0;
         normal.family = "Cascadia Code";
       };
       terminal.shell = {
