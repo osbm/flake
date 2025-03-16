@@ -18,8 +18,6 @@
     '')
     btop
     pciutils
-    nodePackages.npm
-    nodejs
     cloc
     neofetch
     inxi
