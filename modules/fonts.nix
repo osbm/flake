@@ -34,6 +34,9 @@
         font-awesome_5
         roboto
       ];
+      fonts.fontconfig = {
+        defaultFonts.emoji = [ "Noto Color Emoji" ];
+      };
     })
   ];
 }
