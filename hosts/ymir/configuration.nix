@@ -34,6 +34,7 @@
 
   networking.hostName = "ymir"; # Define your hostname.
 
+  networking.firewall.allowedTCPPorts = [ 8889]; 
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.users.osbm = import ../../home/home.nix {
