@@ -1,4 +1,4 @@
-{pkgs, ...}: let
+{pkgs, lib, ...}: let
   wanikani-current-reviews-script = builtins.path {path = ./wanikani-current-reviews.sh;};
   wanikani-level-script = builtins.path {path = ./wanikani-level.sh;};
   wanikani-progression-script = builtins.path {path = ./wanikani-progression.sh;};
@@ -32,7 +32,7 @@ in {
     baseIndex = 1;
     shortcut = "s";
     mouse = true;
-    shell = "${pkgs.fish}/bin/fish";
+    shell = lib.getExe pkgs.fish;
     plugins = with pkgs; [
       tmuxPlugins.sensible
       tmuxPlugins.better-mouse-mode

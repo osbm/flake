@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, lib, ...}: {
   programs.alacritty = {
     enable = true;
     settings = {
@@ -8,7 +8,7 @@
       };
       terminal.shell = {
         args = ["new-session" "-A" "-s" "general"];
-        program = pkgs.tmux + "/bin/tmux";
+        program = lib.getExe pkgs.tmux;
       };
       window = {
         decorations = "None";
