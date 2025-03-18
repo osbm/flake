@@ -1,4 +1,8 @@
-{pkgs, lib, ...}: let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   wanikani-current-reviews-script = builtins.path {path = ./wanikani-current-reviews.sh;};
   wanikani-level-script = builtins.path {path = ./wanikani-level.sh;};
   wanikani-progression-script = builtins.path {path = ./wanikani-progression.sh;};

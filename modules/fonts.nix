@@ -35,7 +35,7 @@
         roboto
       ];
       fonts.fontconfig = {
-        defaultFonts.emoji = [ "Noto Color Emoji" ];
+        defaultFonts.emoji = ["Noto Color Emoji"];
       };
     })
   ];
