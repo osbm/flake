@@ -1,4 +1,9 @@
-{config, inputs, lib, ...}: {
+{
+  config,
+  inputs,
+  lib,
+  ...
+}: {
   imports = [
     inputs.minegrub-theme.nixosModules.default
   ];
@@ -11,8 +16,6 @@
   };
   config = lib.mkMerge [
     (lib.mkIf config.myModules.enableMinegrubTheme {
-
-
       boot.loader.grub = {
         minegrub-theme = {
           enable = true;
