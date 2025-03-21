@@ -7,6 +7,7 @@
       dart.disabled = true;
       python.disabled = true;
       nodejs.disabled = true;
+      c.disabled = true;
     };
   };
 }

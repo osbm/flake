@@ -12,6 +12,7 @@
     ./graphical-interface.nix
     ./i18n.nix
     ./jellyfin.nix
+    ./minegrub.nix
     ./nix-settings.nix
     ./ollama.nix
     ./remote-builds.nix
