@@ -26,6 +26,7 @@
     enableADB = true;
     # enableCaddy = true;
     enableOllama = true;
+    enableMinegrubTheme = true;
   };
 
   # Bootloader.
