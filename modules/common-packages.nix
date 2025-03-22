@@ -37,11 +37,6 @@
     bat
   ];
 
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-
   virtualisation.docker.enable = true;
 
   # Enable the OpenSSH daemon.
