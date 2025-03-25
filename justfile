@@ -34,6 +34,9 @@ collect-garbage:
   # home-manager expire-generations now
   sudo nix-collect-garbage --delete-older-than 3d
 
+list-generations:
+  nixos-rebuild list-generations
+
 build-sd-image-harmonica: check-git
   nom build -L .#nixosConfigurations.harmonica-sd.config.system.build.sdImage
 
