@@ -1,5 +1,5 @@
 {
-  import = [
+  imports = [
     ./caddy.nix
     ./ollama.nix
     ./forgejo.nix
