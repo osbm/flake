@@ -30,7 +30,7 @@
     (lib.mkIf (config.myModules.enableForgejo && config.myModules.enableCaddy) {
       services.caddy.virtualHosts."git.osbm.dev" = {
         extraConfig = ''
-          reverse_proxy pochita.curl-boga.ts.net:3000
+          reverse_proxy pochita.curl-boga.ts.net:${config.services.forgejo.settings.server.HTTP_PORT}
           # acme_dns cloudflare {env.CF_API_TOKEN}
         '';
       };
