@@ -20,6 +20,7 @@
     ./sound.nix
     ./tailscale.nix
     ./users.nix
+    ./vaultwarden.nix
     ./wake-on-lan.nix
   ];
 }
