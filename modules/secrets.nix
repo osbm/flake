@@ -5,6 +5,9 @@
   lib,
   ...
 }: {
+  imports = [
+    inputs.agenix.nixosModules.default
+  ];
   options = {
     myModules.enableSecrets = lib.mkOption {
       type = lib.types.bool;

@@ -8,7 +8,6 @@
     ./hardware-configuration.nix
     ../../modules
     inputs.vscode-server.nixosModules.default
-    inputs.agenix.nixosModules.default
     inputs.home-manager.nixosModules.home-manager
   ];
 
