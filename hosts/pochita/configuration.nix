@@ -23,6 +23,7 @@
     enableTailscale = true;
     enableForgejo = true;
     enableCaddy = true;
+    enableCloudflareDyndns = true;
   };
 
   i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method
