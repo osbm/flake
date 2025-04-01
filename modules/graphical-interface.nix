@@ -38,8 +38,10 @@
         sddm-sugar-dark
         vscode
         alacritty
+        ghostty
         obsidian
         mpv
+        pomodoro-gtk
         libreoffice
         gimp
         kitty
@@ -57,7 +59,6 @@
           ];
           text = ''
             # check if logged in to huggingface
-            # hugingface-cli whoami == "Not logged in" means not logged in
             if [ "$(huggingface-cli whoami)" == "Not logged in" ]; then
               echo "Please log in to huggingface"
               exit 1
