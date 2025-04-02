@@ -15,6 +15,7 @@
     (lib.mkIf config.myModules.enableCloudflareDyndns {
       services.cloudflare-dyndns = {
         enable = true;
+        apiTokenFile = "/persist/cloudflare-dyndns";
       };
     })
   ];
