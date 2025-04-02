@@ -16,6 +16,11 @@
       services.cloudflare-dyndns = {
         enable = true;
         apiTokenFile = "/persist/cloudflare-dyndns";
+        proxied = true;
+        domains = [
+          "git.osbm.dev"
+          "aifred.osbm.dev"
+        ];
       };
     })
   ];
