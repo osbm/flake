@@ -37,7 +37,9 @@
     backupFileExtension = "hmbak";
   };
 
-  environment.systemPackages = [];
+  environment.systemPackages = [
+    pkgs.raspberrypi-eeprom
+  ];
 
   security.sudo = {
     enable = true;
