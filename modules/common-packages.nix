@@ -4,7 +4,7 @@
   ...
 }: {
   environment.systemPackages = with pkgs; [
-    inputs.osbm-nvim.packages.x86_64-linux.default
+    inputs.osbm-nvim.packages."${pkgs.stdenv.hostPlatform.system}".default
     wget
     git
     git-lfs
