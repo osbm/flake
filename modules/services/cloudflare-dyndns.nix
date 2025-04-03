@@ -3,8 +3,7 @@
   config,
   pkgs,
   ...
-}:
-let
+}: let
   # https://github.com/NixOS/nixpkgs/pull/394352
   cloudflare-dyndns-5-3 = pkgs.cloudflare-dyndns.overridePythonAttrs rec {
     version = lib.warnIfNot (pkgs.cloudflare-dyndns.version == "5.0") "The cloudflare-dyndns package is updated, you should remove this override" "5.3";
@@ -24,8 +23,7 @@ let
       truststore
     ];
   };
-in
-{
+in {
   options = {
     myModules.enableCloudflareDyndns = lib.mkOption {
       type = lib.types.bool;
