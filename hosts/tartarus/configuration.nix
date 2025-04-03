@@ -43,9 +43,5 @@
   hardware.bluetooth.enable = true; # enables support for Bluetooth
   hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
 
-  environment.systemPackages = [
-    inputs.osbm-nvim.packages.x86_64-linux.default
-  ];
-
   system.stateVersion = "24.05"; # lalalalala
 }

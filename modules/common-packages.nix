@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   environment.systemPackages = with pkgs; [
+    inputs.osbm-nvim.packages.x86_64-linux.default
     wget
     git
     git-lfs
