@@ -38,7 +38,7 @@ in {
         package = cloudflare-dyndns-5-3;
         enable = true;
         apiTokenFile = "/persist/cloudflare-dyndns";
-        proxied = true;
+        proxied = false; # TODO please revert
         domains = [
           "git.osbm.dev"
           "aifred.osbm.dev"
