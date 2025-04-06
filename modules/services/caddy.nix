@@ -42,6 +42,11 @@
               reverse_proxy ymir.curl-boga.ts.net:3000
             '';
           };
+          "aifred.osbm.dev" = {
+            extraConfig = ''
+              reverse_proxy localhost:8000
+            '';
+          };
         };
       };
 
