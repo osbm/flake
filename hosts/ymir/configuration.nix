@@ -26,6 +26,7 @@
     # enableCaddy = true;
     enableOllama = true;
     enableMinegrubTheme = true;
+    enableCloudflareDyndns = true;
   };
 
   # Bootloader.
