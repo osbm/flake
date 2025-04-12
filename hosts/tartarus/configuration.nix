@@ -16,7 +16,6 @@
     blockTwitter = true;
     blockBluesky = false;
     enableKDE = true;
-    enableTailscale = true;
     enableAarch64Emulation = true;
     enableSound = true;
   };

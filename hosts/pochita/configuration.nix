@@ -19,7 +19,6 @@
     enableFonts = false;
     blockYoutube = false;
     blockTwitter = false;
-    enableTailscale = true;
     enableForgejo = true;
     enableCaddy = true;
     enableCloudflareDyndns = false;

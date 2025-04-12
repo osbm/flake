@@ -15,7 +15,6 @@
     enableFonts = false;
     blockYoutube = false;
     blockTwitter = false;
-    enableTailscale = true;
   };
 
   i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method

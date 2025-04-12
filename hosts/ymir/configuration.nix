@@ -16,7 +16,6 @@
     blockTwitter = true;
     blockBluesky = false;
     enableKDE = true;
-    enableTailscale = true;
     enableJellyfin = true;
     enableAarch64Emulation = true;
     disableHibernation = true;
