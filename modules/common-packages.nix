@@ -23,6 +23,7 @@
     '')
     btop
     pciutils
+    lm_sensors
     cloc
     neofetch
     inxi
