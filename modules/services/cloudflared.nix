@@ -15,7 +15,7 @@
     (lib.mkIf config.myModules.enableCloudflared {
       services.cloudflared = {
         enable = true;
-        credentialsFile = "/home/osbm/.cloudflared/cert.pem";
+        certificateFile = "/home/osbm/.cloudflared/cert.pem";
         tunnels."ffe51e83-5516-44e5-9c8b-2b140cdfece9" = {
           default = "http_status:404";
           ingress = {
