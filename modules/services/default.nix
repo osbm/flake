@@ -2,6 +2,7 @@
   imports = [
     ./caddy.nix
     ./cloudflare-dyndns.nix
+    ./cloudflared.nix
     ./ollama.nix
     ./forgejo.nix
     ./jellyfin.nix

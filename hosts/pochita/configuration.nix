@@ -20,8 +20,9 @@
     blockYoutube = false;
     blockTwitter = false;
     enableForgejo = true;
-    enableCaddy = true;
+    # enableCaddy = true;
     # enableCloudflareDyndns = true;
+    enableCloudflared = true;
   };
 
   i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method
