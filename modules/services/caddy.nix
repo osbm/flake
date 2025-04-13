@@ -45,10 +45,9 @@
           };
           "git.osbm.dev" = {
             serverAliases = [
-              "git.osbm.dev"
               "www.git.osbm.dev"
             ];
-            extraConfig = ''k
+            extraConfig = ''
               reverse_proxy pochita.curl-boga.ts.net:${toString config.services.forgejo.settings.server.HTTP_PORT}
               import cloudflare
             '';
