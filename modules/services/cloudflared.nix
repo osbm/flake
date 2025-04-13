@@ -15,7 +15,7 @@
     (lib.mkIf config.myModules.enableCloudflared {
       services.cloudflared = {
         enable = true;
-        certificateFile = "/home/osbm/.cloudflared/cert.pem";
+        certificateFile = "/persist/cert.pem";
         tunnels."forgejo-service" = {
           default = "http_status:404";
           credentialsFile = "/persist/cloudflare-forgejo.json";
