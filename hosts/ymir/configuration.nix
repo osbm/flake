@@ -22,10 +22,8 @@
     enableWakeOnLan = true;
     enableSound = true;
     enableADB = true;
-    enableCaddy = true;
     enableOllama = true;
     enableMinegrubTheme = true;
-    enableCloudflareDyndns = true;
   };
 
   # Bootloader.
