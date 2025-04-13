@@ -32,7 +32,7 @@
           # acme_dns cloudflare {env.CF_API_TOKEN}
         '';
         virtualHosts = {
-          "chat.ts.osbm.dev" = {
+          "chat.osbm.dev" = {
             extraConfig = ''
               reverse_proxy ymir.curl-boga.ts.net:3000
             '';
