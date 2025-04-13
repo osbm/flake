@@ -31,7 +31,7 @@
       services.caddy.virtualHosts."git.osbm.dev" = {
         extraConfig = ''
           reverse_proxy pochita.curl-boga.ts.net:${toString config.services.forgejo.settings.server.HTTP_PORT}
-          # import cloudflare
+          import cloudflare
         '';
       };
     })

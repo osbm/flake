@@ -24,8 +24,10 @@
         };
         email = "contact@osbm.dev";
         extraConfig = ''
-          tls {
-            dns cloudflare {env.CF_API_TOKEN}
+          (cloudflare) {
+            tls {
+              dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+            }
           }
         '';
         virtualHosts = {
@@ -37,7 +39,7 @@
           "aifred.osbm.dev" = {
             extraConfig = ''
               reverse_proxy localhost:8000
-              # import cloudflare
+              import cloudflare
             '';
           };
         };
