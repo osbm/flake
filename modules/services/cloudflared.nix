@@ -18,6 +18,7 @@
         certificateFile = "/home/osbm/.cloudflared/cert.pem";
         tunnels."forgejo-service" = {
           default = "http_status:404";
+          credentialsFile = "/persist/cloudflare-forgejo.json";
           ingress = {
             "git.osbm.dev" = {
               service = "http://localhost:3000";
