@@ -26,14 +26,6 @@
         };
       };
     })
-    # if enableForgejo and enableCaddy are enabled, add forgejo to caddy
-    (lib.mkIf (config.myModules.enableForgejo && config.myModules.enableCaddy) {
-      services.caddy.virtualHosts."git.osbm.dev" = {
-        extraConfig = ''
-          reverse_proxy pochita.curl-boga.ts.net:${toString config.services.forgejo.settings.server.HTTP_PORT}
-          import cloudflare
-        '';
-      };
     })
   ];
 }

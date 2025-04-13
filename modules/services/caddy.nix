@@ -23,13 +23,13 @@
           hash = "sha256-YYpsf8HMONR1teMiSymo2y+HrKoxuJMKIea5/NEykGc=";
         };
         email = "contact@osbm.dev";
-        extraConfig = ''
-          (cloudflare) {
-            tls {
-              dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-            }
-          }
-        '';
+        # extraConfig = ''
+        #   (cloudflare) {
+        #     tls {
+        #       dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+        #     }
+        #   }
+        # '';
         virtualHosts = {
           "chat.osbm.dev" = {
             extraConfig = ''
@@ -39,7 +39,15 @@
           "aifred.osbm.dev" = {
             extraConfig = ''
               reverse_proxy localhost:8000
-              import cloudflare
+            '';
+          };
+          "git.osbm.dev" = {
+            serverAliases = [
+              "git.osbm.dev"
+              "www.git.osbm.dev"
+            ];
+            extraConfig = ''
+              reverse_proxy pochita.curl-boga.ts.net:${toString config.services.forgejo.settings.server.HTTP_PORT}
             '';
           };
         };
