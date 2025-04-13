@@ -28,6 +28,7 @@
     neofetch
     inxi
     jq
+    dig
     onefetch
     just
     nixd
