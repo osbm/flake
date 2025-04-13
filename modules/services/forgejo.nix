@@ -21,7 +21,7 @@
             ROOT_URL = "https://git.osbm.dev/";
           };
           service = {
-            DISABLE_REGISTRATION = false;
+            DISABLE_REGISTRATION = true;
           };
         };
       };
