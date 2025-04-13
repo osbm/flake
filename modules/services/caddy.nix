@@ -26,10 +26,13 @@
         extraConfig = ''
           (cloudflare) {
             tls {
-              dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+              dns cloudflare {env.CF_API_TOKEN}
             }
           }
         '';
+        # globalConfig = ''
+        #   acme_dns cloudflare {env.CF_API_TOKEN}
+        # '';
         virtualHosts = {
           "chat.osbm.dev" = {
             extraConfig = ''
