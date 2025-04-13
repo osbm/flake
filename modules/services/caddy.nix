@@ -24,19 +24,14 @@
         };
         email = "contact@osbm.dev";
         extraConfig = ''
-          # (cloudflare) {
-          #     tls {
-          #       dns cloudflare {env.CF_API_TOKEN}
-          #     }
-          #   }
+          (cloudflare) {
+              tls {
+                dns cloudflare {env.CF_API_TOKEN}
+              }
+            }
           # acme_dns cloudflare {env.CF_API_TOKEN}
         '';
         virtualHosts = {
-          "jellyfin.ts.osbm.dev" = {
-            extraConfig = ''
-              reverse_proxy ymir.curl-boga.ts.net:8096
-            '';
-          };
           "chat.ts.osbm.dev" = {
             extraConfig = ''
               reverse_proxy ymir.curl-boga.ts.net:3000
@@ -45,6 +40,7 @@
           "aifred.osbm.dev" = {
             extraConfig = ''
               reverse_proxy localhost:8000
+              import cloudflare
             '';
           };
         };
