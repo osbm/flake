@@ -21,7 +21,7 @@
           credentialsFile = "/home/osbm/.cloudflared/eb9052aa-9867-482f-80e3-97a7d7e2ef04.json";
           ingress = {
             "git.osbm.dev" = {
-              service = "http://localhost:3000";
+              service = "http://localhost:30010";
             };
           };
         };
