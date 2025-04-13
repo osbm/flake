@@ -23,13 +23,10 @@
           hash = "sha256-YYpsf8HMONR1teMiSymo2y+HrKoxuJMKIea5/NEykGc=";
         };
         email = "contact@osbm.dev";
-        globalConfig = ''
-          (cloudflare) {
-            tls {
-              dns cloudflare {env.CF_API_TOKEN}
-            }
+        extraConfig = ''
+          tls {
+            dns cloudflare {env.CF_API_TOKEN}
           }
-          # acme_dns cloudflare {env.CF_API_TOKEN}
         '';
         virtualHosts = {
           "chat.osbm.dev" = {
