@@ -15,6 +15,10 @@
     (lib.mkIf config.myModules.enableForgejo {
       services.forgejo = {
         enable = true;
+        lfs.enable = true;
+        dump = {
+          enable = true;
+        };
         settings = {
           server = {
             DOMAIN = "git.osbm.dev";
@@ -22,6 +26,7 @@
           };
           service = {
             DISABLE_REGISTRATION = true;
+            LANDING_PAGE = "osbm";
           };
         };
       };
