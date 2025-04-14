@@ -26,7 +26,7 @@
           };
           service = {
             DISABLE_REGISTRATION = true;
-            LANDING_PAGE = "osbm";
+            LANDING_PAGE = "/osbm";
           };
         };
       };
