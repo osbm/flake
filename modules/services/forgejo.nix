@@ -18,6 +18,8 @@
         lfs.enable = true;
         dump = {
           enable = true;
+          type = "zip";
+          interval = "01:01";
         };
         settings = {
           server = {
