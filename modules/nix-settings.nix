@@ -3,6 +3,10 @@
   lib,
   ...
 }: {
+  imports = [
+    inputs.nix-index-database.nixosModules.nix-index
+  ];
+  programs.nix-index-database.comma.enable = true;
   # Allow unfree packages
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [
