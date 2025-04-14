@@ -13,7 +13,9 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.myModules.enableVaultwarden {
-      services.vaultwarden.enable = true;
+      services.vaultwarden = {
+        enable = true;
+      };
     })
   ];
 }

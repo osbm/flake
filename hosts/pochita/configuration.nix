@@ -23,6 +23,7 @@
     # enableCaddy = true;
     # enableCloudflareDyndns = true;
     enableCloudflared = true;
+    enableVaultvarden = true;
   };
 
   i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method
