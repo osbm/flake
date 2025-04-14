@@ -29,9 +29,10 @@
             DOMAIN = "git.osbm.dev";
             ROOT_URL = "https://git.osbm.dev/";
           };
-          ui.meta = {
+          "ui.meta" = {
             AUTHOR = "osbm";
             DESCRIPTION = "\"After all, all devices have their dangers. The discovery of speech introduced communication and lies.\" -Isaac Asimov";
+            KEYWORDS = "git,self-hosted,gitea,forgejo,osbm,open-source,nix,nixos";
           };
           service = {
             DISABLE_REGISTRATION = true;
