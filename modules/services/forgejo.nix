@@ -24,11 +24,14 @@
         settings = {
           DEFAULT = {
             APP_NAME = "osbm's self hosted git service";
-            APP_SLOGAN = "\"After all, all devices have their dangers. The discovery of speech introduced communication and lies.\" -Isaac Asimov";
           };
           server = {
             DOMAIN = "git.osbm.dev";
             ROOT_URL = "https://git.osbm.dev/";
+          };
+          ui.meta = {
+            AUTHOR = "osbm";
+            DESCRIPTION = "\"After all, all devices have their dangers. The discovery of speech introduced communication and lies.\" -Isaac Asimov";
           };
           service = {
             DISABLE_REGISTRATION = true;
