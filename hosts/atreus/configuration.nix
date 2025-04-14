@@ -34,6 +34,9 @@
     openssh
     just
     nh
+    (pkgs.writeShellScriptBin "lg-rerouting" ''
+      ${pkgs.lazygit}/bin/lazygit --path /storage/emulated/0/Documents/rerouting
+    '')
     (pkgs.writeShellScriptBin "sshd-start" ''
       echo "Starting sshd on port 8022"
       ${pkgs.openssh}/bin/sshd
@@ -74,14 +77,11 @@
 
   # Read the changelog before changing this value
   system.stateVersion = "24.05";
-  #services.openssh.enable=true;
   # Set up nix for flakes
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
 
-  # Set your time zone
-  #time.timeZone = "Europe/Berlin";
 
   build.activation.sshd = ''
     if [ ! -e /etc/ssh/ssh_host_ed25519_key ]; then
