@@ -51,6 +51,7 @@
         ani-cli
         prismlauncher
         qbittorrent
+        discord
         (pkgs.writeShellApplication {
           name = "sync-terraria";
           runtimeInputs = [

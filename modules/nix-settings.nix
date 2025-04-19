@@ -11,6 +11,7 @@
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [
       "vscode" # TODO: remove this
+      "discord"
       "obsidian"
       "steam"
       "steam-unwrapped"
