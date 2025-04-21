@@ -41,7 +41,7 @@
       repo = "nixpkgs";
       type = "github";
     };
-    "osbm.dev".to = {
+    osbm-dev.to = {
       owner = "osbm";
       repo = "osbm.dev";
       type = "github";
