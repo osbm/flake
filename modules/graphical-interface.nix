@@ -36,6 +36,7 @@
 
       environment.systemPackages = with pkgs; [
         sddm-sugar-dark
+        screenkey
         vscode
         alacritty
         ghostty
