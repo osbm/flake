@@ -82,7 +82,6 @@
     experimental-features = nix-command flakes
   '';
 
-
   build.activation.sshd = ''
     if [ ! -e /etc/ssh/ssh_host_ed25519_key ]; then
       $VERBOSE_ECHO "Generating host keys..."
