@@ -28,12 +28,24 @@
   # enable nix flakes
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
-  nix.nixPath = [
-    "nixpkgs=${inputs.nixpkgs}"
-    "nixos-config=${inputs.self}"
-  ];
+  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
   nix.channel.enable = false;
+
+  nix.registry = {
+    self.flake = inputs.self;
+    osbm-nvim = {
+      to = {
+        owner = "osbm";
+        repo = "osbm-nvim";
+        type = "github";
+      };
+      from = {
+        id = "osbm-nvim";
+        type = "indirect";
+      };
+    };
+  };
 
   nix.settings.trusted-users = ["root" "osbm"];
 
