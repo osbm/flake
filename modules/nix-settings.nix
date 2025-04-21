@@ -34,7 +34,7 @@
 
   nix.registry = {
     self.flake = inputs.self;
-    nixpkgs = inputs.nixpkgs;
+    nixpkgs.flake = inputs.nixpkgs;
     # osbm-nvim = {
     #   to = {
     #     owner = "osbm";
@@ -46,7 +46,7 @@
     #     type = "indirect";
     #   };
     # };
-    osbm-nvim = inputs.osbm-nvim;
+    osbm-nvim.flake = inputs.osbm-nvim;
   };
 
   nix.settings.trusted-users = ["root" "osbm"];
