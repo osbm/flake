@@ -47,6 +47,11 @@
     #   };
     # };
     osbm-nvim.flake = inputs.osbm-nvim;
+    my-nixpkgs.to = {
+      owner = "osbm";
+      repo = "nixpkgs";
+      type = "github";
+    };
   };
 
   nix.settings.trusted-users = ["root" "osbm"];
