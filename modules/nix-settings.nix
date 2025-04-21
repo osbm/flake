@@ -35,21 +35,15 @@
   nix.registry = {
     self.flake = inputs.self;
     nixpkgs.flake = inputs.nixpkgs;
-    # osbm-nvim = {
-    #   to = {
-    #     owner = "osbm";
-    #     repo = "osbm-nvim";
-    #     type = "github";
-    #   };
-    #   from = {
-    #     id = "osbm-nvim";
-    #     type = "indirect";
-    #   };
-    # };
     osbm-nvim.flake = inputs.osbm-nvim;
     my-nixpkgs.to = {
       owner = "osbm";
       repo = "nixpkgs";
+      type = "github";
+    };
+    "osbm.dev".to = {
+      owner = "osbm";
+      repo = "osbm.dev";
       type = "github";
     };
   };
