@@ -9,7 +9,6 @@
     ./hardware-configuration.nix
     ../../modules
     inputs.home-manager.nixosModules.home-manager
-    inputs.vscode-server.nixosModules.default
   ];
 
   myModules = {

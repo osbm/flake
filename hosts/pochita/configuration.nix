@@ -10,7 +10,6 @@
     ../../modules
     inputs.raspberry-pi-nix.nixosModules.raspberry-pi
     inputs.nixos-hardware.nixosModules.raspberry-pi-5
-    inputs.vscode-server.nixosModules.default
     inputs.home-manager.nixosModules.home-manager
   ];
 
