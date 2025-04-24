@@ -7,7 +7,6 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules
-    inputs.home-manager.nixosModules.home-manager
   ];
 
   myModules = {
@@ -32,12 +31,6 @@
   networking.hostName = "ymir"; # Define your hostname.
 
   networking.firewall.allowedTCPPorts = [8889 8000];
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
-  home-manager.users.osbm = import ../../home/home.nix {
-    inherit config pkgs;
-    backupFileExtension = "hmbak";
-  };
 
   # Enable networking
   networking.networkmanager.enable = true;

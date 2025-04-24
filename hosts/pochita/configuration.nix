@@ -10,7 +10,6 @@
     ../../modules
     inputs.raspberry-pi-nix.nixosModules.raspberry-pi
     inputs.nixos-hardware.nixosModules.raspberry-pi-5
-    inputs.home-manager.nixosModules.home-manager
   ];
 
   myModules = {
@@ -29,13 +28,6 @@
 
   networking.hostName = "pochita";
   # log of shame: osbm blamed nix when he wrote "hostname" instead of "hostName"
-
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
-  home-manager.users.osbm = import ../../home/home.nix {
-    inherit config pkgs;
-    backupFileExtension = "hmbak";
-  };
 
   environment.systemPackages = [
     pkgs.raspberrypi-eeprom

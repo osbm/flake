@@ -7,7 +7,6 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules
-    inputs.home-manager.nixosModules.home-manager
   ];
 
   myModules = {
@@ -19,12 +18,6 @@
     enableSound = true;
   };
 
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
-  home-manager.users.osbm = import ../../home/home.nix {
-    inherit config pkgs;
-    backupFileExtension = "hmbak";
-  };
 
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = ["osbm"];

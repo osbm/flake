@@ -9,6 +9,7 @@
     ./emulation.nix
     ./fonts.nix
     ./graphical-interface.nix
+    ./home.nix
     ./i18n.nix
     ./minegrub.nix
     ./nix-settings.nix
