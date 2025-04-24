@@ -48,6 +48,11 @@
     bat
   ];
 
+  environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
+
   virtualisation.docker.enable = true;
 
   # Enable the OpenSSH daemon.
