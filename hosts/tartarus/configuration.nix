@@ -18,7 +18,6 @@
     enableSound = true;
   };
 
-
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = ["osbm"];
 

@@ -1,4 +1,8 @@
-{config, pkgs, ...}:{
+{
+  config,
+  pkgs,
+  ...
+}: {
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.users.osbm = import ../home/home.nix {
