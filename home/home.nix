@@ -7,6 +7,7 @@
     ./alacritty.nix
     ./tmux
     ./git.nix
+    ./gtk.nix
     ./ssh.nix
     ./bash.nix
     ./direnv.nix
