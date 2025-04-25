@@ -1,4 +1,9 @@
 {pkgs, ...}: {
+  home.pointerCursor = {
+    name = "Dracula";
+    package = pkgs.dracula-theme;
+    gtk.enable = true;
+  };
   gtk = {
     enable = true;
     theme = {
