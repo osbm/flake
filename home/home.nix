@@ -27,6 +27,6 @@
 
   home.stateVersion = config.system.stateVersion;
 
-  programs.home-manager.enable = true;
-
+  enableGTK = config.myModules.enableKDE;
+  enableFirefox = config.myModules.enableKDE;
 }
