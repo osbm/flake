@@ -26,4 +26,7 @@
   ];
 
   home.stateVersion = config.system.stateVersion;
+
+  programs.home-manager.enable = true;
+
 }
