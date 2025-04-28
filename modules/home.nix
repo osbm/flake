@@ -7,10 +7,13 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
   ];
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
-  home-manager.users.osbm = import ../home/home.nix {
-    inherit config pkgs;
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    verbose = true;
     backupFileExtension = "hmbak";
+    users.osbm = import ../home/home.nix {
+      inherit config pkgs;
+    };
   };
 }
