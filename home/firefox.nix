@@ -1,8 +1,8 @@
-{lib, ...}: {
+{lib, config, ...}: {
   options.enableFirefox = lib.mkEnableOption "enableFirefox";
   config = {
     programs.firefox = {
-      enable = true;
+      enable = config.enableFirefox;
       languagePacks = [
         "ja"
         "tr"

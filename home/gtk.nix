@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }: {
   options = {
@@ -12,10 +13,10 @@
     home.pointerCursor = {
       name = "Dracula";
       package = pkgs.dracula-theme;
-      gtk.enable = true;
+      gtk.enable = config.enableGTK;
     };
     gtk = {
-      enable = true;
+      enable = config.enableGTK;
       theme = {
         name = "Dracula";
         package = pkgs.dracula-theme;
