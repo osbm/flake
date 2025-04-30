@@ -8,5 +8,6 @@
     ./jellyfin.nix
     ./tailscale.nix
     ./vaultwarden.nix
+    ./vscode-server.nix
   ];
 }

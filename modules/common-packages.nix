@@ -3,10 +3,6 @@
   inputs,
   ...
 }: {
-  imports = [
-    inputs.vscode-server.nixosModules.default
-  ];
-
   environment.systemPackages = with pkgs; [
     inputs.osbm-nvim.packages."${pkgs.stdenv.hostPlatform.system}".default
     wget
@@ -76,5 +72,4 @@
     };
   };
 
-  services.vscode-server.enable = true;
 }
