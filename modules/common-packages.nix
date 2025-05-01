@@ -26,6 +26,7 @@
     lm_sensors
     cloc
     neofetch
+    pfetch
     inxi
     jq
     dig
