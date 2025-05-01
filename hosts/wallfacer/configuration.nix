@@ -10,11 +10,10 @@
     enableKDE = false;
     enableFonts = false;
   };
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
   i18n.inputMethod.enable = lib.mkForce false;
   networking.hostName = "wallfacer";
-  environment.systemPackages = [
-  ];
-
   services.getty.autologinUser = "osbm";
   system.stateVersion = "25.05";
 }
