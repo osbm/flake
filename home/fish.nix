@@ -7,6 +7,7 @@
     shellAliases = {
       c = "code .";
       l = "ls -lah";
+      ll = "exa -la -F --icons --git --group-directories-first --git";
       free = "free -h";
       df = "df -h";
       du = "du -h";
