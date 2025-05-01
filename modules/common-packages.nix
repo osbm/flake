@@ -33,7 +33,7 @@
     onefetch
     just
     nixd
-    exa
+    eza
     gh
     starship
     tree
