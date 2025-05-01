@@ -34,6 +34,8 @@ in {
       pochita-ts = sshBlock "pochita.curl-boga.ts.net";
       harmonica = sshBlock "192.168.0.11";
       harmonica-ts = sshBlock "harmonica.curl-boga.ts.net";
+      wallfacer = sshBlock "192.168.0.5";
+      wallfacer-ts = sshBlock "wallfacer.curl-boga.ts.net";
     };
   };
 }
