@@ -93,6 +93,10 @@
           "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma6.nix"
         ];
       };
+      wallfacer = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs;};
+        modules = [./hosts/wallfacer/configuration.nix];
+      };
     };
     nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
       extraSpecialArgs = {inherit inputs outputs;};
