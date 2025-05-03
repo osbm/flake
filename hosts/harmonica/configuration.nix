@@ -28,5 +28,5 @@
     enable = true;
     wheelNeedsPassword = false;
   };
-  services.getty.autologinUser = "osbm";
+  # services.getty.autologinUser = "osbm";
 }

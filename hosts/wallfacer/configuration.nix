@@ -14,6 +14,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
   i18n.inputMethod.enable = lib.mkForce false;
   networking.hostName = "wallfacer";
-  services.getty.autologinUser = "osbm";
+  # services.getty.autologinUser = "osbm";
   system.stateVersion = "25.05";
 }

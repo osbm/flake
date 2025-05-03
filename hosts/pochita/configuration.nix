@@ -43,7 +43,7 @@
     acceptTerms = true;
   };
 
-  services.getty.autologinUser = "osbm";
+  # services.getty.autologinUser = "osbm";
 
   # The board and wanted kernel version
   raspberry-pi-nix = {
