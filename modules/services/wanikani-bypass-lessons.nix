@@ -28,8 +28,7 @@
 
     # echo Starting assignments:
     for assignment_id in $ASSIGNMENT_IDS; do
-      put_url="https://api.wanikani.com/v2/assignments/$assignment_id/start"
-      # echo "PUT $put_url"
+      echo "Starting assignment $assignment_id"
       curl "https://api.wanikani.com/v2/assignments/$assignment_id/start" \
         -X "PUT" \
         -H "Wanikani-Revision: 20170710" \
