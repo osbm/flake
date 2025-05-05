@@ -9,5 +9,6 @@
     ./tailscale.nix
     ./vaultwarden.nix
     ./vscode-server.nix
+    ./wanikani-bypass-lessons.nix
   ];
 }
