@@ -1,6 +1,10 @@
 {lib, config, pkgs, ...}: let
 
-  waniKani-bypass-lessons = pkgs.writeShellScript "wanikani-bypass-lessons" ''
+  waniKani-bypass-lessons = pkgs.writeShellApplication{
+
+    name = "wanikani-bypass-lessons";
+    runtimeInputs = with pkgs; [ curl jq ];
+    text = ''
     #!/usr/bin/env bash
 
     # this token that starts with "2da24" is read only so i am keeping it public, i have nothing secret on my wanikani account
@@ -24,6 +28,7 @@
       sleep 1
     done
   '';
+  };
 in
 
  {
