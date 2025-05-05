@@ -28,18 +28,15 @@
 
     # echo Starting assignments:
     for assignment_id in $ASSIGNMENT_IDS; do
-      echo "Starting assignment $assignment_id"
-      curl "https://api.wanikani.com/v2/assignments/$assignment_id/start" \
-        -X "PUT" \
-        -H "Wanikani-Revision: 20170710" \
-        -H "Content-Type: application/json; charset=utf-8" \
-        -H "Authorization: Bearer $WANIKANI_TOKEN" \
-        -d $'{
-            "assignment": {
-              "started_at": "$TIME_STRING"
-            }
-          }'
-    sleep 1
+        echo "Starting assignment $assignment_id"
+        curl "https://api.wanikani.com/v2/assignments/$assignment_id/start" \
+            -X "PUT" \
+            -H "Wanikani-Revision: 20170710" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -H "Authorization: Bearer $WANIKANI_TOKEN" \
+            -d "{\"assignment\": {\"started_at\": \"$TIME_STRING\" }}"
+        echo
+        sleep 1
     done
   '';
   };
