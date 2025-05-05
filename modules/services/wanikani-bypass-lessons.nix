@@ -20,12 +20,27 @@
 
     echo "number of assignments: $(echo "$ASSIGNMENT_IDS" | wc -l)"
 
+    # "2017-09-05T23:41:28.980679Z" i need to create this from current time
+
+    TIME_STRING=$(date -u +"%Y-%m-%dT%H:%M:%S.%6NZ")
+    echo "Current time:"
+    echo "$TIME_STRING"
+
     # echo Starting assignments:
     for assignment_id in $ASSIGNMENT_IDS; do
       put_url="https://api.wanikani.com/v2/assignments/$assignment_id/start"
       # echo "PUT $put_url"
-      echo curl -X PUT -s -H "Authorization: Bearer $WANIKANI_TOKEN" "$put_url"
-      sleep 1
+      curl "https://api.wanikani.com/v2/assignments/$assignment_id/start" \
+        -X "PUT" \
+        -H "Wanikani-Revision: 20170710" \
+        -H "Content-Type: application/json; charset=utf-8" \
+        -H "Authorization: Bearer $WANIKANI_TOKEN" \
+        -d $'{
+            "assignment": {
+              "started_at": $TIME_STRING
+            }
+          }'
+    sleep 1
     done
   '';
   };
