@@ -43,7 +43,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${waniKani-bypass-lessons}";
+        ExecStart = "${lib.getExe waniKani-bypass-lessons}";
         Restart = "always";
         RestartSec = 60;
       };
