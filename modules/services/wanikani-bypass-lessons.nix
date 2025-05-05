@@ -36,7 +36,7 @@
         -H "Authorization: Bearer $WANIKANI_TOKEN" \
         -d $'{
             "assignment": {
-              "started_at": $TIME_STRING
+              "started_at": "$TIME_STRING"
             }
           }'
     sleep 1
