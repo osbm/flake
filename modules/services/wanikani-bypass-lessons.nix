@@ -16,7 +16,7 @@
 
     WANIKANI_TOKEN=$(< /persist/wanikani)
 
-    ASSIGNMENT_IDS = $(curl -s -H "Authorization: Bearer 2da24e4a-ba89-4c4a-9047-d08f21e9dd01" "https://api.wanikani.com/v2/assignments?immediately_available_for_lessons=true" | jq ".data[] | .id" )
+    ASSIGNMENT_IDS=$(curl -s -H "Authorization: Bearer 2da24e4a-ba89-4c4a-9047-d08f21e9dd01" "https://api.wanikani.com/v2/assignments?immediately_available_for_lessons=true" | jq ".data[] | .id" )
 
     echo "number of assignments: $(echo "$ASSIGNMENT_IDS" | wc -l)"
 
