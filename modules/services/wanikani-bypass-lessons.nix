@@ -24,7 +24,7 @@
     for assignment_id in $ASSIGNMENT_IDS; do
       put_url="https://api.wanikani.com/v2/assignments/$assignment_id/start"
       # echo "PUT $put_url"
-      echo curl -X PUT -s -H "Authorization: Bearer $WANIKANI_TOKEN" $put_url
+      echo curl -X PUT -s -H "Authorization: Bearer $WANIKANI_TOKEN" "$put_url"
       sleep 1
     done
   '';
