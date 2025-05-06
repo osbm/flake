@@ -9,7 +9,7 @@
   ];
 
   myModules = {
-    # blockYoutube = true;
+    blockYoutube = false;
     blockTwitter = true;
     blockBluesky = false;
     enableKDE = true;
