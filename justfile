@@ -20,7 +20,11 @@ switch *args: check-git remove-hm-backup-files
   fi
 
 remove-hm-backup-files:
-  rm ~/.gtkrc-2.0.hmbak
+  #!/usr/bin/env sh
+
+  if [ -f ~/.gtkrc-2.0.hmbak ]; then
+    rm ~/.gtkrc-2.0.hmbak
+  fi
 
 test:
   nh os test .
