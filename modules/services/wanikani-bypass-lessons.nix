@@ -56,7 +56,7 @@ in
         Type = "simple";
         ExecStart = "${lib.getExe waniKani-bypass-lessons}";
         Restart = "always";
-        RestartSec = 60;
+        RestartSec = 60 * 60;
       };
     };
   };
