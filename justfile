@@ -11,7 +11,7 @@ build *args: check-git
   nvd diff /run/current-system ./result
 
 [linux]
-switch *args: check-git
+switch *args: check-git remove-hm-backup-files
   #!/usr/bin/env sh
   if [[ "$(hostname)" == "localhost" ]]; then
     nix-on-droid switch --flake .
@@ -19,6 +19,8 @@ switch *args: check-git
     nh os switch .
   fi
 
+remove-hm-backup-files:
+  rm ~/.gtkrc-2.0.hmbak
 
 test:
   nh os test .
