@@ -1,4 +1,8 @@
-{lib, config, ...}: {
+{
+  lib,
+  config,
+  ...
+}: {
   options.enableFirefox = lib.mkEnableOption "enableFirefox";
   config = {
     programs.firefox = {
