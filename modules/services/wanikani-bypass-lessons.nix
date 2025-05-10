@@ -41,6 +41,7 @@
           echo
           sleep 1
       done
+      sleep 3600
     '';
   };
 in {
