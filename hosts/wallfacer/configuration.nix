@@ -6,6 +6,7 @@
   myModules = {
     enableKDE = false;
     enableFonts = false;
+    enableNextcloud = true;
   };
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
