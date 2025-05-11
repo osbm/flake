@@ -22,7 +22,7 @@
         config.adminpassFile = "/etc/nextcloud-admin-pass";
         config.dbtype = "sqlite";
         settings.trusted_domains = [
-          "http://wallfacer.curl-boga.ts.net/"
+          "wallfacer.curl-boga.ts.net"
         ];
       };
     })
