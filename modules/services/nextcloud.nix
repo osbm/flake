@@ -14,7 +14,7 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.myModules.enableNextcloud {
-      environment.etc."nextcloud-admin-pass".text = "PWD";
+      # environment.etc."nextcloud-admin-pass".text = "PWD";
       services.nextcloud = {
         enable = true;
         package = pkgs.nextcloud31;
