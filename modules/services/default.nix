@@ -3,6 +3,7 @@
     ./caddy.nix
     ./cloudflare-dyndns.nix
     ./cloudflared.nix
+    ./nextcloud.nix
     ./ollama.nix
     ./forgejo.nix
     ./jellyfin.nix
