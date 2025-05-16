@@ -13,14 +13,17 @@ in  {
   };
 
   config = lib.mkIf config.services.wanikani-fetch-data.enable {
-    systemd.services.wanikani-fetch-data = {
+
+    systemd.user.timers.wanikani-fetch-data = {
       description = "WaniKani Fetch Data";
-      # just run once everyday at 2am
       wantedBy = ["timers.target"];
       timerConfig = {
         OnCalendar = "daily";
         Persistent = true;
       };
+    };
+    systemd.user.services.wanikani-fetch-data = {
+      description = "WaniKani Fetch Data";
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${lib.getExe wanikani-fetcher}";
