@@ -71,5 +71,5 @@ date=$(date +%Y-%m-%d)
 zip -r "$tmp_dir/wanikani_data_$date.zip" "$tmp_dir/data"
 echo "Data zipped to $tmp_dir/wanikani_data_$date.zip"
 
-echo $tmp_dir
+echo "$tmp_dir"
 # rm -r "$tmp_dir"
