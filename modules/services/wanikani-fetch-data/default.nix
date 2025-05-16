@@ -18,8 +18,7 @@ in  {
       description = "WaniKani Fetch Data";
       wantedBy = ["timers.target"];
       timerConfig = {
-        OnCalendar = "daily";
-        Persistent = true;
+        OnCalendar = "02:00";
       };
     };
     systemd.services.wanikani-fetch-data = {
