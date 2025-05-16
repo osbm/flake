@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
 shopt -s nullglob
 API_TOKEN="2da24e4a-ba89-4c4a-9047-d08f21e9dd01"
+date=$(date +%Y-%m-%d)
+
+# check if todays date is already in the logs folder
+if [ -f "/var/lib/wanikani-logs/wanikani_data_$date.zip" ]; then
+  echo "Data for today already exists. Exiting..."
+  exit 0
+fi
 
 tmp_dir=$(mktemp -d)
 echo "Temporary directory created at $tmp_dir"
 
 mkdir "$tmp_dir/data"
+mkdir -p "/var/lib/wanikani-logs"
 
 fetch_and_merge() {
   local topic="$1"
@@ -66,10 +74,9 @@ curl -s "https://api.wanikani.com/v2/user" \
 
 
 # get the date as a variable and use it to zip the data folder
-date=$(date +%Y-%m-%d)
-zip -r "$tmp_dir/wanikani_data_$date.zip" "$tmp_dir/data"
-echo "Data zipped to $tmp_dir/wanikani_data_$date.zip"
+zip -j -r "/var/lib/wanikani-logs/wanikani_data_$date.zip" "$tmp_dir/data"
+echo "Data zipped to /var/lib/wanikani-logs/wanikani_data_$date.zip"
 
-echo "$tmp_dir"
-# rm -r "$tmp_dir"
+echo "Cleaning up temporary files..."
+rm -r "$tmp_dir"
 
