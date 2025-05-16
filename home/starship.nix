@@ -8,6 +8,9 @@
       python.disabled = true;
       nodejs.disabled = true;
       c.disabled = true;
+      gradle.disabled = true;
+      java.disabled = true;
+      ruby.disabled = true;
     };
   };
 }
