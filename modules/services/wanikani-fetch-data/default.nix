@@ -14,7 +14,7 @@ in  {
 
   config = lib.mkIf config.services.wanikani-fetch-data.enable {
 
-    systemd.user.timers.wanikani-fetch-data = {
+    systemd.timers.wanikani-fetch-data = {
       description = "WaniKani Fetch Data";
       wantedBy = ["timers.target"];
       timerConfig = {
@@ -22,7 +22,7 @@ in  {
         Persistent = true;
       };
     };
-    systemd.user.services.wanikani-fetch-data = {
+    systemd.services.wanikani-fetch-data = {
       description = "WaniKani Fetch Data";
       serviceConfig = {
         Type = "oneshot";
