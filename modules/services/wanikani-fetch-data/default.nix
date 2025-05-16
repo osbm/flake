@@ -1,0 +1,32 @@
+{pkgs, config, lib, ...}:
+let
+  wanikani-fetcher = pkgs.writeShellApplication {
+    name = "wanikani-fetcher";
+    runtimeInputs = with pkgs; [curl jq];
+    # read script from the wanikani-fetcher.sh file
+    text = builtins.readFile ./wanikani-fetcher.sh;
+  };
+in  {
+  options.services.wanikani-fetch-data.enable = lib.mkEnableOption {
+    description = "Enable WaniKani Fetch Data";
+    default = false;
+  };
+
+  config = lib.mkIf config.services.wanikani-fetch-data.enable {
+    systemd.services.wanikani-fetch-data = {
+      description = "WaniKani Fetch Data";
+      # just run once everyday at 2am
+      wantedBy = ["timers.target"];
+      timerConfig = {
+        OnCalendar = "daily";
+        Persistent = true;
+      };
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${lib.getExe wanikani-fetcher}";
+        Restart = "on-failure";
+        RestartSec = 60;
+      };
+    };
+  };
+}
