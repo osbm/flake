@@ -2,8 +2,6 @@
 shopt -s nullglob
 API_TOKEN="2da24e4a-ba89-4c4a-9047-d08f21e9dd01"
 
-BASE_URL_ASSIGNMENTS=
-BASE_URL_REVIEWS="https://api.wanikani.com/v2/reviews"
 tmp_dir=$(mktemp -d)
 echo "Temporary directory created at $tmp_dir"
 
