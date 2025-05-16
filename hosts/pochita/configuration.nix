@@ -25,6 +25,7 @@
   };
 
   services.wanikani-bypass-lessons.enable = true;
+  services.wanikani-fetch-data.enable = true;
 
   i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method
 
