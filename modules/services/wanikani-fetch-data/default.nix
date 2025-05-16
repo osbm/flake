@@ -2,7 +2,7 @@
 let
   wanikani-fetcher = pkgs.writeShellApplication {
     name = "wanikani-fetcher";
-    runtimeInputs = with pkgs; [curl jq];
+    runtimeInputs = with pkgs; [curl jq zip];
     # read script from the wanikani-fetcher.sh file
     text = builtins.readFile ./wanikani-fetcher.sh;
   };
