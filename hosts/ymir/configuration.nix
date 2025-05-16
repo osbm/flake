@@ -22,7 +22,6 @@
     enableOllama = true;
     enableMinegrubTheme = true;
   };
-  services.wanikani-fetch-data.enable = true;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
