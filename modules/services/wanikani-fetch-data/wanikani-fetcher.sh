@@ -24,7 +24,7 @@ fetch_and_merge() {
       -o "$resp_file"
 
     echo -e "\n--- Page $((counter + 1)) (First 20 lines) ---"
-    cat "$resp_file" | jq | head -n 20
+    jq "." "$resp_file" | head -n 20
 
     next_url=$(jq -r '.pages.next_url // empty' "$resp_file")
     ((counter++))
