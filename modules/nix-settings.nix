@@ -15,6 +15,7 @@
       "obsidian"
       "steam"
       "steam-unwrapped"
+      "open-webui"
       # nvidia related (i have to)
       "nvidia-x11"
       "cuda_cudart"
