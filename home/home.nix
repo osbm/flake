@@ -6,6 +6,7 @@
   imports = [
     ./alacritty.nix
     ./tmux
+    ./ghostty.nix
     ./git.nix
     ./gtk.nix
     ./ssh.nix
