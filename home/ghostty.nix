@@ -3,7 +3,7 @@
   lib,
   ...
 }: {
-  programs.ghosty = {
+  programs.ghostty = {
     enable = true;
     settings = {
     };
