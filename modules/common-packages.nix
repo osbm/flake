@@ -44,7 +44,9 @@
     comma
     nix-inspect
     bat
-  ];
+    fd
+    du-dust
+    ];
 
   environment.variables = {
     EDITOR = "nvim";
