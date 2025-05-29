@@ -30,4 +30,6 @@
 
   enableGTK = config.myModules.enableKDE;
   enableFirefox = config.myModules.enableKDE;
+  enableAlacritty = config.myModules.enableKDE;
+  enableGhostty = config.myModules.enableKDE;
 }
