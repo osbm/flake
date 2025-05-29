@@ -46,7 +46,7 @@
     bat
     fd
     du-dust
-    ];
+  ];
 
   environment.variables = {
     EDITOR = "nvim";
