@@ -12,6 +12,7 @@
       df = "df -h";
       du = "du -h";
       lg = "lazygit";
+      onefetch = "onefetch -T prose -T programming -T data";
     };
     functions = {
       gitu = ''
