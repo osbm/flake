@@ -41,10 +41,6 @@
     raspberry-pi-nix = {
       url = "github:nix-community/raspberry-pi-nix";
     };
-    vscode-server = {
-      url = "github:nix-community/nixos-vscode-server";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
