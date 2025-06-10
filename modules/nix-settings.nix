@@ -17,6 +17,7 @@
       "steam-unwrapped"
       "open-webui"
       "vscode-extension-github-copilot"
+      "spotify"
       # nvidia related (i have to)
       "nvidia-x11"
       "cuda_cudart"
