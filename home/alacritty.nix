@@ -10,7 +10,7 @@
       enable = config.enableAlacritty;
       settings = {
         font = {
-          size = 17.0;
+          size = 14.0;
           normal.family = "Cascadia Code";
         };
         terminal.shell = {
