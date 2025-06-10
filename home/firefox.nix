@@ -48,6 +48,7 @@
             (extension "motivation-new-tab" "")
             (extension "return-youtube-dislikes" "{762f9885-5a13-4abd-9c77-433dcd38b8fd}")
             (extension "violentmonkey" "{aecec67f-0d10-4fa7-b7c7-609a2db280cf}")
+            (extension "vimium-ff" "{d7742d87-e61d-4b78-b8a1-b469842139fa}")
             # (extension "tabliss" "extension@tabliss.io")
             # (extension "umatrix" "uMatrix@raymondhill.net")
             # (extension "libredirect" "7esoorv3@alefvanoon.anonaddy.me")
