@@ -1,4 +1,4 @@
-{config, ...}:{
+{config, ...}: {
   services.code-server = {
     enable = true;
     port = 4444;
