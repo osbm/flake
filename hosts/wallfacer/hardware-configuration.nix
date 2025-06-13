@@ -29,12 +29,12 @@
     ];
 
   # 2 tb mini hdd
-  fileSystems."/data/atreus/" =
+  fileSystems."/data/atreus" =
     { device = "/dev/disk/by-uuid/1840c2af-fdb2-48b6-8555-2cecd1afb106";
       fsType = "ext4";
     };
   # 500 gb nvme pcie
-  fileSystems."/data/kasio/" =
+  fileSystems."/data/kasio" =
     { device = "/dev/disk/by-uuid/af74aa48-8513-4e31-a4b7-9fdd138e0002";
       fsType = "ext4";
     };
