@@ -52,7 +52,7 @@
             (extension "i-dont-care-about-cookies" "jid1-KKzOGWgsW3Ao4Q@jetpack")
             # (extension "tabliss" "extension@tabliss.io")
             # (extension "umatrix" "uMatrix@raymondhill.net")
-            (extension "libredirect" "7esoorv3@alefvanoon.anonaddy.me")
+            # (extension "libredirect" "7esoorv3@alefvanoon.anonaddy.me")
             (extension "clearurls" "{74145f27-f039-47ce-a470-a662b129930a}")
           ];
         # To add additional extensions, find it on addons.mozilla.org, find
