@@ -46,6 +46,7 @@
     bat
     fd
     du-dust
+    dysk
   ];
 
   environment.variables = {
