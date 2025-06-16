@@ -55,7 +55,7 @@
         qbittorrent
         ani-cli
         prismlauncher
-        element-desktop-wayland
+        element-desktop
         qbittorrent
         discord
         (pkgs.writeShellApplication {
@@ -79,6 +79,8 @@
           '';
         })
       ];
+
+      environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
       programs.steam = {
         enable = true;
