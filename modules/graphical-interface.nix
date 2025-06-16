@@ -55,6 +55,7 @@
         qbittorrent
         ani-cli
         prismlauncher
+        element-desktop-wayland
         qbittorrent
         discord
         (pkgs.writeShellApplication {
