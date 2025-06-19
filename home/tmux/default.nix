@@ -55,6 +55,7 @@ in {
     extraConfig = ''
       # Automatically renumber windows
       set -g renumber-windows on
+      set -g allow-passthrough on
     '';
   };
 }
