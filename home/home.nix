@@ -33,5 +33,5 @@
   enableFirefox = config.myModules.enableKDE;
   enableAlacritty = config.myModules.enableKDE;
   enableGhostty = config.myModules.enableKDE;
-  enableWezter = config.myModules.enableKDE;
+  enableWezterm = config.myModules.enableKDE;
 }
