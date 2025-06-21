@@ -54,6 +54,7 @@
             # (extension "umatrix" "uMatrix@raymondhill.net")
             # (extension "libredirect" "7esoorv3@alefvanoon.anonaddy.me")
             (extension "clearurls" "{74145f27-f039-47ce-a470-a662b129930a}")
+            (extension "youtube-shorts-block" "")
           ];
         # To add additional extensions, find it on addons.mozilla.org, find
         # the short ID in the url (like https://addons.mozilla.org/en-US/firefox/addon/!SHORT_ID!/)
