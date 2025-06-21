@@ -16,6 +16,7 @@
     ./fish.nix
     ./tlrc.nix
     ./starship.nix
+    ./wezterm.nix
     ./zoxide.nix
   ];
 
@@ -32,4 +33,5 @@
   enableFirefox = config.myModules.enableKDE;
   enableAlacritty = config.myModules.enableKDE;
   enableGhostty = config.myModules.enableKDE;
+  enableWezter = config.myModules.enableKDE;
 }
