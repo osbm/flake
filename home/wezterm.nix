@@ -7,8 +7,9 @@
   config = {
     programs.wezterm = {
       enable = config.enableWezterm;
-      settings = {
-      };
+      extraConfig = ''
+        
+      '';
     };
   };
 }
