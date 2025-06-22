@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }: {
   options.enableWezterm = lib.mkEnableOption "Wezterm terminal emulator";
