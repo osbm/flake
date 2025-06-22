@@ -25,19 +25,11 @@
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nix-on-droid = {
       url = "github:nix-community/nix-on-droid";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    osbm-nvim = {
-      url = "github:osbm/osbm-nvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixvim.follows = "nixvim";
-    };
+    osbm-nvim.url = "github:osbm/osbm-nvim";
     raspberry-pi-nix = {
       url = "github:nix-community/raspberry-pi-nix";
     };
