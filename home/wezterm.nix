@@ -14,6 +14,7 @@
         };
         return {
           default_prog = { _G.shells.fish },
+          window_decorations = "NONE",
         }
       '';
     };
