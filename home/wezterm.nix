@@ -10,7 +10,7 @@
       enable = config.enableWezterm;
       extraConfig = ''
         _G.shells = {
-          fish = ${lib.getExe pkgs.fish}
+          fish = '${lib.getExe pkgs.fish}'
         };
 
         local cfg = require('config');
