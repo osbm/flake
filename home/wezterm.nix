@@ -12,9 +12,9 @@
         _G.shells = {
           fish = '${lib.getExe pkgs.fish}'
         };
-
-        local cfg = require('config');
-        return cfg
+        return {
+          default_prog = { _G.shells.fish },
+        }
       '';
     };
   };
