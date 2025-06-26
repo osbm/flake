@@ -6,8 +6,8 @@
     '';
     shellAliases = {
       c = "code .";
-      l = "ls -lah";
-      ll = "eza -la -F --icons --git --group-directories-first --git";
+      l = "eza --all --long --git --icons --sort size --header --group-directories-first";
+      ll = "eza --all --long --git --icons --sort name --header --group-directories-first";
       free = "free -h";
       df = "df -h";
       du = "du -h";
