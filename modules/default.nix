@@ -18,5 +18,6 @@
     ./sound.nix
     ./users.nix
     ./wake-on-lan.nix
+    ./getty.nix
   ];
 }
