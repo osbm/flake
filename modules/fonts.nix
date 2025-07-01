@@ -38,9 +38,9 @@
         # dejavu_fonts
         # twitter-color-emoji
       ];
-      fonts.fontconfig = {
-        defaultFonts.emoji = ["Noto Color Emoji"];
-      };
+      # fonts.fontconfig = {
+      #   defaultFonts.emoji = ["Noto Color Emoji"];
+      # };
     })
   ];
 }
