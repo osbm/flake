@@ -33,7 +33,10 @@
         font-awesome
         font-awesome_5
         roboto
-        twitter-color-emoji
+        roboto-mono
+        roboto-serif
+        # dejavu_fonts
+        # twitter-color-emoji
       ];
       fonts.fontconfig = {
         defaultFonts.emoji = ["Noto Color Emoji"];
