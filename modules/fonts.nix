@@ -26,6 +26,7 @@
         dina-font
         nerd-fonts.fira-code
         nerd-fonts.ubuntu
+        nerd-fonts.droid-sans-mono
         proggyfonts
         source-sans
         source-sans-pro
