@@ -38,6 +38,7 @@
         roboto
         twitter-color-emoji
         iosevka
+        dejavu_fonts
       ];
       # fonts.fontconfig = {
       #   defaultFonts.emoji = ["Noto Color Emoji"];
@@ -45,7 +46,7 @@
       fonts.fontconfig.defaultFonts = {
         serif = ["Source Han Serif SC" "Source Han Serif TC" "Noto Color Emoji"];
         sansSerif = ["Source Han Sans SC" "Source Han Sans TC" "Noto Color Emoji"];
-        monospace = ["Droid Sans Mono" "Source Han Mono" "Cascadia Code" "Noto Color Emoji"];
+        monospace = ["DejaVu Sans Mono" "Droid Sans Mono" "Source Han Mono" "Cascadia Code" "Noto Color Emoji"];
         emoji = ["Noto Color Emoji"];
       };
     })
