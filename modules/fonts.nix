@@ -46,7 +46,7 @@
       fonts.fontconfig.defaultFonts = {
         serif = ["Source Han Serif SC" "Source Han Serif TC" "Noto Color Emoji"];
         sansSerif = ["Source Han Sans SC" "Source Han Sans TC" "Noto Color Emoji"];
-        monospace = ["DejaVu Sans Mono" "Source Han Mono" "Cascadia Code"];
+        monospace = ["Droid Sans Mono" "DejaVu Sans Mono" "Source Han Mono" "Cascadia Code"];
         emoji = ["Noto Color Emoji"];
       };
     })
