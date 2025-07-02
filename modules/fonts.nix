@@ -29,15 +29,24 @@
         nerd-fonts.droid-sans-mono
         proggyfonts
         source-sans
+        source-han-sans
+        source-han-mono
         source-sans-pro
         source-serif-pro
         font-awesome
         font-awesome_5
         roboto
         twitter-color-emoji
+        iosevka
       ];
-      fonts.fontconfig = {
-        defaultFonts.emoji = ["Noto Color Emoji"];
+      # fonts.fontconfig = {
+      #   defaultFonts.emoji = ["Noto Color Emoji"];
+      # };
+      fontconfig.defaultFonts = {
+        serif = ["Source Han Serif SC" "Source Han Serif TC" "Noto Color Emoji"];
+        sansSerif = ["Source Han Sans SC" "Source Han Sans TC" "Noto Color Emoji"];
+        monospace = ["JetBrainsMono Nerd Font" "Noto Color Emoji"];
+        emoji = ["Noto Color Emoji"];
       };
     })
   ];
