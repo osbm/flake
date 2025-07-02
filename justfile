@@ -35,6 +35,9 @@ update:
 check:
   nix flake check
 
+repl:
+  nix repl -f flake:nixpkgs
+
 collect-garbage:
   sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations old
   # home-manager expire-generations now
