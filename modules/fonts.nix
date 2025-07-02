@@ -16,7 +16,6 @@
     (lib.mkIf config.myModules.enableFonts {
       fonts.packages = with pkgs; [
         cascadia-code
-        noto-fonts
         noto-fonts-cjk-sans
         noto-fonts-emoji
         liberation_ttf
