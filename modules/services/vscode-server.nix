@@ -4,7 +4,8 @@
   ...
 }: {
   services.code-server = {
-    enable = true;
+    # only true if the machine is not pochita
+    enable = config.networking.hostName != "pochita";
     port = 4444;
     disableTelemetry = true;
     disableUpdateCheck = true;
