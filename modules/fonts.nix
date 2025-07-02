@@ -14,33 +14,50 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.myModules.enableFonts {
-      fonts.packages = with pkgs; [
-        cascadia-code
-        noto-fonts
-        noto-fonts-cjk-sans
-        noto-fonts-emoji
-        liberation_ttf
-        fira-code
-        fira-code-symbols
-        mplus-outline-fonts.githubRelease
-        dina-font
-        nerd-fonts.fira-code
-        nerd-fonts.ubuntu
-        proggyfonts
-        source-sans
-        source-sans-pro
-        source-serif-pro
-        font-awesome
-        font-awesome_5
-        roboto
-        roboto-mono
-        roboto-serif
-        # dejavu_fonts
-        # twitter-color-emoji
+      fonts = {
+    packages =
+      builtins.attrValues {
+        inherit
+          (pkgs)
+          material-icons
+          material-design-icons
+          roboto
+          work-sans
+          comic-neue
+          source-sans
+          twemoji-color-font
+          comfortaa
+          inter
+          lato
+          lexend
+          jost
+          dejavu_fonts
+          noto-fonts
+          noto-fonts-cjk-sans
+          noto-fonts-emoji
+          ;
+      }
+      ++ [
+        pkgs.nerd-fonts.jetbrains-mono
+        # (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
       ];
-      # fonts.fontconfig = {
-      #   defaultFonts.emoji = ["Noto Color Emoji"];
-      # };
+
+    enableDefaultPackages = false;
+
+    # this fixes emoji stuff
+    fontconfig = {
+      defaultFonts = {
+        monospace = [
+          "JetBrainsMono"
+          "JetBrainsMono Nerd Font"
+          "Noto Color Emoji"
+        ];
+        sansSerif = ["Lexend" "Noto Color Emoji"];
+        serif = ["Noto Serif" "Noto Color Emoji"];
+        emoji = ["Noto Color Emoji"];
+      };
+    };
+  };
     })
   ];
 }
