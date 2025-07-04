@@ -49,6 +49,11 @@
       repo = "osbm.dev";
       type = "github";
     };
+    devshells.to = {
+      owner = "osbm";
+      repo = "devshells";
+      type = "github";
+    };
   };
 
   nix.settings.trusted-users = ["root" "osbm"];
