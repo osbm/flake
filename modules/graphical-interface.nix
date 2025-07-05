@@ -78,6 +78,8 @@
             huggingface-cli upload --repo-type dataset osbm/terraria-backups "Terraria_$timestamp.zip" "Terraria_$timestamp.zip"
           '';
         })
+        code-cursor
+        ungoogled-chromium
       ];
 
       environment.sessionVariables.NIXOS_OZONE_WL = "1";
