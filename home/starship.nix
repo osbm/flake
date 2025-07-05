@@ -11,6 +11,8 @@
       gradle.disabled = true;
       java.disabled = true;
       ruby.disabled = true;
+      rust.disabled = true;
+      typst.disabled = true;
     };
   };
 }
