@@ -18,6 +18,7 @@
       "open-webui"
       "vscode-extension-github-copilot"
       "spotify"
+      "cursor"
       # nvidia related (i have to)
       "nvidia-x11"
       "cuda_cudart"
