@@ -102,6 +102,7 @@
         modules = [ ./hosts/atreus/configuration.nix ];
       };
 
+      lib = import ./lib { inherit (nixpkgs) lib; };
       formatter = forAllSystems (system: (makePkgs system).nixfmt-rfc-style);
       deploy.nodes.harmonica = {
         hostname = "192.168.0.11";
