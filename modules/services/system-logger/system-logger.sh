@@ -133,4 +133,4 @@ find "$LOG_DIR" -name "*-logs-*.zip" -type f -mtime +$RETENTION_DAYS -delete 2>/
 # Clean up temporary directory
 rm -rf "$TEMP_DIR"
 
-echo "System log collection finished successfully" 
+echo "System log collection finished successfully"
