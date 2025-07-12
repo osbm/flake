@@ -49,6 +49,9 @@
     ...
   } @ inputs: let
     inherit (self) outputs;
+    supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
+    makePkgs = system: import nixpkgs { inherit system; };
   in {
     nixosConfigurations = {
       tartarus = nixpkgs.lib.nixosSystem {
@@ -92,8 +95,7 @@
       modules = [./hosts/atreus/configuration.nix];
     };
 
-    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
-    formatter.aarch64-linux = nixpkgs.legacyPackages.aarch64-linux.alejandra;
+    formatter = forAllSystems (system: (makePkgs system).nixfmt-rfc-style);
     deploy.nodes.harmonica = {
       hostname = "192.168.0.11";
       profiles.system = {
