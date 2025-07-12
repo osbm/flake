@@ -7,6 +7,7 @@
     ./ollama.nix
     ./forgejo.nix
     ./jellyfin.nix
+    ./system-logger/
     ./tailscale.nix
     ./vaultwarden.nix
     ./vscode-server.nix
