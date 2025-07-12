@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, ... }:
 {
 
   importList = lib.mapAttrsToList (name: _path: ./. + "/${name}") (
