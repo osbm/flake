@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     myModules.enableSound = lib.mkOption {
       type = lib.types.bool;

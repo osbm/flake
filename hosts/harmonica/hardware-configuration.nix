@@ -2,12 +2,12 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   # Some packages (ahci fail... this bypasses that) https://discourse.nixos.org/t/does-pkgs-linuxpackages-rpi3-build-all-required-kernel-modules/42509
   nixpkgs.overlays = [
     (final: super: {
-      makeModulesClosure = x:
-        super.makeModulesClosure (x // {allowMissing = true;});
+      makeModulesClosure = x: super.makeModulesClosure (x // { allowMissing = true; });
     })
   ];
 
@@ -23,7 +23,7 @@
 
   hardware = {
     enableRedistributableFirmware = lib.mkForce false;
-    firmware = [pkgs.raspberrypiWirelessFirmware]; # Keep this to make sure wifi works
+    firmware = [ pkgs.raspberrypiWirelessFirmware ]; # Keep this to make sure wifi works
     i2c.enable = true;
     deviceTree.filter = "bcm2837-rpi-zero*.dtb";
     deviceTree.overlays = [
@@ -49,7 +49,11 @@
   boot = {
     kernelPackages = pkgs.linuxPackages_rpi02w;
 
-    initrd.availableKernelModules = ["xhci_pci" "usbhid" "usb_storage"];
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "usbhid"
+      "usb_storage"
+    ];
     loader = {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;

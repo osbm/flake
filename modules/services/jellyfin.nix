@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options = {
     myModules.enableJellyfin = lib.mkOption {
       type = lib.types.bool;
@@ -21,7 +22,7 @@
         dataDir = "/home/osbm/.local/share/jellyfin";
       };
 
-      networking.firewall.allowedTCPPorts = [8096];
+      networking.firewall.allowedTCPPorts = [ 8096 ];
     })
   ];
 }

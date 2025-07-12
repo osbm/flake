@@ -4,7 +4,8 @@
   pkgs,
   system,
   ...
-}: {
+}:
+{
   imports = [
   ];
 

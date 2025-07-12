@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     myModules.enableCaddy = lib.mkOption {
       type = lib.types.bool;
@@ -19,7 +20,7 @@
         package = pkgs.caddy.withPlugins {
           # update time to time
           # last update: 2025-03-02
-          plugins = ["github.com/caddy-dns/cloudflare@v0.0.0-20250228175314-1fb64108d4de"];
+          plugins = [ "github.com/caddy-dns/cloudflare@v0.0.0-20250228175314-1fb64108d4de" ];
           hash = "sha256-YYpsf8HMONR1teMiSymo2y+HrKoxuJMKIea5/NEykGc=";
         };
         email = "contact@osbm.dev";
@@ -58,7 +59,11 @@
         };
       };
 
-      networking.firewall.allowedTCPPorts = [80 443 3000];
+      networking.firewall.allowedTCPPorts = [
+        80
+        443
+        3000
+      ];
 
       environment.systemPackages = with pkgs; [
         nssTools

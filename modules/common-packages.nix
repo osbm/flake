@@ -2,7 +2,8 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   environment.systemPackages = with pkgs; [
     inputs.osbm-nvim.packages."${pkgs.stdenv.hostPlatform.system}".default
     wget

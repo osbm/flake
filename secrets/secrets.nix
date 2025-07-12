@@ -12,9 +12,10 @@ let
     pochita
     wallfacer
   ];
-in {
-  "network-manager.age".publicKeys = machines ++ [osbm];
-  "ssh-key-private.age".publicKeys = machines ++ [osbm];
-  "ssh-key-public.age".publicKeys = machines ++ [osbm];
-  "cloudflare.age".publicKeys = machines ++ [osbm];
+in
+{
+  "network-manager.age".publicKeys = machines ++ [ osbm ];
+  "ssh-key-private.age".publicKeys = machines ++ [ osbm ];
+  "ssh-key-public.age".publicKeys = machines ++ [ osbm ];
+  "cloudflare.age".publicKeys = machines ++ [ osbm ];
 }

@@ -3,7 +3,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   options = {
     myModules.enableNextcloud = lib.mkOption {
       type = lib.types.bool;

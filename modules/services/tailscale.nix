@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   options = {
     myModules.enableTailscale = lib.mkOption {
       type = lib.types.bool;
@@ -25,8 +26,8 @@
         port = 51513;
       };
 
-      networking.firewall.allowedUDPPorts = [config.services.tailscale.port];
-      environment.systemPackages = [pkgs.tailscale];
+      networking.firewall.allowedUDPPorts = [ config.services.tailscale.port ];
+      environment.systemPackages = [ pkgs.tailscale ];
     })
   ];
 }

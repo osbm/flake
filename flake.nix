@@ -41,67 +41,74 @@
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    nix-on-droid,
-    deploy-rs,
-    ...
-  } @ inputs: let
-    inherit (self) outputs;
-    supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
-    forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
-    makePkgs = system: import nixpkgs { inherit system; };
-  in {
-    nixosConfigurations = {
-      tartarus = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/tartarus/configuration.nix];
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nix-on-droid,
+      deploy-rs,
+      ...
+    }@inputs:
+    let
+      inherit (self) outputs;
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+      ];
+      forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
+      makePkgs = system: import nixpkgs { inherit system; };
+    in
+    {
+      nixosConfigurations = {
+        tartarus = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/tartarus/configuration.nix ];
+        };
+        ymir = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/ymir/configuration.nix ];
+        };
+        harmonica = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/harmonica/configuration.nix ];
+        };
+        harmonica-sd = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/harmonica-sd/configuration.nix ];
+        };
+        pochita = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/pochita/configuration.nix ];
+        };
+        pochita-sd = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/pochita-sd/configuration.nix ];
+        };
+        myISO = nixpkgs.lib.nixosSystem {
+          modules = [
+            ./hosts/iso/configuration.nix
+            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma6.nix"
+          ];
+        };
+        wallfacer = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/wallfacer/configuration.nix ];
+        };
       };
-      ymir = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/ymir/configuration.nix];
+      nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
+        extraSpecialArgs = { inherit inputs outputs; };
+        pkgs = import nixpkgs { system = "aarch64-linux"; };
+        modules = [ ./hosts/atreus/configuration.nix ];
       };
-      harmonica = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/harmonica/configuration.nix];
-      };
-      harmonica-sd = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/harmonica-sd/configuration.nix];
-      };
-      pochita = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/pochita/configuration.nix];
-      };
-      pochita-sd = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/pochita-sd/configuration.nix];
-      };
-      myISO = nixpkgs.lib.nixosSystem {
-        modules = [
-          ./hosts/iso/configuration.nix
-          "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma6.nix"
-        ];
-      };
-      wallfacer = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/wallfacer/configuration.nix];
-      };
-    };
-    nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
-      extraSpecialArgs = {inherit inputs outputs;};
-      pkgs = import nixpkgs {system = "aarch64-linux";};
-      modules = [./hosts/atreus/configuration.nix];
-    };
 
-    formatter = forAllSystems (system: (makePkgs system).nixfmt-rfc-style);
-    deploy.nodes.harmonica = {
-      hostname = "192.168.0.11";
-      profiles.system = {
-        user = "osbm";
-        path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.harmonica;
+      formatter = forAllSystems (system: (makePkgs system).nixfmt-rfc-style);
+      deploy.nodes.harmonica = {
+        hostname = "192.168.0.11";
+        profiles.system = {
+          user = "osbm";
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.harmonica;
+        };
       };
     };
-  };
 }

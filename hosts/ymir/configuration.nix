@@ -2,7 +2,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     ./hardware-configuration.nix
     ../../modules
@@ -29,7 +30,10 @@
 
   networking.hostName = "ymir"; # Define your hostname.
 
-  networking.firewall.allowedTCPPorts = [8889 8000];
+  networking.firewall.allowedTCPPorts = [
+    8889
+    8000
+  ];
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -47,7 +51,7 @@
   virtualisation.waydroid.enable = true;
 
   # Load nvidia driver for Xorg and Wayland
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
     # Modesetting is required.

@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     myModules.enableADB = lib.mkOption {
       type = lib.types.bool;
@@ -14,7 +15,7 @@
   config = lib.mkMerge [
     (lib.mkIf config.myModules.enableADB {
       programs.adb.enable = true;
-      users.users.osbm.extraGroups = ["adbusers"];
+      users.users.osbm.extraGroups = [ "adbusers" ];
     })
   ];
 }

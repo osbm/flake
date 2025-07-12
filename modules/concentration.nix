@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     myModules = {
       blockYoutube = lib.mkOption {

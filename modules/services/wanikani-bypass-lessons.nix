@@ -3,10 +3,14 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   waniKani-bypass-lessons = pkgs.writeShellApplication {
     name = "wanikani-bypass-lessons";
-    runtimeInputs = with pkgs; [curl jq];
+    runtimeInputs = with pkgs; [
+      curl
+      jq
+    ];
     text = ''
       #!/usr/bin/env bash
 
@@ -44,7 +48,8 @@
       sleep 3600
     '';
   };
-in {
+in
+{
   options.services.wanikani-bypass-lessons.enable = lib.mkEnableOption {
     description = "Enable WaniKani Bypass Lessons";
     default = false;
@@ -53,7 +58,7 @@ in {
   config = lib.mkIf config.services.wanikani-bypass-lessons.enable {
     systemd.services.wanikani-bypass-lessons = {
       description = "WaniKani Bypass Lessons";
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
         ExecStart = "${lib.getExe waniKani-bypass-lessons}";

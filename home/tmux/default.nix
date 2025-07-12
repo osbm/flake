@@ -2,10 +2,11 @@
   pkgs,
   lib,
   ...
-}: let
-  wanikani-current-reviews-script = builtins.path {path = ./wanikani-current-reviews.sh;};
-  wanikani-level-script = builtins.path {path = ./wanikani-level.sh;};
-  wanikani-progression-script = builtins.path {path = ./wanikani-progression.sh;};
+}:
+let
+  wanikani-current-reviews-script = builtins.path { path = ./wanikani-current-reviews.sh; };
+  wanikani-level-script = builtins.path { path = ./wanikani-level.sh; };
+  wanikani-progression-script = builtins.path { path = ./wanikani-progression.sh; };
   tmux-dracula = pkgs.tmuxPlugins.mkTmuxPlugin rec {
     pluginName = "dracula";
     version = "3.0.0";
@@ -26,10 +27,11 @@
       description = "Feature packed Dracula theme for tmux!";
       license = licenses.mit;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ethancedwards8];
+      maintainers = with maintainers; [ ethancedwards8 ];
     };
   };
-in {
+in
+{
   programs.tmux = {
     enable = true;
     historyLimit = 100000;

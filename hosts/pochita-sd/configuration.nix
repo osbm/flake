@@ -2,7 +2,8 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     inputs.raspberry-pi-nix.nixosModules.raspberry-pi
     inputs.raspberry-pi-nix.nixosModules.sd-image
@@ -19,7 +20,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.osbm = {
     isNormalUser = true;
-    extraGroups = ["wheel"]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     initialPassword = "changeme";
   };
 
@@ -37,9 +38,15 @@
     wget
   ];
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
-  nix.settings.trusted-users = ["root" "osbm"];
+  nix.settings.trusted-users = [
+    "root"
+    "osbm"
+  ];
 
   nixpkgs.hostPlatform = "aarch64-linux";
 

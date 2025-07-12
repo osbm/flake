@@ -3,7 +3,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   options.enableWezterm = lib.mkEnableOption "Wezterm terminal emulator";
   config = {
     programs.wezterm = {

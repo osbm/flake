@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     myModules.enableKDE = lib.mkOption {
       type = lib.types.bool;
@@ -93,7 +94,7 @@
         # Open ports in the firewall for Steam Local Network Game Transfers
         localNetworkGameTransfers.openFirewall = true;
       };
-      networking.firewall.allowedTCPPorts = [51513];
+      networking.firewall.allowedTCPPorts = [ 51513 ];
     })
   ];
 }

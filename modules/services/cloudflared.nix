@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options = {
     myModules.enableCloudflared = lib.mkOption {
       type = lib.types.bool;

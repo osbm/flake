@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     # Enable the GTK theme
     enableGTK = lib.mkEnableOption "enableGTK";

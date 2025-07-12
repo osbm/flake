@@ -2,13 +2,15 @@
   inputs,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     inputs.nix-index-database.nixosModules.nix-index
   ];
   programs.nix-index-database.comma.enable = true;
   # Allow unfree packages
-  nixpkgs.config.allowUnfreePredicate = pkg:
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
     builtins.elem (lib.getName pkg) [
       "vscode" # TODO: remove this
       "discord"
@@ -30,7 +32,10 @@
     ];
 
   # enable nix flakes
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
@@ -57,7 +62,10 @@
     };
   };
 
-  nix.settings.trusted-users = ["root" "osbm"];
+  nix.settings.trusted-users = [
+    "root"
+    "osbm"
+  ];
 
   nix.gc = {
     automatic = true;

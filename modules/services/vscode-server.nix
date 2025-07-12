@@ -2,7 +2,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   services.code-server = {
     # only true if the machine is not pochita
     enable = config.networking.hostName != "pochita";
@@ -16,7 +17,8 @@
     hashedPassword = "$argon2i$v=19$m=4096,t=3,p=1$dGc0TStGMDNzSS9JRkJYUFp3d091Q2p0bXlzPQ$zvdE9BkclkJmyFaenzPy2E99SEqsyDMt4IQNZfcfFFQ";
     package = pkgs.vscode-with-extensions.override {
       vscode = pkgs.code-server;
-      vscodeExtensions = with pkgs.vscode-extensions;
+      vscodeExtensions =
+        with pkgs.vscode-extensions;
         [
           bbenoist.nix
           catppuccin.catppuccin-vsc
@@ -47,5 +49,5 @@
         ];
     };
   };
-  networking.firewall.allowedTCPPorts = [config.services.code-server.port];
+  networking.firewall.allowedTCPPorts = [ config.services.code-server.port ];
 }

@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options = {
     myModules.enableVaultwarden = lib.mkOption {
       type = lib.types.bool;

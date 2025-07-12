@@ -2,7 +2,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   user.userName = lib.mkForce "osbm"; # fuck i hate unmaintained projects
   environment.packages = with pkgs; [
     vim # or some other editor, e.g. nano or neovim

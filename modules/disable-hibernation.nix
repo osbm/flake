@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     myModules.disableHibernation = lib.mkOption {
       type = lib.types.bool;

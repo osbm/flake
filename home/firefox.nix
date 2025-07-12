@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options.enableFirefox = lib.mkEnableOption "enableFirefox";
   config = {
     programs.firefox = {
@@ -32,15 +33,17 @@
         DisplayBookmarksToolbar = "always"; # alternatives: "never" or "newtab"
         # DisplayMenuBar = "default-off"; # alternatives: "always", "never" or "default-on"
         # SearchBar = "unified"; # alternat
-        ExtensionSettings = with builtins; let
-          extension = shortId: uuid: {
-            name = uuid;
-            value = {
-              install_url = "https://addons.mozilla.org/en-US/firefox/downloads/latest/${shortId}/latest.xpi";
-              installation_mode = "normal_installed";
+        ExtensionSettings =
+          with builtins;
+          let
+            extension = shortId: uuid: {
+              name = uuid;
+              value = {
+                install_url = "https://addons.mozilla.org/en-US/firefox/downloads/latest/${shortId}/latest.xpi";
+                installation_mode = "normal_installed";
+              };
             };
-          };
-        in
+          in
           listToAttrs [
             (extension "tree-style-tab" "treestyletab@piro.sakura.ne.jp")
             (extension "ublock-origin" "uBlock0@raymondhill.net")

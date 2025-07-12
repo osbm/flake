@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     myModules.enableForgejo = lib.mkOption {
       type = lib.types.bool;

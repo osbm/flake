@@ -1,4 +1,5 @@
-{...}: let
+{ ... }:
+let
   # define a block that just takes a hostname and returns attrset to not repeat the same fields
   sshBlock = hostname: {
     hostname = hostname;
@@ -18,7 +19,8 @@
     port = 8022;
     # fish not found error ???
   };
-in {
+in
+{
   programs.ssh = {
     enable = true;
     hashKnownHosts = true;

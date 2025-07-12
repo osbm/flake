@@ -3,7 +3,8 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     ./hardware-configuration.nix
     ../../modules
@@ -19,7 +20,7 @@
   };
 
   virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = ["osbm"];
+  users.extraGroups.vboxusers.members = [ "osbm" ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;

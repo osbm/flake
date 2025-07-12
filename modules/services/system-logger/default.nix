@@ -3,13 +3,21 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   system-logger = pkgs.writeShellApplication {
     name = "system-logger";
-    runtimeInputs = with pkgs; [curl jq zip gawk systemd];
+    runtimeInputs = with pkgs; [
+      curl
+      jq
+      zip
+      gawk
+      systemd
+    ];
     text = builtins.readFile ./system-logger.sh;
   };
-in {
+in
+{
   options.services.system-logger = {
     enable = lib.mkEnableOption {
       description = "Enable System Logger Service";
@@ -38,7 +46,7 @@ in {
   config = lib.mkIf config.services.system-logger.enable {
     systemd.timers.system-logger = {
       description = "System Logger Timer";
-      wantedBy = ["timers.target"];
+      wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "daily";
         Persistent = true;

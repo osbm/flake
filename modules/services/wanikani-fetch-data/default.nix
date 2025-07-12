@@ -3,13 +3,19 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   wanikani-fetcher = pkgs.writeShellApplication {
     name = "wanikani-fetcher";
-    runtimeInputs = with pkgs; [curl jq zip];
+    runtimeInputs = with pkgs; [
+      curl
+      jq
+      zip
+    ];
     text = builtins.readFile ./wanikani-fetcher.sh;
   };
-in {
+in
+{
   options.services.wanikani-fetch-data.enable = lib.mkEnableOption {
     description = "Enable WaniKani Fetch Data";
     default = false;
@@ -18,7 +24,7 @@ in {
   config = lib.mkIf config.services.wanikani-fetch-data.enable {
     systemd.timers.wanikani-fetch-data = {
       description = "WaniKani Fetch Data";
-      wantedBy = ["timers.target"];
+      wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "02:00";
       };

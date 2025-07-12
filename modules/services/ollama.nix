@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     myModules = {
       enableOllama = lib.mkOption {
@@ -18,7 +19,10 @@
       services.ollama = {
         enable = true;
         acceleration = "cuda";
-        loadModels = ["deepseek-r1:7b" "deepseek-r1:14b"];
+        loadModels = [
+          "deepseek-r1:7b"
+          "deepseek-r1:14b"
+        ];
       };
 
       services.open-webui = {

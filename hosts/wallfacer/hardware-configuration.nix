@@ -7,15 +7,24 @@
   pkgs,
   modulesPath,
   ...
-}: {
+}:
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = ["ahci" "ehci_pci" "megaraid_sas" "nvme" "usbhid" "usb_storage" "sd_mod"];
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = ["kvm-intel"];
-  boot.extraModulePackages = [];
+  boot.initrd.availableKernelModules = [
+    "ahci"
+    "ehci_pci"
+    "megaraid_sas"
+    "nvme"
+    "usbhid"
+    "usb_storage"
+    "sd_mod"
+  ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-intel" ];
+  boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/8270dba5-6d89-438a-90bd-d9f29b20cb5b";
@@ -25,11 +34,14 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/A1EB-43F8";
     fsType = "vfat";
-    options = ["fmask=0077" "dmask=0077"];
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
   };
 
   swapDevices = [
-    {device = "/dev/disk/by-uuid/534ea30c-2664-498b-915f-41b037eba01b";}
+    { device = "/dev/disk/by-uuid/534ea30c-2664-498b-915f-41b037eba01b"; }
   ];
 
   # 2 tb mini hdd
