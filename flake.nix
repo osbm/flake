@@ -86,9 +86,9 @@
           modules = [ ./hosts/pochita-sd/configuration.nix ];
         };
         myISO = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
           modules = [
             ./hosts/iso/configuration.nix
-            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma6.nix"
           ];
         };
         wallfacer = nixpkgs.lib.nixosSystem {
