@@ -38,6 +38,8 @@ $ zstdcat nixos-sd-image-24.05.20241116.e8c38b7-aarch64-linux.img.zst | dd of=/d
 and voila! when you plug the sd card to the raspberry pi 5 it will boot up with the configuration that you have built. And then you can ssh into it and further configure it.
 
 </details>
+build iso with:
+ nix build .#nixosConfigurations.myISO.config.system.build.isoImage 
 
 # To-do list
 
