@@ -48,6 +48,7 @@
     fd
     du-dust
     dysk
+    gnupg
   ];
 
   environment.variables = {
