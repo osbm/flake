@@ -49,7 +49,6 @@
     du-dust
     dysk
     gnupg
-    pinentry-tty
   ];
 
   environment.variables = {
