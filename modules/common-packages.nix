@@ -58,7 +58,11 @@
 
   virtualisation.docker.enable = true;
 
-  programs.gnupg.agent.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
+  services.pcscd.enable = true;
 
   # Enable the OpenSSH daemon.
   services.openssh = {
