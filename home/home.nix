@@ -9,6 +9,7 @@
     ./tmux
     ./ghostty.nix
     ./git.nix
+    ./gpg.nix
     ./gtk.nix
     ./ssh.nix
     ./bash.nix
