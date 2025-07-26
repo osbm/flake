@@ -12,6 +12,7 @@ I didnt get these setup yet.
 - Raspberry Pi Zero 2W **harmonica** (small machine for small tasks and cronjobs) (not setup yet)
 - Android phone (termux) **android** (not setup yet)
 
+
 <details>
   <summary> How to bootstrap raspberry pi 5</summary>
 
