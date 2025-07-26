@@ -3,7 +3,7 @@ The nix configuration of mine. My intentions are just to maintain my configurati
 
 Here i have 4 machines and 1 sd card image that i maintain.
 - Laptop **tartarus** (faulty hardware, nvidia gpu doesnt work)
-- Desktop **ymir** (beast, my most prized possesion as of now)
+- Desktop **ymir** (beast, my most prized possession as of now)
 - Raspberry Pi 5 **pochita** (a server that i experiment with)
 - Raspberry Pi 5 SD image **pochita-sd** (produces an sd image that could be used to flash the sd card of a rpi-5)
 - Phone **atreus** (unrooted, nix-on-droid)
