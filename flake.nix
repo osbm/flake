@@ -64,15 +64,9 @@
         modules = [ ./hosts/${configName}/configuration.nix ];
       };
       configNames = builtins.attrNames (builtins.readDir ./hosts);
-
-      makeNixosConfigurations = config_folder:
-        let
-          configNames = builtins.attrNames (builtins.readDir config_folder);
-        in
-          nixpkgs.lib.genAttrs configNames (name: makeNixosConfig name);
     in
     {
-      nixosConfigurations = makeNixosConfigurations ./hosts;
+      nixosConfigurations = nixpkgs.lib.genAttrs configNames (name: makeNixosConfig name);
       nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
         extraSpecialArgs = { inherit inputs outputs; };
         pkgs = import nixpkgs { system = "aarch64-linux"; };
