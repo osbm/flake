@@ -1,7 +1,7 @@
 {
   programs.git = {
     enable = true;
-    userEmail = "osmanfbayram@gmail.com";
+    userEmail = "osbm@osbm.dev";
     userName = "osbm";
     signing = {
       format = "openpgp";
