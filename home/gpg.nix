@@ -10,5 +10,5 @@
     pinentry.program = "pinentry-cursor";
   };
   programs.gpg.enable = true;
-  home.packages = [ pkgs.pinentry-cursor ];
+  home.packages = [ pkgs.pinentry-curses ];
 }
