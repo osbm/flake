@@ -7,6 +7,7 @@
     extraConfig = ''
       allow-loopback-pinentry
     '';
+    pinentry.program = "pinentry-wayprompt";
   };
   programs.gpg.enable = true;
 }
