@@ -43,6 +43,10 @@
         process = "git-lfs filter-process";
         required = true;
       };
+      signing = {
+        signByDefault = true;
+        key = "3A264839184185CF";
+      };
     };
   };
 }
