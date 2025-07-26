@@ -1,4 +1,4 @@
-{
+{pkgs, ...}:{
 
   services.gpg-agent = {
     enable = true;
@@ -7,7 +7,8 @@
     extraConfig = ''
       allow-loopback-pinentry
     '';
-    pinentry.program = "pinentry-wayprompt";
+    pinentry.program = "pinentry-cursor";
   };
   programs.gpg.enable = true;
+  home.packages = [ pkgs.pinentry-cursor ];
 }
