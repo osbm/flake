@@ -82,5 +82,21 @@
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.harmonica;
         };
       };
+      packages = forAllSystems (system:
+        let
+          makeDotfilesPackages = machines:
+            builtins.listToAttrs (map (machine: {
+              name = "${machine}-dotfiles";
+              value = self.nixosConfigurations.${machine}.config.home-manager.users.osbm.home-files;
+            }) machines);
+          dotfilesMachines = [ "ymir" "pochita" "tartarus" "wallfacer" ];
+        in
+        {
+          # export home-manager dotfiles
+          # /nix/store/61b1rzwps27pa4gb3ql8kdddyz22nhnn-home-manager-files/.bashrc
+          # /nix/store/61b1rzwps27pa4gb3ql8kdddyz22nhnn-home-manager-files/.config/git/config
+          # etc.
+        } // (makeDotfilesPackages dotfilesMachines)
+      );
     };
 }
