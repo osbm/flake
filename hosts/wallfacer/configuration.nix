@@ -1,4 +1,7 @@
 { lib, ... }:
+let
+  hydraPort = 54543;
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -12,12 +15,13 @@
 
   services.hydra = {
     enable = true;
-    hydraURL = "http://localhost:54543";
+    hydraURL = "http://localhost:${hydraPort}";
     notificationSender = "hydra@localhost";
     buildMachinesFiles = [];
     useSubstitutes = true;
+
   };
-  networking.firewall.allowedTCPPorts = [ 54543 ];
+  networking.firewall.allowedTCPPorts = [ hydraPort ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
