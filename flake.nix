@@ -84,19 +84,19 @@
       };
       packages = forAllSystems (system:
         let
-          makeDotfilesPackages = machines:
-            builtins.listToAttrs (map (machine: {
-              name = "${machine}-dotfiles";
-              value = self.nixosConfigurations.${machine}.config.home-manager.users.osbm.home-files;
-            }) machines);
-          dotfilesMachines = [ "ymir" "pochita" "tartarus" "wallfacer" ];
+          makeNixosConfigWithSystemOverride = configName: nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit inputs outputs; };
+            modules = [
+              ./hosts/${configName}/configuration.nix
+              { nixpkgs.hostPlatform = nixpkgs.lib.mkForce system; }
+            ];
+          };
+          dotfilesMachineNames = [ "ymir" "pochita" "tartarus" "wallfacer" ];
         in
-        {
-          # export home-manager dotfiles
-          # /nix/store/61b1rzwps27pa4gb3ql8kdddyz22nhnn-home-manager-files/.bashrc
-          # /nix/store/61b1rzwps27pa4gb3ql8kdddyz22nhnn-home-manager-files/.config/git/config
-          # etc.
-        } // (makeDotfilesPackages dotfilesMachines)
+        builtins.listToAttrs (map (name: {
+          name = "${name}-dotfiles";
+          value = (makeNixosConfigWithSystemOverride name).config.home-manager.users.osbm.home-files;
+        }) dotfilesMachineNames)
       );
     };
 }
