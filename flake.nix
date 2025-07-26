@@ -58,48 +58,24 @@
       ];
       forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
       makePkgs = system: import nixpkgs { inherit system; };
+      makeNixosConfig = configName: nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs outputs; };
+        modules = [ ./hosts/${configName}/configuration.nix ];
+      };
+      configNames = builtins.attrNames (builtins.readDir ./hosts);
+
+      makeNixosConfigurations = config_folder:
+        let
+          configNames = builtins.attrNames (builtins.readDir config_folder);
+        in
+          nixpkgs.lib.genAttrs configNames (name: makeNixosConfig name);
     in
     {
-      nixosConfigurations = {
-        tartarus = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/tartarus/configuration.nix ];
-        };
-        ymir = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/ymir/configuration.nix ];
-        };
-        harmonica = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/harmonica/configuration.nix ];
-        };
-        harmonica-sd = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/harmonica-sd/configuration.nix ];
-        };
-        pochita = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/pochita/configuration.nix ];
-        };
-        pochita-sd = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/pochita-sd/configuration.nix ];
-        };
-        myISO = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/iso/configuration.nix
-          ];
-        };
-        wallfacer = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/wallfacer/configuration.nix ];
-        };
-      };
+      nixosConfigurations = makeNixosConfigurations ./hosts;
       nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
         extraSpecialArgs = { inherit inputs outputs; };
         pkgs = import nixpkgs { system = "aarch64-linux"; };
-        modules = [ ./hosts/atreus/configuration.nix ];
+        modules = [ ./nixOnDroidHosts/atreus/configuration.nix ];
       };
 
       lib = import ./lib { inherit (nixpkgs) lib; };
