@@ -15,7 +15,7 @@ in
 
   services.hydra = {
     enable = true;
-    hydraURL = "http://localhost:${hydraPort}";
+    hydraURL = "http://localhost:${builtins.toString hydraPort}";
     notificationSender = "hydra@localhost";
     buildMachinesFiles = [];
     useSubstitutes = true;
