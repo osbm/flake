@@ -18,6 +18,7 @@ in
   services.caddy.virtualHosts = {
     "${wallfacerTailscaleDomain}" = {
       extraConfig = ''
+        tls off
         handle_path /hydra/* {
           reverse_proxy localhost:${toString config.services.hydra.port}
         }
