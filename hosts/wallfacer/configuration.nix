@@ -1,6 +1,5 @@
-{ lib, ... }:
+{ lib, config, ... }:
 let
-  hydraPort = 54543;
   wallfacerTailscaleDomain = "wallfacer.curl-boga.ts.net";
 in
 {
@@ -19,7 +18,7 @@ in
     "${wallfacerTailscaleDomain}" = {
       extraConfig = ''
         handle_path /hydra* {
-          reverse_proxy localhost:${toString hydraPort}
+          reverse_proxy localhost:${toString config.services.hydra.port}
         }
         handle_path /nextcloud* {
           retun hello "Nextcloud is not configured yet. Please set up the service.";
@@ -27,7 +26,7 @@ in
       '';
     };
   };
-  networking.firewall.allowedTCPPorts = [ hydraPort ];
+  networking.firewall.allowedTCPPorts = [ config.services.hydra.port ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
