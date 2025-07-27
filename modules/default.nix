@@ -15,6 +15,7 @@
     ./nix-settings.nix
     ./remote-builds.nix
     ./secrets.nix
+    ./security.nix
     ./sound.nix
     ./users.nix
     ./wake-on-lan.nix
