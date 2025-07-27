@@ -1,6 +1,7 @@
 { lib, ... }:
 let
   hydraPort = 54543;
+  wallfacerTailscaleDomain = "wallfacer.curl-boga.ts.net";
 in
 {
   imports = [
@@ -11,9 +12,18 @@ in
     enableKDE = false;
     enableFonts = false;
     enableNextcloud = true;
+    enableHydra = true;
   };
 
-
+  services.caddy.virtualHosts = {
+    "${wallfacerTailscaleDomain}" = {
+      extraConfig = ''
+        handle_path /hydra* {
+          reverse_proxy localhost:${toString hydraPort}
+        }
+      '';
+    };
+  };
   networking.firewall.allowedTCPPorts = [ hydraPort ];
 
   boot.loader.systemd-boot.enable = true;
