@@ -27,6 +27,23 @@
   services.wanikani-bypass-lessons.enable = true;
   services.wanikani-fetch-data.enable = true;
 
+  services.glance = {
+    enable = true;
+    openFirewall = true;
+    settings = {
+      server = {
+        port = 3838;
+        host = "0.0.0.0";
+      };
+      pages = {
+        "home" = {
+          title = "Home";
+          content = "Welcome to Pochita's home page!";
+        };
+      };
+    };
+  };
+
   # paperless is giving an error
   # services.paperless = {
   #   enable = true;
