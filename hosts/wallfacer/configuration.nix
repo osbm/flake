@@ -12,6 +12,7 @@ in
     enableFonts = false;
     # enableNextcloud = true;
     enableHydra = true;
+    enableCaddy = true;
   };
 
   services.caddy.virtualHosts = {
