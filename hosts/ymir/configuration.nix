@@ -30,6 +30,15 @@
 
   networking.hostName = "ymir"; # Define your hostname.
 
+  services.hydra = {
+    enable = true;
+    hydraURL = "http://localhost:3000";
+    notificationSender = "hydra@localhost";
+    buildMachinesFiles = [];
+    useSubstitutes = true;
+  };
+
+
   networking.firewall.allowedTCPPorts = [
     8889
     8000

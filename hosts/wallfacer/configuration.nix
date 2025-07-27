@@ -13,14 +13,7 @@ in
     enableNextcloud = true;
   };
 
-  services.hydra = {
-    enable = true;
-    hydraURL = "http://localhost:${builtins.toString hydraPort}";
-    notificationSender = "hydra@localhost";
-    buildMachinesFiles = [];
-    useSubstitutes = true;
 
-  };
   networking.firewall.allowedTCPPorts = [ hydraPort ];
 
   boot.loader.systemd-boot.enable = true;
