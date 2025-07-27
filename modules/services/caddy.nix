@@ -17,20 +17,20 @@
     (lib.mkIf config.myModules.enableCaddy {
       services.caddy = {
         enable = true;
-        package = pkgs.caddy.withPlugins {
-          # update time to time
-          # last update: 2025-03-02
-          plugins = [ "github.com/caddy-dns/cloudflare@v0.2.1" ];
-          hash = "sha256-2D7dnG50CwtCho+U+iHmSj2w14zllQXPjmTHr6lJZ/A=";
-        };
-        email = "osbm@osbm.dev";
-        extraConfig = ''
-          (cloudflare) {
-            tls {
-              dns cloudflare {env.CF_API_TOKEN}
-            }
-          }
-        '';
+        # package = pkgs.caddy.withPlugins {
+        #   # update time to time
+        #   # last update: 2025-03-02
+        #   plugins = [ "github.com/caddy-dns/cloudflare@v0.2.1" ];
+        #   hash = "sha256-2D7dnG50CwtCho+U+iHmSj2w14zllQXPjmTHr6lJZ/A=";
+        # };
+        # email = "osbm@osbm.dev";
+        # extraConfig = ''
+        #   (cloudflare) {
+        #     tls {
+        #       dns cloudflare {env.CF_API_TOKEN}
+        #     }
+        #   }
+        # '';
         # globalConfig = ''
         #   acme_dns cloudflare {env.CF_API_TOKEN}
         # '';
