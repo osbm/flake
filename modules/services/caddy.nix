@@ -20,7 +20,7 @@
         package = pkgs.caddy.withPlugins {
           # update time to time
           # last update: 2025-03-02
-          plugins = [ "github.com/caddy-dns/cloudflare@v0.0.0-20250228175314-1fb64108d4de" ];
+          plugins = [ "github.com/caddy-dns/cloudflare@v0.2.1" ];
           hash = "sha256-x5SJSns16VaqOyKLCtaMIMWaooT+C0f9iSWKFBTywnA=";
         };
         email = "osbm@osbm.dev";
