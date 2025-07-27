@@ -17,11 +17,11 @@ in
   services.caddy.virtualHosts = {
     "${wallfacerTailscaleDomain}" = {
       extraConfig = ''
-        handle_path /hydra* {
+        handle_path /hydra/* {
           reverse_proxy localhost:${toString config.services.hydra.port}
         }
-        handle_path /nextcloud* {
-          retun hello "Nextcloud is not configured yet. Please set up the service.";
+        handle_path /nextcloud/* {
+          return hello "Nextcloud is not configured yet. Please set up the service."
         }
       '';
     };
