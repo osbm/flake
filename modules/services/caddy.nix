@@ -57,6 +57,10 @@
       };
 
       security.acme.acceptTerms = true;
+      security.acme.defaults = {
+        email = "osbm@osbm.dev";
+        acceptTerms = true;
+      };
 
     })
   ];

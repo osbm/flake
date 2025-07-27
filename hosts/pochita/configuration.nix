@@ -40,18 +40,6 @@
     pkgs.raspberrypi-eeprom
   ];
 
-  security.sudo = {
-    enable = true;
-    wheelNeedsPassword = false;
-  };
-
-  security.acme.defaults = {
-    email = "osmanfbayram@gmail.com";
-    acceptTerms = true;
-  };
-
-  # services.getty.autologinUser = "osbm";
-
   # The board and wanted kernel version
   raspberry-pi-nix = {
     board = "bcm2712";
