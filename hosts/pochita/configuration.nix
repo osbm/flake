@@ -59,15 +59,15 @@
                   cache = "1m";
                   sites = [
                     {
-                      icon = "si:vaultwarden";
-                      title = "Vaultwarden";
-                      url = "https://ymir.curl-boga.ts.net:7070/";
+                      icon = "si:ollama";
+                      title = "Open Webui";
+                      url = "http://ymir.curl-boga.ts.net:7070/";
                     }
                     # http://ymir.curl-boga.ts.net:4444 ymir remote web vscode
                     {
                       icon = "si:vs-code";
                       title = "Ymir Remote VSCode";
-                      url = "https://ymir.curl-boga.ts.net:4444/";
+                      url = "http://ymir.curl-boga.ts.net:4444/";
                     }
                   ];
                   title = "Services";
