@@ -35,12 +35,51 @@
         port = 3838;
         host = "0.0.0.0";
       };
-      pages = {
-        "home" = {
-          title = "Home";
+      pages = [
+        {
+          columns = [
+            {
+              size = "small";
+              widgets = [
+                {type = "calendar";}
+                {
+                  type = "repository";
+                  repository = "NixOS/nixpkgs";
+                }
+              ];
+            }
+            {
+              size = "full";
+              widgets = [
+                {
+                  type = "repository";
+                  repository = "NixOS/nixpkgs";
+                }
+                {
+                  cache = "1m";
+                  sites = [
+                    {
+                      icon = "si:vaultwarden";
+                      title = "Vaultwarden";
+                      url = "https://ymir.curl-boga.ts.net:7070/";
+                    }
+                    # http://ymir.curl-boga.ts.net:4444 ymir remote web vscode
+                    {
+                      icon = "si:vs-code";
+                      title = "Ymir Remote VSCode";
+                      url = "https://ymir.curl-boga.ts.net:4444/";
+                    }
+                  ];
+                  title = "Services";
+                  type = "monitor";
+                }
+              ];
+            }
+          ];
+          name = "Home";
           content = "Welcome to Pochita's home page!";
-        };
-      };
+        }
+      ];
     };
   };
 
