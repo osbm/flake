@@ -11,7 +11,7 @@ in
   myModules = {
     enableKDE = false;
     enableFonts = false;
-    enableNextcloud = true;
+    # enableNextcloud = true;
     enableHydra = true;
   };
 
@@ -22,7 +22,7 @@ in
           reverse_proxy localhost:${toString hydraPort}
         }
         handle_path /nextcloud* {
-          reverse_proxy localhost:443
+          retun hello "Nextcloud is not configured yet. Please set up the service.";
         }
       '';
     };
