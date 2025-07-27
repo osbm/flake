@@ -34,29 +34,6 @@
         # globalConfig = ''
         #   acme_dns cloudflare {env.CF_API_TOKEN}
         # '';
-        virtualHosts = {
-          "chat.osbm.dev" = {
-            extraConfig = ''
-              reverse_proxy ymir.curl-boga.ts.net:3000
-              import cloudflare
-            '';
-          };
-          "aifred.osbm.dev" = {
-            extraConfig = ''
-              reverse_proxy ymir.curl-boga.ts.net:8000
-              import cloudflare
-            '';
-          };
-          "git.osbm.dev" = {
-            serverAliases = [
-              "www.git.osbm.dev"
-            ];
-            extraConfig = ''
-              reverse_proxy pochita.curl-boga.ts.net:${toString config.services.forgejo.settings.server.HTTP_PORT}
-              import cloudflare
-            '';
-          };
-        };
       };
 
       networking.firewall.allowedTCPPorts = [
