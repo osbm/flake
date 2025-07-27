@@ -55,6 +55,9 @@
       systemd.services.caddy.serviceConfig = {
         EnvironmentFile = "/etc/caddy/.env";
       };
+
+      security.acme.acceptTerms = true;
+
     })
   ];
 }
