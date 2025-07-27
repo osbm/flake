@@ -27,12 +27,12 @@
               };
             };
           };
-          "288d47fb-95ee-4019-9e07-6f918ab02357" = {
+          "91b13f9b-81be-46e1-bca0-db2640bf2d0a" = {
             default = "http_status:404";
-            credentialsFile = "/home/osbm/.cloudflared/288d47fb-95ee-4019-9e07-6f918ab02357.json";
+            credentialsFile = "/home/osbm/.cloudflared/91b13f9b-81be-46e1-bca0-db2640bf2d0a.json";
             ingress = {
-              "git.osbm.dev" = {
-                service = "http://localhost:3000";
+              "home.osbm.dev" = {
+                service = "http://localhost:3838";
               };
             };
           };
