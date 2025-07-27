@@ -21,7 +21,7 @@
           # update time to time
           # last update: 2025-03-02
           plugins = [ "github.com/caddy-dns/cloudflare@v0.2.1" ];
-          hash = "sha256-x5SJSns16VaqOyKLCtaMIMWaooT+C0f9iSWKFBTywnA=";
+          hash = "sha256-2D7dnG50CwtCho+U+iHmSj2w14zllQXPjmTHr6lJZ/A=";
         };
         email = "osbm@osbm.dev";
         extraConfig = ''
