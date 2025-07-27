@@ -19,12 +19,13 @@
       services.nextcloud = {
         enable = true;
         package = pkgs.nextcloud31;
-        hostName = "localhost";
+        hostName = "localhost/nextcloud";
         config.adminpassFile = "/etc/nextcloud-admin-pass";
         config.dbtype = "sqlite";
         database.createLocally = true;
         settings.trusted_domains = [
           "wallfacer.curl-boga.ts.net"
+          "localhost"
         ];
       };
     })

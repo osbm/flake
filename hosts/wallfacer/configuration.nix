@@ -21,6 +21,9 @@ in
         handle_path /hydra* {
           reverse_proxy localhost:${toString hydraPort}
         }
+        handle_path /nextcloud* {
+          reverse_proxy localhost:443
+        }
       '';
     };
   };
