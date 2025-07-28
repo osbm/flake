@@ -64,12 +64,30 @@
                     }
                   ];
                 }
+
                 {
                   size = "full";
                   widgets = [
                     {
-                      type = "repository";
-                      repository = "NixOS/nixpkgs";
+                      type = "search";
+                      search-engine = "google";
+                      bangs = [
+                        {
+                          title = "youtube";
+                          shortcut = "!yt";
+                          url = "https://www.youtube.com/results?search_query={QUERY}";
+                        }
+                        {
+                          title = "nixpkgs";
+                          shortcut = "!np";
+                          url = "https://search.nixos.org/packages?channel=unstable&query={QUERY}";
+                        }
+                        {
+                          title = "nixos";
+                          shortcut = "!no";
+                          url = "https://search.nixos.org/options?channel=unstable&query={QUERY}";
+                        }
+                      ];
                     }
                     {
                       cache = "1m";
