@@ -16,6 +16,7 @@
     (lib.mkIf config.myModules.enableAttic {
       services.atticd = {
         enable = true;
+        environmentFile = "/persist/attic.env";
         settings = {
           listen = "[::]:5000";
           storage = {
