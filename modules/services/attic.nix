@@ -27,7 +27,17 @@
         };
       };
       networking.firewall.allowedTCPPorts = [ 5000 ];
-
+      services.cloudflared.tunnels = {
+        "fa301a21-b259-4149-b3d0-b1438c7c81f8" = {
+          default = "http_status:404";
+          credentialsFile = "/home/osbm/.cloudflared/fa301a21-b259-4149-b3d0-b1438c7c81f8.json";
+          ingress = {
+            "cache.osbm.dev" = {
+              service = "http://localhost:5000";
+            };
+          };
+        };
+      };
     })
   ];
 }
