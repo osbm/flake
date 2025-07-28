@@ -59,10 +59,12 @@
       ];
       forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
       makePkgs = system: import nixpkgs { inherit system; };
-      makeNixosConfig = configName: nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs outputs; };
-        modules = [ ./hosts/${configName}/configuration.nix ];
-      };
+      makeNixosConfig =
+        configName:
+        nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/${configName}/configuration.nix ];
+        };
       configNames = builtins.attrNames (builtins.readDir ./hosts);
     in
     {
@@ -82,21 +84,31 @@
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.harmonica;
         };
       };
-      packages = forAllSystems (system:
+      packages = forAllSystems (
+        system:
         let
-          makeNixosConfigWithSystemOverride = configName: nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit inputs outputs; };
-            modules = [
-              ./hosts/${configName}/configuration.nix
-              { nixpkgs.hostPlatform = nixpkgs.lib.mkForce system; }
-            ];
-          };
-          dotfilesMachineNames = [ "ymir" "pochita" "tartarus" "wallfacer" ];
+          makeNixosConfigWithSystemOverride =
+            configName:
+            nixpkgs.lib.nixosSystem {
+              specialArgs = { inherit inputs outputs; };
+              modules = [
+                ./hosts/${configName}/configuration.nix
+                { nixpkgs.hostPlatform = nixpkgs.lib.mkForce system; }
+              ];
+            };
+          dotfilesMachineNames = [
+            "ymir"
+            "pochita"
+            "tartarus"
+            "wallfacer"
+          ];
         in
-        builtins.listToAttrs (map (name: {
-          name = "${name}-dotfiles";
-          value = (makeNixosConfigWithSystemOverride name).config.home-manager.users.osbm.home-files;
-        }) dotfilesMachineNames)
+        builtins.listToAttrs (
+          map (name: {
+            name = "${name}-dotfiles";
+            value = (makeNixosConfigWithSystemOverride name).config.home-manager.users.osbm.home-files;
+          }) dotfilesMachineNames
+        )
       );
     };
 }

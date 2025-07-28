@@ -30,7 +30,6 @@
 
   networking.hostName = "ymir"; # Define your hostname.
 
-
   networking.firewall.allowedTCPPorts = [
     8889
     8000
