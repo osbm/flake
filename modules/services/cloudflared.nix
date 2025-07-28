@@ -17,17 +17,6 @@
       services.cloudflared = {
         enable = true;
         certificateFile = "/home/osbm/.cloudflared/cert.pem";
-        tunnels = {
-          "91b13f9b-81be-46e1-bca0-db2640bf2d0a" = {
-            default = "http_status:404";
-            credentialsFile = "/home/osbm/.cloudflared/91b13f9b-81be-46e1-bca0-db2640bf2d0a.json";
-            ingress = {
-              "home.osbm.dev" = {
-                service = "http://localhost:3838";
-              };
-            };
-          };
-        };
       };
     })
   ];
