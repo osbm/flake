@@ -14,6 +14,7 @@ in
     enableHydra = true;
     enableCaddy = true;
     enableAttic = true;
+    enableCloudflared = true;
   };
 
   services.caddy.virtualHosts = {
