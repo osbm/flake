@@ -59,6 +59,11 @@
                   cache = "1m";
                   sites = [
                     {
+                      icon = "sh:forgejo";
+                      title = "Forgejo git server";
+                      url = "https://git.osbm.dev";
+                    }
+                    {
                       icon = "si:ollama";
                       title = "Open Webui";
                       url = "http://ymir.curl-boga.ts.net:7070/";
