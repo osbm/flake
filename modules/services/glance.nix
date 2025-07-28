@@ -22,6 +22,10 @@
             port = 3838;
             host = "0.0.0.0";
           };
+          branding = {
+            # stolen from notohh/snowflake but i love it so much
+            custom-footer = ''<b><p>ᓚᘏᗢ</p></b>'';
+          };
           pages = [
             {
               columns = [
