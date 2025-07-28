@@ -41,6 +41,17 @@
           };
         };
       };
+      services.cloudflared.tunnels = {
+        "eb9052aa-9867-482f-80e3-97a7d7e2ef04" = {
+          default = "http_status:404";
+          credentialsFile = "/home/osbm/.cloudflared/eb9052aa-9867-482f-80e3-97a7d7e2ef04.json";
+          ingress = {
+            "git.osbm.dev" = {
+              service = "http://localhost:3000";
+            };
+          };
+        };
+      };
     })
   ];
 }
