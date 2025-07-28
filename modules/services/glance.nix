@@ -49,6 +49,22 @@
                               title = "Crates.io";
                               url = "https://crates.io/users/osbm";
                             }
+                            {
+                              title = "HuggingFace";
+                              url = "https://huggingface.co/osbm";
+                            }
+                            {
+                              title = "Bluesky";
+                              url = "https://bsky.app/profile/osbm.dev";
+                            }
+                            {
+                              title = "Docker Hub";
+                              url = "https://hub.docker.com/u/osbm";
+                            }
+                            {
+                              title = "Kaggle";
+                              url = "https://www.kaggle.com/osmanf";
+                            }
                           ];
                         }
                         {
