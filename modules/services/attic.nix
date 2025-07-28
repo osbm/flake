@@ -19,6 +19,7 @@
         environmentFile = "/persist/attic.env";
         settings = {
           listen = "[::]:5000";
+          jwt = { };
           storage = {
             type = "local";
             path = "/data/atreus/attic";
