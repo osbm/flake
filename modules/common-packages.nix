@@ -49,6 +49,7 @@
     du-dust
     dysk
     gnupg
+    attic
   ];
 
   environment.variables = {
