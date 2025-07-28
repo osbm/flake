@@ -78,6 +78,11 @@
                       title = "Tartarus Remote VSCode";
                       url = "http://tartarus.curl-boga.ts.net:4444/";
                     }
+                    {
+                      icon = "sh:visual-studio-code";
+                      title = "Wallfacer Remote VSCode";
+                      url = "http://wallfacer.curl-boga.ts.net:4444/";
+                    }
                   ];
                   title = "Services";
                   type = "monitor";
