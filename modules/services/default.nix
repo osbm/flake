@@ -1,5 +1,6 @@
 {
   imports = [
+    ./attic.nix
     ./caddy.nix
     ./cloudflare-dyndns.nix
     ./cloudflared.nix

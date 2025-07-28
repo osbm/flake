@@ -13,6 +13,7 @@ in
     # enableNextcloud = true;
     enableHydra = true;
     enableCaddy = true;
+    enableAttic = true;
   };
 
   services.caddy.virtualHosts = {
