@@ -66,7 +66,7 @@
                     {
                       icon = "sh:jellyfin";
                       title = "Jellyfin";
-                      url = "htty://ymir.curl-boga.ts.net:8096/";
+                      url = "http://ymir.curl-boga.ts.net:8096/";
                     }
                     {
                       icon = "sh:visual-studio-code";
