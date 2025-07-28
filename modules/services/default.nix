@@ -7,6 +7,7 @@
     ./nextcloud.nix
     ./ollama.nix
     ./forgejo.nix
+    ./glance.nix
     ./hydra.nix
     ./jellyfin.nix
     ./system-logger
