@@ -49,7 +49,7 @@
     du-dust
     dysk
     gnupg
-    attic
+    attic-client
   ];
 
   environment.variables = {
