@@ -30,8 +30,37 @@
                   widgets = [
                     { type = "calendar"; }
                     {
-                      type = "repository";
-                      repository = "NixOS/nixpkgs";
+                      type = "bookmarks";
+                      groups = [
+                        {
+                          title = "My Profiles";
+                          same-tab = true;
+                          color = "200 50 50";
+                          links = [
+                            {
+                              title = "GitHub";
+                              url = "https://github.com/osbm";
+                            }
+                            {
+                              title = "Gitlab";
+                              url = "https://gitlab.com/osbm";
+                            }
+                            {
+                              title = "Crates.io";
+                              url = "https://crates.io/users/osbm";
+                            }
+                          ];
+                        }
+                        {
+                          title = "Documents";
+                          links = [
+                            {
+                              title = "Nixos Search";
+                              url = "https://search.nixos.org";
+                            }
+                          ];
+                        }
+                      ];
                     }
                   ];
                 }
