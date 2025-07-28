@@ -63,11 +63,20 @@
                       title = "Open Webui";
                       url = "http://ymir.curl-boga.ts.net:7070/";
                     }
-                    # http://ymir.curl-boga.ts.net:4444 ymir remote web vscode
                     {
-                      icon = "si:vs-code";
+                      icon = "sh:jellyfin";
+                      title = "Jellyfin";
+                      url = "htty://ymir.curl-boga.ts.net:8096/";
+                    }
+                    {
+                      icon = "sh:visual-studio-code";
                       title = "Ymir Remote VSCode";
                       url = "http://ymir.curl-boga.ts.net:4444/";
+                    }
+                    {
+                      icon = "sh:visual-studio-code";
+                      title = "Tartarus Remote VSCode";
+                      url = "http://tartarus.curl-boga.ts.net:4444/"
                     }
                   ];
                   title = "Services";
