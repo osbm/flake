@@ -66,6 +66,11 @@
                       url = "http://wallfacer.curl-boga.ts.net:3000";
                     }
                     {
+                      icon = "sh:nixos";
+                      title = "Attix Binary Cache";
+                      url = "https://cache.osbm.dev";
+                    }
+                    {
                       icon = "sh:visual-studio-code";
                       title = "Ymir Remote VSCode";
                       url = "http://ymir.curl-boga.ts.net:4444/";
