@@ -76,7 +76,7 @@
                     {
                       icon = "sh:visual-studio-code";
                       title = "Tartarus Remote VSCode";
-                      url = "http://tartarus.curl-boga.ts.net:4444/"
+                      url = "http://tartarus.curl-boga.ts.net:4444/";
                     }
                   ];
                   title = "Services";
