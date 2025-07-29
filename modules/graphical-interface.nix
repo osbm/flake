@@ -52,7 +52,6 @@
         gimp
         kitty
         obs-studio
-        audacity
         qbittorrent
         ani-cli
         prismlauncher
