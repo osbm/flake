@@ -11,6 +11,7 @@
     ./hydra.nix
     ./jellyfin.nix
     ./system-logger
+    ./syncthing.nix
     ./tailscale.nix
     ./vaultwarden.nix
     ./vscode-server.nix
