@@ -22,6 +22,7 @@
     enableADB = true;
     enableOllama = true;
     enableMinegrubTheme = true;
+    enableNextcloud = true;
   };
 
   # Bootloader.
