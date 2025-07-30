@@ -22,7 +22,8 @@
           jwt = { };
           storage = {
             type = "local";
-            path = "/data/atreus/attic";
+            # path = "/data/atreus/attic";
+            # there is an issue
           };
         };
       };
