@@ -19,6 +19,12 @@
         environmentFile = "/persist/attic.env";
         settings = {
           listen = "[::]:5000";
+          allowedHosts = [
+            "cache.osbm.dev"
+            "wallfacer.curl-boga.ts.net"
+            "localhost"
+            "wallfacer"
+          ];
           jwt = { };
           storage = {
             type = "local";
