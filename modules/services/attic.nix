@@ -19,7 +19,7 @@
         environmentFile = "/persist/attic.env";
         settings = {
           listen = "[::]:5000";
-          allowedHosts = [
+          allowed-hosts = [
             "cache.osbm.dev"
             "wallfacer.curl-boga.ts.net"
             "localhost"
