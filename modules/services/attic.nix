@@ -26,11 +26,11 @@
             "wallfacer"
           ];
           jwt = { };
-          storage = {
-            type = "local";
-            # path = "/data/atreus/attic";
-            # there is an issue
-          };
+          # storage = {
+          #   type = "local";
+          #   # path = "/data/atreus/attic";
+          #   # there is an issue
+          # };
         };
       };
       networking.firewall.allowedTCPPorts = [ 5000 ];
