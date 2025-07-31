@@ -9,7 +9,8 @@ import matplotlib
 import functools
 
 matplotlib.use('agg')
-sns.set_theme(style="whitegrid")
+# set dark theme for plots
+sns.set_theme(style="darkgrid")
 
 app = Flask(__name__)
 DATA_DIR = Path("/var/lib/wanikani-logs")
@@ -47,7 +48,7 @@ def render_html(df):
     import io
 
     # Generate reviews plot SVG
-    plt.figure(figsize=(10, 5))
+    plt.figure(figsize=(10, 6))
     plt.plot(df['date'], df['num_reviews'], marker='o', label='Reviews')
     plt.title('Daily Reviews')
     plt.xlabel('Date')
@@ -56,16 +57,17 @@ def render_html(df):
     plt.xticks(range(0, len(df['date']), 10), df['date'][::10], rotation=45)
     plt.grid()
     plt.legend()
+    plt.tight_layout()
 
     # Save to string buffer
     reviews_buffer = io.StringIO()
-    plt.savefig(reviews_buffer, format='svg')
+    plt.savefig(reviews_buffer, format='svg', bbox_inches='tight')
     reviews_svg = reviews_buffer.getvalue()
     reviews_buffer.close()
     plt.close()
 
     # Generate lessons plot SVG
-    plt.figure(figsize=(10, 5))
+    plt.figure(figsize=(10, 6))
     plt.plot(df['date'], df['num_lessons'], marker='o', label='Lessons', color='orange')
     plt.title('Daily Lessons')
     plt.xlabel('Date')
@@ -74,10 +76,11 @@ def render_html(df):
     plt.xticks(range(0, len(df['date']), 10), df['date'][::10], rotation=45)
     plt.grid()
     plt.legend()
+    plt.tight_layout()
 
     # Save to string buffer
     lessons_buffer = io.StringIO()
-    plt.savefig(lessons_buffer, format='svg')
+    plt.savefig(lessons_buffer, format='svg', bbox_inches='tight')
     lessons_svg = lessons_buffer.getvalue()
     lessons_buffer.close()
     plt.close()
