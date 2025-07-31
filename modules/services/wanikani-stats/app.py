@@ -49,7 +49,7 @@ def render_html(df):
     import io
 
     # Generate reviews plot SVG
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(10, 6), facecolor='#151519')
     plt.plot(df['date'], df['num_reviews'], marker='o', label='Reviews')
     plt.title('Daily Reviews')
     plt.xlabel('Date')
@@ -58,6 +58,7 @@ def render_html(df):
     plt.xticks(range(0, len(df['date']), 10), df['date'][::10], rotation=45)
     plt.grid()
     plt.legend()
+    plt.gca().set_facecolor('#151519')
     plt.tight_layout()
 
     # Save to string buffer
@@ -68,7 +69,7 @@ def render_html(df):
     plt.close()
 
     # Generate lessons plot SVG
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(10, 6), facecolor='#151519')
     plt.plot(df['date'], df['num_lessons'], marker='o', label='Lessons', color='orange')
     plt.title('Daily Lessons')
     plt.xlabel('Date')
@@ -77,6 +78,7 @@ def render_html(df):
     plt.xticks(range(0, len(df['date']), 10), df['date'][::10], rotation=45)
     plt.grid()
     plt.legend()
+    plt.gca().set_facecolor('#151519')
     plt.tight_layout()
 
     # Save to string buffer
@@ -99,16 +101,6 @@ def render_html(df):
                     margin: 0;
                     padding: 20px;
                 }}
-                h1 {{
-                    color: hsl(240, 8%, 85%);
-                    text-align: center;
-                    margin-bottom: 30px;
-                }}
-                h2 {{
-                    color: hsl(240, 8%, 85%);
-                    margin-top: 40px;
-                    margin-bottom: 20px;
-                }}
                 svg {{
                     display: block;
                     margin: 0 auto;
@@ -117,10 +109,7 @@ def render_html(df):
             </style>
         </head>
         <body>
-            <h1>WaniKani Daily Stats</h1>
-            <h2>Reviews</h2>
             {reviews_svg}
-            <h2>Lessons</h2>
             {lessons_svg}
         </body>
     </html>
