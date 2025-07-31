@@ -66,5 +66,25 @@ in
         Group = "root";
       };
     };
+
+    # Timer to restart the service every 12 hours
+    systemd.services.wanikani-stats-restart = {
+      description = "Restart WaniKani Stats Service";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.systemd}/bin/systemctl restart wanikani-stats.service";
+        User = "root";
+      };
+    };
+
+    systemd.timers.wanikani-stats-restart = {
+      description = "Timer to restart WaniKani Stats Service every 12 hours";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "*-*-* 00,12:00:00";
+        Persistent = true;
+        RandomizedDelaySec = "5m";
+      };
+    };
   };
 }
