@@ -103,12 +103,11 @@ def render_html(df):
                 }}
                 svg {{
                     display: block;
-                    margin: 0 auto;
+                    margin: 17px auto;
                     background-color: transparent;
                     border-radius: 5px;
                     overflow: hidden;
                     border: 1px solid #1e1e24;
-                    padding: 17px;
                 }}
             </style>
         </head>
