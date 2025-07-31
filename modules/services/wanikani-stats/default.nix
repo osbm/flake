@@ -19,7 +19,9 @@ let
     ];
     text = ''
       #!/usr/bin/env bash
-      exec streamlit run /path/to/your/wanikani_stats_app.py
+      echo "Starting WaniKani Stats Streamlit app..."
+      cat ${./app.py}
+      exec streamlit run ${./app.py} --server.port ${toString config.services.wanikani-stats.port}
     '';
   };
 in
@@ -34,6 +36,12 @@ in
       type = lib.types.path;
       default = "/var/lib/wanikani-logs";
       description = "Directory to get the log archives";
+    };
+
+    port = lib.mkOption {
+      type = lib.types.port;
+      default = 8501;
+      description = "Port for the WaniKani Stats service";
     };
   };
 
