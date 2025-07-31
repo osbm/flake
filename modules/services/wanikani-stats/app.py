@@ -11,6 +11,7 @@ import functools
 matplotlib.use('agg')
 # set dark theme for plots
 sns.set_theme(style="darkgrid")
+plt.style.use('dark_background')
 
 app = Flask(__name__)
 DATA_DIR = Path("/var/lib/wanikani-logs")
@@ -88,7 +89,33 @@ def render_html(df):
     # Render HTML with embedded SVGs
     html_content = f"""
     <html>
-        <head><title>WaniKani Stats</title></head>
+        <head>
+            <title>WaniKani Stats</title>
+            <style>
+                body {{
+                    background-color: #151519;
+                    color: #8b8b9c;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    margin: 0;
+                    padding: 20px;
+                }}
+                h1 {{
+                    color: hsl(240, 8%, 85%);
+                    text-align: center;
+                    margin-bottom: 30px;
+                }}
+                h2 {{
+                    color: hsl(240, 8%, 85%);
+                    margin-top: 40px;
+                    margin-bottom: 20px;
+                }}
+                svg {{
+                    display: block;
+                    margin: 0 auto;
+                    background-color: transparent;
+                }}
+            </style>
+        </head>
         <body>
             <h1>WaniKani Daily Stats</h1>
             <h2>Reviews</h2>
