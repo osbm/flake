@@ -153,7 +153,7 @@
                           url = "http://wallfacer.curl-boga.ts.net:4444/";
                         }
                         {
-                          icon = "sh:json";
+                          icon = "si:json";
                           title = "Wanikani Stats Health";
                           url = "http://localhost:8501/health";
                         }
