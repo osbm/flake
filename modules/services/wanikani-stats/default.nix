@@ -8,13 +8,14 @@ let
   wanikani-stats-streamlit = pkgs.writeShellApplication {
     name = "wanikani-stats-streamlit";
     runtimeInputs = [
-      pkgs.python312.withPackages (
+      (pkgs.python312.withPackages (
           ppkgs:
             with pkgs.python312Packages; [
               pip
               streamlit
             ]
         )
+      )
     ];
     text = ''
       #!/usr/bin/env bash
