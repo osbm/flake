@@ -13,6 +13,10 @@ let
             with pkgs.python312Packages; [
               pip
               streamlit
+              matplotlib
+              pandas
+              numpy
+              seaborn
             ]
         )
       )
