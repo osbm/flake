@@ -6,7 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 DATA_DIR = Path("/var/lib/wanikani-logs")
-
+print("starting the WaniKani service")
 def load_data():
     records = []
     for zip_path in sorted(DATA_DIR.glob("wanikani_data_*.zip")):
