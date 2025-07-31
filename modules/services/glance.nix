@@ -152,6 +152,11 @@
                           title = "Wallfacer Remote VSCode";
                           url = "http://wallfacer.curl-boga.ts.net:4444/";
                         }
+                        {
+                          icon = "sh:json";
+                          title = "Wanikani Stats Health";
+                          url = "http://localhost:8501/health";
+                        }
                       ];
                       title = "Services";
                       type = "monitor";
