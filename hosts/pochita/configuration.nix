@@ -29,9 +29,9 @@
   services.wanikani-fetch-data.enable = true;
 
   # paperless is giving an error
-  services.paperless = {
-    enable = true;
-  };
+  # services.paperless = {
+  #   enable = true;
+  # };
 
   i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method
 
