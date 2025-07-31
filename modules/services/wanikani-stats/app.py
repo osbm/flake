@@ -105,6 +105,8 @@ def render_html(df):
                     display: block;
                     margin: 0 auto;
                     background-color: transparent;
+                    border-radius: 5px;
+                    overflow: hidden;
                 }}
             </style>
         </head>
