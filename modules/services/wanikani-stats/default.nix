@@ -49,11 +49,12 @@ in
 
     systemd.services.wanikani-stats = {
       description = "WaniKani Stats Service";
+      after = [ "network.target" ];
       serviceConfig = {
         Type = "simple";
         ExecStart = "${lib.getExe wanikani-stats-streamlit}";
-        Restart = "always";
-        RestartSec = 60;
+        WorkingDirectory = "/var/lib/wanikani-stats";
+        Restart = "on-failure";
         User = "root";
         Group = "root";
       };
