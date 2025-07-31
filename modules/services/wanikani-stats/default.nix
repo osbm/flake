@@ -61,6 +61,7 @@ in
     systemd.services.wanikani-stats = {
       description = "WaniKani Stats Service";
       after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
         ExecStart = "${lib.getExe wanikani-stats-streamlit}";
