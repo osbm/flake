@@ -19,7 +19,7 @@ let
 
       # i am going to read it from /persist/wanikani
 
-      [ ! -e /persist/wanikani ] && echo "/persist/wanikani doesnt exist here :("
+      [ ! -e /persist/wanikani ] && echo "/persist/wanikani doesnt exist here :(" && exit 1
 
       WANIKANI_TOKEN=$(< /persist/wanikani)
 
