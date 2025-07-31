@@ -136,6 +136,7 @@ def index():
 
     response = Response(render_html(df), content_type='text/html')
     response.headers['Widget-Content-Type'] = 'html'
+    response.headers['Widget-Title'] = 'WaniKani Statistics'
     return response
 
 @app.route('/health')
