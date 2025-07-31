@@ -5,28 +5,24 @@
   ...
 }:
 let
-  wanikani-stats-streamlit = pkgs.writeShellApplication {
-    name = "wanikani-stats-streamlit";
+  wanikani-stats-flask = pkgs.writeShellApplication {
+    name = "wanikani-stats-flask";
     runtimeInputs = [
       (pkgs.python312.withPackages (
           ppkgs:
             with pkgs.python312Packages; [
-              pip
-              streamlit
-              matplotlib
+              flask
               pandas
               numpy
-              seaborn
+              jinja2
             ]
         )
       )
     ];
     text = ''
       #!/usr/bin/env bash
-      echo "Starting WaniKani Stats Streamlit app..."
-      exec streamlit run ${./app.py} \
-        --server.port ${toString config.services.wanikani-stats.port} \
-        --browser.gatherUsageStats false
+      echo "Starting WaniKani Stats Flask app..."
+      exec python ${./app.py} ${toString config.services.wanikani-stats.port}
     '';
   };
 in
@@ -51,14 +47,6 @@ in
   };
 
   config = lib.mkIf config.services.wanikani-stats.enable {
-    # systemd.timers.wanikani-stats = {
-    #   description = "WaniKani Stats Timer";
-    #   wantedBy = [ "timers.target" ];
-    #   timerConfig = {
-    #     OnCalendar = "daily";
-    #     Persistent = true;
-    #   };
-    # };
     networking.firewall.allowedTCPPorts = [
       config.services.wanikani-stats.port
     ];
@@ -69,7 +57,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${lib.getExe wanikani-stats-streamlit}";
+        ExecStart = "${lib.getExe wanikani-stats-flask}";
         StateDirectory = "/var/lib/wanikani-stats";
         Restart = "on-failure";
         User = "root";
