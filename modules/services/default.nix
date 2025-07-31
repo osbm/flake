@@ -17,5 +17,6 @@
     ./vscode-server.nix
     ./wanikani-bypass-lessons.nix
     ./wanikani-fetch-data
+    ./wanikani-stats
   ];
 }
