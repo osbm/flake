@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 from flask import Flask, render_template_string, Response
 import pandas as pd
-from datetime import datetime
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib
@@ -113,7 +112,9 @@ def index():
     # sort by date string
     df.sort_values(by='date', inplace=True)
 
-    return render_html(df)
+    response = Response(render_html(df), content_type='text/html')
+    response.headers['Widget-Content-Type'] = 'html'
+    return response
 
 @app.route('/health')
 def health():
