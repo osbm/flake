@@ -162,6 +162,23 @@
               name = "Home";
               content = "Welcome to Pochita's home page!";
             }
+
+            {
+              columns = [
+                {
+                  size = "full";
+                  widgets = [
+                    {
+                      type = "extension";
+                      url = "http://localhost:8501";
+                    }
+                  ];
+                }
+              ];
+              name = "Wanikani Stats";
+              content = "Welcome to Wanikani Stats page!";
+            }
+
           ];
         };
       };
