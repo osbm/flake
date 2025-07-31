@@ -11,8 +11,9 @@ import functools
 
 matplotlib.use('agg')
 sns.set_theme(style="whitegrid")
+
 app = Flask(__name__)
-DATA_DIR = Path("./data")
+DATA_DIR = Path("/var/lib/wanikani-logs")
 
 def get_zip_file_names():
     """Get a list of zip files in the data directory."""
