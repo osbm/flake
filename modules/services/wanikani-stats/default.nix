@@ -65,7 +65,7 @@ in
       serviceConfig = {
         Type = "simple";
         ExecStart = "${lib.getExe wanikani-stats-streamlit}";
-        WorkingDirectory = "/var/lib/wanikani-stats";
+        StateDirectory = "/var/lib/wanikani-stats";
         Restart = "on-failure";
         User = "root";
         Group = "root";
