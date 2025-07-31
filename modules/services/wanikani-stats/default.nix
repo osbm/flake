@@ -15,6 +15,8 @@ let
               pandas
               numpy
               jinja2
+              matplotlib
+              seaborn
             ]
         )
       )
