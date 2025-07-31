@@ -23,20 +23,56 @@ let
 
       WANIKANI_TOKEN=$(< /persist/wanikani)
 
-      ASSIGNMENT_IDS=$(curl -s -H "Authorization: Bearer 2da24e4a-ba89-4c4a-9047-d08f21e9dd01" "https://api.wanikani.com/v2/assignments?immediately_available_for_lessons=true" | jq ".data[] | .id" )
+      # Maximum number of reviews to maintain
+      MAX_REVIEWS=200
 
-      echo "number of assignments: $(echo "$ASSIGNMENT_IDS" | wc -l)"
+      echo "=== Checking current reviews ==="
+
+      # Get current reviews (SRS stages 0-4)
+      current_reviews=0
+      for i in {0..4}; do
+          stage_count=$(curl -s -H "Authorization: Bearer 2da24e4a-ba89-4c4a-9047-d08f21e9dd01" "https://api.wanikani.com/v2/assignments?srs_stages=$i" | jq '.total_count')
+          current_reviews=$((current_reviews + stage_count))
+          echo "SRS stage $i: $stage_count items"
+      done
+
+      echo "Current total reviews: $current_reviews"
+      echo "Maximum reviews target: $MAX_REVIEWS"
+
+      if [ $current_reviews -ge $MAX_REVIEWS ]; then
+          echo "Reviews ($current_reviews) >= max ($MAX_REVIEWS). No lessons to bypass."
+          sleep 3600
+          exit 0
+      fi
+
+      lessons_to_bypass=$((MAX_REVIEWS - current_reviews))
+      echo "Need to bypass $lessons_to_bypass lessons to reach $MAX_REVIEWS total"
+
+      # Get available lessons (limited to what we need)
+      ASSIGNMENT_IDS=$(curl -s -H "Authorization: Bearer 2da24e4a-ba89-4c4a-9047-d08f21e9dd01" "https://api.wanikani.com/v2/assignments?immediately_available_for_lessons=true" | jq -r ".data[] | .id" | head -n $lessons_to_bypass)
+
+      available_lessons=$(echo "$ASSIGNMENT_IDS" | wc -l)
+      echo "Available lessons: $available_lessons"
+
+      if [ $available_lessons -eq 0 ]; then
+          echo "No lessons available to bypass."
+          sleep 3600
+          exit 0
+      fi
+
+      # Limit to what we actually need
+      actual_bypass=$(echo "$ASSIGNMENT_IDS" | wc -l)
+      echo "Will bypass $actual_bypass lessons"
 
       # "2017-09-05T23:41:28.980679Z" i need to create this from current time
 
       TIME_STRING=$(date -u +"%Y-%m-%dT%H:%M:%S.%6NZ")
-      echo "Current time:"
-      echo "$TIME_STRING"
+      echo "Current time: $TIME_STRING"
 
-      # echo Starting assignments:
+      echo "=== Starting assignments ==="
       for assignment_id in $ASSIGNMENT_IDS; do
           echo "Starting assignment $assignment_id"
-          curl "https://api.wanikani.com/v2/assignments/$assignment_id/start" \
+          curl -s "https://api.wanikani.com/v2/assignments/$assignment_id/start" \
               -X "PUT" \
               -H "Wanikani-Revision: 20170710" \
               -H "Content-Type: application/json; charset=utf-8" \
@@ -45,6 +81,9 @@ let
           echo
           sleep 1
       done
+
+      echo "Successfully bypassed $actual_bypass lessons"
+      echo "New total should be approximately: $((current_reviews + actual_bypass))"
       sleep 3600
     '';
   };
