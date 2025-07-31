@@ -39,7 +39,7 @@ let
       echo "Current total reviews: $current_reviews"
       echo "Maximum reviews target: $MAX_REVIEWS"
 
-      if [ $current_reviews -ge $MAX_REVIEWS ]; then
+      if [ "$current_reviews" -ge "$MAX_REVIEWS" ]; then
           echo "Reviews ($current_reviews) >= max ($MAX_REVIEWS). No lessons to bypass."
           sleep 3600
           exit 0
@@ -49,12 +49,12 @@ let
       echo "Need to bypass $lessons_to_bypass lessons to reach $MAX_REVIEWS total"
 
       # Get available lessons (limited to what we need)
-      ASSIGNMENT_IDS=$(curl -s -H "Authorization: Bearer 2da24e4a-ba89-4c4a-9047-d08f21e9dd01" "https://api.wanikani.com/v2/assignments?immediately_available_for_lessons=true" | jq -r ".data[] | .id" | head -n $lessons_to_bypass)
+      ASSIGNMENT_IDS=$(curl -s -H "Authorization: Bearer 2da24e4a-ba89-4c4a-9047-d08f21e9dd01" "https://api.wanikani.com/v2/assignments?immediately_available_for_lessons=true" | jq -r ".data[] | .id" | head -n "$lessons_to_bypass")
 
       available_lessons=$(echo "$ASSIGNMENT_IDS" | wc -l)
       echo "Available lessons: $available_lessons"
 
-      if [ $available_lessons -eq 0 ]; then
+      if [ "$available_lessons" -eq 0 ]; then
           echo "No lessons available to bypass."
           sleep 3600
           exit 0
