@@ -54,6 +54,9 @@ in
     #     Persistent = true;
     #   };
     # };
+    networking.firewall.allowedTCPPorts = [
+      config.services.wanikani-stats.port
+    ];
 
     systemd.services.wanikani-stats = {
       description = "WaniKani Stats Service";
