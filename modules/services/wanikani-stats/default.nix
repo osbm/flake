@@ -24,7 +24,6 @@ let
     text = ''
       #!/usr/bin/env bash
       echo "Starting WaniKani Stats Streamlit app..."
-      cat ${./app.py}
       exec streamlit run ${./app.py} --server.port ${toString config.services.wanikani-stats.port}
     '';
   };
