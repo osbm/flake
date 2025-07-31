@@ -176,6 +176,8 @@
                     {
                       type = "extension";
                       url = "http://localhost:8501";
+                      allow-potentially-dangerous-html = true;
+
                     }
                   ];
                 }
