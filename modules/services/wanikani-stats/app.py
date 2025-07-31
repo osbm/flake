@@ -4,233 +4,115 @@ from pathlib import Path
 from flask import Flask, render_template_string, Response
 import pandas as pd
 from datetime import datetime
+import matplotlib.pyplot as plt
+import seaborn as sns
+import matplotlib
+import functools
 
+matplotlib.use('agg')
+sns.set_theme(style="whitegrid")
 app = Flask(__name__)
-DATA_DIR = Path("/var/lib/wanikani-logs")
+DATA_DIR = Path("./data")
 
-print("Starting WaniKani Flask service")
+def get_zip_file_names():
+    """Get a list of zip files in the data directory."""
+    return [f for f in DATA_DIR.glob("*.zip") if f.is_file()]
 
-def load_data():
-    """Load and process WaniKani data from zip files"""
-    records = []
-    try:
-        for zip_path in sorted(DATA_DIR.glob("wanikani_data_*.zip")):
-            print(f"Processing {zip_path.name}...")
-            with zipfile.ZipFile(zip_path) as z:
-                for name in z.namelist():
-                    if name.endswith('.json'):
-                        try:
-                            with z.open(name) as f:
-                                data = json.load(f)
-                                date = zip_path.stem.split("_")[-1]
-                                # Extract relevant data from the JSON structure
-                                record = {
-                                    "date": date,
-                                    "available_lessons": data.get("lessons", {}).get("available", 0) if isinstance(data.get("lessons"), dict) else 0,
-                                    "level": data.get("level", 0),
-                                    "reviews_available": data.get("reviews", {}).get("available", 0) if isinstance(data.get("reviews"), dict) else 0,
-                                }
-                                records.append(record)
-                        except (json.JSONDecodeError, KeyError, TypeError) as e:
-                            print(f"Error processing {name}: {e}")
-                            continue
-    except Exception as e:
-        print(f"Error loading data: {e}")
 
-    return pd.DataFrame(records) if records else pd.DataFrame()
+# this is an expensive function so we will cache the results
+@functools.lru_cache(maxsize=None)
+def load_zip(zip_path):
+    print(f"Processing {zip_path}")
+    """Load a zip file and return its contents as a dictionary."""
+    with zipfile.ZipFile(zip_path, 'r') as z:
+        data = {}
+        # just read summary.json
+        with z.open("summary.json") as f:
+            summary_data = json.load(f)
+            num_reviews = len(summary_data['data']['reviews'][0]["subject_ids"])
+            num_lessons = len(summary_data['data']['lessons'][0]["subject_ids"])
+            data["num_reviews"] = num_reviews
+            data["num_lessons"] = num_lessons
+            # wanikani_data_2025-05-18.zip
+            data["date"] = zip_path.stem.split('_')[-1].replace('.zip', '')
+    return data
 
-def generate_chart_html(df):
-    """Generate HTML with embedded chart using Chart.js"""
-    if df.empty:
-        return "<p>No data available</p>"
+def get_dataframe(list_of_daily_data):
+    """Convert a list of daily data dictionaries into a pandas DataFrame."""
+    df = pd.DataFrame(list_of_daily_data)
+    return df
 
-    # Prepare data for Chart.js
-    dates = df['date'].tolist()
-    levels = df['level'].tolist()
-    lessons = df['available_lessons'].tolist()
-    reviews = df['reviews_available'].tolist()
+def render_html(df):
+    """Render the DataFrame as HTML."""
+    import io
 
-    chart_html = f"""
-    <div style="width: 100%; height: 300px;">
-        <canvas id="wanikaniChart"></canvas>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('wanikaniChart').getContext('2d');
-        const chart = new Chart(ctx, {{
-            type: 'line',
-            data: {{
-                labels: {dates},
-                datasets: [{{
-                    label: 'Level',
-                    data: {levels},
-                    borderColor: 'rgb(75, 192, 192)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    yAxisID: 'y'
-                }}, {{
-                    label: 'Available Lessons',
-                    data: {lessons},
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    yAxisID: 'y1'
-                }}, {{
-                    label: 'Available Reviews',
-                    data: {reviews},
-                    borderColor: 'rgb(54, 162, 235)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    yAxisID: 'y1'
-                }}]
-            }},
-            options: {{
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {{
-                    mode: 'index',
-                    intersect: false,
-                }},
-                scales: {{
-                    x: {{
-                        display: true,
-                        title: {{
-                            display: true,
-                            text: 'Date'
-                        }}
-                    }},
-                    y: {{
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        title: {{
-                            display: true,
-                            text: 'Level'
-                        }}
-                    }},
-                    y1: {{
-                        type: 'linear',
-                        display: true,
-                        position: 'right',
-                        title: {{
-                            display: true,
-                            text: 'Lessons/Reviews'
-                        }},
-                        grid: {{
-                            drawOnChartArea: false,
-                        }},
-                    }}
-                }}
-            }}
-        }});
-    </script>
+    # Generate reviews plot SVG
+    plt.figure(figsize=(10, 5))
+    plt.plot(df['date'], df['num_reviews'], marker='o', label='Reviews')
+    plt.title('Daily Reviews')
+    plt.xlabel('Date')
+    plt.ylabel('Number of Reviews')
+    # Show every 10th date label
+    plt.xticks(range(0, len(df['date']), 10), df['date'][::10], rotation=45)
+    plt.grid()
+    plt.legend()
+
+    # Save to string buffer
+    reviews_buffer = io.StringIO()
+    plt.savefig(reviews_buffer, format='svg')
+    reviews_svg = reviews_buffer.getvalue()
+    reviews_buffer.close()
+    plt.close()
+
+    # Generate lessons plot SVG
+    plt.figure(figsize=(10, 5))
+    plt.plot(df['date'], df['num_lessons'], marker='o', label='Lessons', color='orange')
+    plt.title('Daily Lessons')
+    plt.xlabel('Date')
+    plt.ylabel('Number of Lessons')
+    # Show every 10th date label
+    plt.xticks(range(0, len(df['date']), 10), df['date'][::10], rotation=45)
+    plt.grid()
+    plt.legend()
+
+    # Save to string buffer
+    lessons_buffer = io.StringIO()
+    plt.savefig(lessons_buffer, format='svg')
+    lessons_svg = lessons_buffer.getvalue()
+    lessons_buffer.close()
+    plt.close()
+
+    # Render HTML with embedded SVGs
+    html_content = f"""
+    <html>
+        <head><title>WaniKani Stats</title></head>
+        <body>
+            <h1>WaniKani Daily Stats</h1>
+            <h2>Reviews</h2>
+            {reviews_svg}
+            <h2>Lessons</h2>
+            {lessons_svg}
+        </body>
+    </html>
     """
-    return chart_html
-
-HTML_TEMPLATE = """
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            padding: 16px;
-            background: transparent;
-        }
-        .stats-container {
-            display: grid;
-            gap: 16px;
-        }
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #00d4aa;
-        }
-        .stat-label {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
-            margin-top: 4px;
-        }
-        .chart-container {
-            margin-top: 16px;
-        }
-        .no-data {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.6);
-            padding: 32px;
-        }
-    </style>
-</head>
-<body>
-    <div class="stats-container">
-        {% if has_data %}
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 16px;">
-            <div class="stat-card">
-                <div class="stat-value">{{ current_level }}</div>
-                <div class="stat-label">Current Level</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">{{ available_lessons }}</div>
-                <div class="stat-label">Lessons</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">{{ available_reviews }}</div>
-                <div class="stat-label">Reviews</div>
-            </div>
-        </div>
-        <div class="chart-container">
-            {{ chart_html|safe }}
-        </div>
-        {% else %}
-        <div class="no-data">
-            <p>📚 No WaniKani data available</p>
-            <p style="font-size: 12px;">Check if data files exist in {{ data_dir }}</p>
-        </div>
-        {% endif %}
-    </div>
-</body>
-</html>
-"""
+    return render_template_string(html_content)
 
 @app.route('/')
 def index():
-    """Main endpoint for Glance extension"""
-    df = load_data()
+    """Index route"""
+    file_names = get_zip_file_names()
 
-    # Prepare template variables
-    template_vars = {
-        'has_data': not df.empty,
-        'data_dir': str(DATA_DIR),
-        'chart_html': '',
-        'current_level': 0,
-        'available_lessons': 0,
-        'available_reviews': 0
-    }
+    print(f"Found {len(file_names)} zip files in {DATA_DIR}")
+    list_of_daily_data = []
+    for file_name in file_names:
+        daily_data = load_zip(file_name)
+        list_of_daily_data.append(daily_data)
 
-    if not df.empty:
-        # Get latest stats
-        latest = df.iloc[-1]
-        template_vars.update({
-            'current_level': int(latest['level']),
-            'available_lessons': int(latest['available_lessons']),
-            'available_reviews': int(latest['reviews_available']),
-            'chart_html': generate_chart_html(df)
-        })
+    df = get_dataframe(list_of_daily_data)
+    # sort by date string
+    df.sort_values(by='date', inplace=True)
 
-    html = render_template_string(HTML_TEMPLATE, **template_vars)
-
-    # Create response with Glance extension headers
-    response = Response(html, mimetype='text/html')
-    response.headers['Widget-Title'] = '📚 WaniKani Stats'
-    response.headers['Widget-Content-Type'] = 'html'
-
-    return response
+    return render_html(df)
 
 @app.route('/health')
 def health():
@@ -242,3 +124,4 @@ if __name__ == '__main__':
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8501
     print(f"Starting WaniKani Stats Flask app on port {port}")
     app.run(host='0.0.0.0', port=port, debug=False)
+
