@@ -44,49 +44,34 @@ def get_dataframe(list_of_daily_data):
     df = pd.DataFrame(list_of_daily_data)
     return df
 
+def get_svg_plot(df, column, title, ylabel):
+    """Generate an SVG plot for a given DataFrame column."""
+    plt.figure(figsize=(10, 6), facecolor='#151519')
+    plt.plot(df['date'], df[column], marker='o', label=column.capitalize())
+    plt.title(title)
+    plt.xlabel('Date')
+    plt.ylabel(ylabel)
+    # Show every 10th date label
+    plt.xticks(range(0, len(df['date']), 10), df['date'][::10], rotation=45)
+    plt.grid()
+    plt.legend()
+    plt.gca().set_facecolor('#151519')
+    plt.tight_layout()
+
+    # Save to string buffer
+    import io
+    buffer = io.StringIO()
+    plt.savefig(buffer, format='svg', bbox_inches='tight')
+    svg_content = buffer.getvalue()
+    buffer.close()
+    plt.close()
+
+    return svg_content
+
 def render_html(df):
     """Render the DataFrame as HTML."""
-    import io
-
-    # Generate reviews plot SVG
-    plt.figure(figsize=(10, 6), facecolor='#151519')
-    plt.plot(df['date'], df['num_reviews'], marker='o', label='Reviews')
-    plt.title('Daily Reviews')
-    plt.xlabel('Date')
-    plt.ylabel('Number of Reviews')
-    # Show every 10th date label
-    plt.xticks(range(0, len(df['date']), 10), df['date'][::10], rotation=45)
-    plt.grid()
-    plt.legend()
-    plt.gca().set_facecolor('#151519')
-    plt.tight_layout()
-
-    # Save to string buffer
-    reviews_buffer = io.StringIO()
-    plt.savefig(reviews_buffer, format='svg', bbox_inches='tight')
-    reviews_svg = reviews_buffer.getvalue()
-    reviews_buffer.close()
-    plt.close()
-
-    # Generate lessons plot SVG
-    plt.figure(figsize=(10, 6), facecolor='#151519')
-    plt.plot(df['date'], df['num_lessons'], marker='o', label='Lessons', color='orange')
-    plt.title('Daily Lessons')
-    plt.xlabel('Date')
-    plt.ylabel('Number of Lessons')
-    # Show every 10th date label
-    plt.xticks(range(0, len(df['date']), 10), df['date'][::10], rotation=45)
-    plt.grid()
-    plt.legend()
-    plt.gca().set_facecolor('#151519')
-    plt.tight_layout()
-
-    # Save to string buffer
-    lessons_buffer = io.StringIO()
-    plt.savefig(lessons_buffer, format='svg', bbox_inches='tight')
-    lessons_svg = lessons_buffer.getvalue()
-    lessons_buffer.close()
-    plt.close()
+    reviews_svg = get_svg_plot(df, 'num_reviews', 'Daily Reviews', 'Number of Reviews')
+    lessons_svg = get_svg_plot(df, 'num_lessons', 'Daily Lessons', 'Number of Lessons')
 
     # Render HTML with embedded SVGs
     html_content = f"""
