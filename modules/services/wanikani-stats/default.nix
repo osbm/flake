@@ -9,17 +9,15 @@ let
     name = "wanikani-stats-flask";
     runtimeInputs = [
       (pkgs.python312.withPackages (
-          ppkgs:
-            with pkgs.python312Packages; [
-              flask
-              pandas
-              numpy
-              jinja2
-              matplotlib
-              seaborn
-            ]
-        )
-      )
+        ppkgs: with pkgs.python312Packages; [
+          flask
+          pandas
+          numpy
+          jinja2
+          matplotlib
+          seaborn
+        ]
+      ))
     ];
     text = ''
       #!/usr/bin/env bash
