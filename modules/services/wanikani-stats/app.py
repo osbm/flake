@@ -37,11 +37,44 @@ def load_zip(zip_path):
             data["num_lessons"] = num_lessons
             # wanikani_data_2025-05-18.zip
             data["date"] = zip_path.stem.split('_')[-1].replace('.zip', '')
+
+        # with z.open("subjects.json") as f:
+        #     subjects_data = json.load(f)
+        #     print(f"Found total data subjects: {subjects_data['total_count']}")
+        #     data["total_subjects"] = subjects_data['total_count']
+        # so the subjects.json file is about 50 mb so we are just not gonna care if this value changes (doesnt change much)
+        data["total_subjects"] = 9300
+
+        with z.open("assignments.json") as f:
+            assignments_data = json.load(f)
+            print(f"Found total assignments: {assignments_data['total_count']}")
+            data["total_assignments"] = assignments_data['total_count']
+
+            # now the data key will give us all the srs stages
+            srs_stages = [0 for _ in range(10)]  # 10 SRS stages
+            for assignment in assignments_data['data']:
+                srs_stage = assignment['data']['srs_stage']
+                srs_stages[srs_stage] += 1
+
+            # add srs stages to data
+            for i, count in enumerate(srs_stages):
+                data[f'srs_stage_{i}'] = count
+
+    print(data)
     return data
 
 def get_dataframe(list_of_daily_data):
     """Convert a list of daily data dictionaries into a pandas DataFrame."""
     df = pd.DataFrame(list_of_daily_data)
+
+    df["progression"] = df.apply(lambda row: sum(row[f'srs_stage_{i}'] * (i + 1) for i in range(10)) / (row['total_subjects'] * 10) * 100, axis=1)
+
+    df["apprentice"] = df.apply(lambda row: row['srs_stage_1'] + row['srs_stage_2'] + row['srs_stage_3'] + row['srs_stage_4'], axis=1)
+    df["guru"] = df.apply(lambda row: row['srs_stage_5'] + row['srs_stage_6'], axis=1)
+    df["master"] = df['srs_stage_7']
+    df["enlightened"] = df["srs_stage_8"]
+    df["burned"] = df["srs_stage_9"]
+
     return df
 
 def get_svg_plot(df, column, title, ylabel):
@@ -72,6 +105,14 @@ def render_html(df):
     """Render the DataFrame as HTML."""
     reviews_svg = get_svg_plot(df, 'num_reviews', 'Daily Reviews', 'Number of Reviews')
     lessons_svg = get_svg_plot(df, 'num_lessons', 'Daily Lessons', 'Number of Lessons')
+    progression_svg = get_svg_plot(df, 'progression', 'SRS Progression', 'Progression (%)')
+
+    # srs stages
+    srs_stage_apprentice_svg = get_svg_plot(df, 'apprentice', 'Apprentice Stage', 'Number of Subjects')
+    srs_stage_guru_svg = get_svg_plot(df, 'guru', 'Guru Stage', 'Number of Subjects')
+    srs_stage_master_svg = get_svg_plot(df, 'master', 'Master Stage', 'Number of Subjects')
+    srs_stage_enlightened_svg = get_svg_plot(df, 'enlightened', 'Enlightened Stage', 'Number of Subjects')
+    srs_stage_burned_svg = get_svg_plot(df, 'burned', 'Burned Stage', 'Number of Subjects')
 
     # Render HTML with embedded SVGs
     html_content = f"""
@@ -99,6 +140,12 @@ def render_html(df):
         <body>
             {reviews_svg}
             {lessons_svg}
+            {progression_svg}
+            {srs_stage_apprentice_svg}
+            {srs_stage_guru_svg}
+            {srs_stage_master_svg}
+            {srs_stage_enlightened_svg}
+            {srs_stage_burned_svg}
         </body>
     </html>
     """
