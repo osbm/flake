@@ -28,6 +28,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  services.wanikani-fetch-data.enable = true;
 
   networking.hostName = "ymir"; # Define your hostname.
 
