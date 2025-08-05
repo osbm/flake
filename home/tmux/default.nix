@@ -2,7 +2,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   programs.tmux = {
     enable = true;
     historyLimit = 100000;
