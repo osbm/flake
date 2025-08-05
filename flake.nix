@@ -76,7 +76,7 @@
       };
 
       lib = import ./lib { inherit (nixpkgs) lib; };
-      formatter = forAllSystems (system: (makePkgs system).nixfmt-rfc-style);
+      formatter = forAllSystems (system: (makePkgs system).nixfmt-tree);
       deploy.nodes.harmonica = {
         hostname = "192.168.0.11";
         profiles.system = {
