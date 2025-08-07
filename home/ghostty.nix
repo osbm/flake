@@ -9,6 +9,8 @@
     programs.ghostty = {
       enable = config.enableGhostty;
       settings = {
+        maximize = true;
+        window-decoration = false;
       };
     };
   };
