@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 {
@@ -11,6 +12,7 @@
       settings = {
         maximize = true;
         window-decoration = false;
+        command = lib.getExe pkgs.tmux;
       };
     };
   };
