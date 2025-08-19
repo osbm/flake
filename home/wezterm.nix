@@ -24,6 +24,7 @@
           default_prog = { _G.shells.fish },
           window_decorations = "NONE",
           hide_tab_bar_if_only_one_tab = true,
+          enable_wayland = false,
         }
       '';
     };
