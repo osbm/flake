@@ -26,7 +26,7 @@
       };
 
       services.open-webui = {
-        enable = true;
+        enable = false; # TODO gives error fix later
         port = 7070;
         host = "0.0.0.0";
         openFirewall = true;
