@@ -83,6 +83,14 @@ def get_dataframe(list_of_daily_data):
         + row["srs_stage_4"],
         axis=1,
     )
+
+    # Individual apprentice stages for distribution analysis
+    df["apprentice_1"] = df["srs_stage_1"]
+    df["apprentice_2"] = df["srs_stage_2"]
+    df["apprentice_3"] = df["srs_stage_3"]
+    df["apprentice_4"] = df["srs_stage_4"]
+    df["unlocked"] = df["srs_stage_0"]
+
     df["guru"] = df.apply(lambda row: row["srs_stage_5"] + row["srs_stage_6"], axis=1)
     df["master"] = df["srs_stage_7"]
     df["enlightened"] = df["srs_stage_8"]
@@ -117,6 +125,45 @@ def get_svg_plot(df, column, title, ylabel):
     return svg_content
 
 
+def get_apprentice_distribution_svg(df):
+    """Generate a stacked area chart showing apprentice stage distribution over time."""
+    plt.figure(figsize=(12, 8), facecolor="#151519")
+
+    # Create stacked area chart
+    plt.stackplot(
+        df["date"],
+        df["apprentice_1"],
+        df["apprentice_2"],
+        df["apprentice_3"],
+        df["apprentice_4"],
+        labels=["Apprentice I", "Apprentice II", "Apprentice III", "Apprentice IV"],
+        alpha=0.8,
+        colors=["#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4"]
+    )
+
+    plt.title("Apprentice Stage Distribution Over Time", fontsize=16, pad=20)
+    plt.xlabel("Date")
+    plt.ylabel("Number of Items")
+
+    # Show every 10th date label
+    plt.xticks(range(0, len(df["date"]), 10), df["date"][::10], rotation=45)
+    plt.grid(True, alpha=0.3)
+    plt.legend(loc="upper left", bbox_to_anchor=(0, 1))
+    plt.gca().set_facecolor("#151519")
+    plt.tight_layout()
+
+    # Save to string buffer
+    import io
+
+    buffer = io.StringIO()
+    plt.savefig(buffer, format="svg", bbox_inches="tight")
+    svg_content = buffer.getvalue()
+    buffer.close()
+    plt.close()
+
+    return svg_content
+
+
 def render_html(df):
     """Render the DataFrame as HTML."""
     reviews_svg = get_svg_plot(df, "num_reviews", "Daily Reviews", "Number of Reviews")
@@ -124,6 +171,9 @@ def render_html(df):
     progression_svg = get_svg_plot(
         df, "progression", "SRS Progression", "Progression (%)"
     )
+
+    # apprentice distribution chart
+    apprentice_distribution_svg = get_apprentice_distribution_svg(df)
 
     # srs stages
     srs_stage_apprentice_svg = get_svg_plot(
@@ -167,6 +217,7 @@ def render_html(df):
             {reviews_svg}
             {lessons_svg}
             {progression_svg}
+            {apprentice_distribution_svg}
             {srs_stage_apprentice_svg}
             {srs_stage_guru_svg}
             {srs_stage_master_svg}
