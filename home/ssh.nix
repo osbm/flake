@@ -10,6 +10,8 @@ let
       "RemoteCommand" = "fish";
       "RequestTTY" = "force";
     };
+    hashKnownHosts = true;
+    compression = true;
   };
   # sshBlockAtreus is the same as sshBlock but with 8090 as the port
   sshBlockAtreus = hostname: {
@@ -17,14 +19,15 @@ let
     user = "osbm";
     identityFile = "/home/osbm/.ssh/id_ed25519";
     port = 8022;
+    hashKnownHosts = true;
+    compression = true;
     # fish not found error ???
   };
 in
 {
   programs.ssh = {
     enable = true;
-    hashKnownHosts = true;
-    compression = true;
+
     matchBlocks = {
       ymir = sshBlock "192.168.0.2";
       ymir-ts = sshBlock "ymir.curl-boga.ts.net";
