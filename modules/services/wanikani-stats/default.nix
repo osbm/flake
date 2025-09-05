@@ -16,6 +16,7 @@ let
           jinja2
           matplotlib
           seaborn
+          plotly
         ]
       ))
     ];
