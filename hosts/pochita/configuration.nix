@@ -27,7 +27,7 @@
 
   services.wanikani-bypass-lessons.enable = true;
   services.wanikani-fetch-data.enable = true;
-  # services.wanikani-stats.enable = true;
+  services.wanikani-stats.enable = true;
 
   # paperless is giving an error
   # services.paperless = {
