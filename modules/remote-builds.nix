@@ -1,6 +1,6 @@
 {
-  #  config,
-  #  outputs,
+   config,
+   outputs,
   ...
 }:
 {
