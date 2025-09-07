@@ -8,7 +8,7 @@ let
   wanikani-stats-flask = pkgs.writeShellApplication {
     name = "wanikani-stats-flask";
     runtimeInputs = [
-      (pkgs.python312.withPackages (
+      (pkgs.python3.withPackages (
         ppkgs: with pkgs.python312Packages; [
           flask
           pandas
