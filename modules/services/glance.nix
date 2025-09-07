@@ -174,10 +174,9 @@
                   size = "full";
                   widgets = [
                     {
-                      type = "extension";
-                      url = "http://localhost:8501";
-                      allow-potentially-dangerous-html = true;
-
+                      type = "iframe";
+                      source = "http://localhost:8501";
+                      height = 1600;
                     }
                   ];
                 }
