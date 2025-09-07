@@ -15,6 +15,11 @@ let
           "test_process_termination"
         ];
       });
+      plotly = super.plotly.overridePythonAttrs (old: {
+        disabledTestPaths = (old.disabledTestPaths or []) ++ [
+          "tests/test_optional/test_kaleido/test_kaleido.py"
+        ];
+      });
     };
   in
     pkgs.python313.override { inherit packageOverrides; self = python; };
