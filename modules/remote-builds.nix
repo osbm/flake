@@ -6,7 +6,7 @@
 }:
 {
   config = lib.mkMerge [
-    (lib.mkIf (config.networking.hostName != "ymir") {
+    (lib.mkIf (config.networking.hostName == "pochita") {
       nix.distributedBuilds = true;
       # nix.settings.builders-use-substitutes = true;
       nix.buildMachines = [
@@ -18,12 +18,6 @@
           sshUser = "osbm";
           protocol = "ssh-ng";
         }
-      ];
-    })
-    (lib.mkIf (config.networking.hostName != "wallfacer") {
-      nix.distributedBuilds = true;
-      # nix.settings.builders-use-substitutes = true;
-      nix.buildMachines = [
         {
           hostName = "wallfacer";
           systems = ["x86_64-linux"];
