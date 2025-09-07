@@ -393,7 +393,7 @@ def render_html(df):
         </body>
     </html>
     """
-    return render_template_string(html_content)
+    return html_content
 
 
 @app.route("/")
