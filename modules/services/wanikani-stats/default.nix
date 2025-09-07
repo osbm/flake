@@ -12,7 +12,7 @@ let
           "test_read_stream"
           "test_uri_reading"
           "test_trim_filter"
-          "test_tifffile_reading_writing"
+          "test_process_termination"
         ];
       });
     };
