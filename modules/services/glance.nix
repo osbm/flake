@@ -154,8 +154,8 @@
                         }
                         {
                           icon = "si:json";
-                          title = "Wanikani Stats Health";
-                          url = "http://localhost:8501/health";
+                          title = "Wanikani Stats";
+                          url = "http://pochita:8501";
                         }
                       ];
                       title = "Services";
@@ -167,24 +167,6 @@
               name = "Home";
               content = "Welcome to Pochita's home page!";
             }
-
-            {
-              columns = [
-                {
-                  size = "full";
-                  widgets = [
-                    {
-                      type = "iframe";
-                      source = "http://pochita:8501";
-                      height = 1600;
-                    }
-                  ];
-                }
-              ];
-              name = "Wanikani Stats";
-              content = "Welcome to Wanikani Stats page!";
-            }
-
           ];
         };
       };
