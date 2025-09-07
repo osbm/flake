@@ -5,11 +5,24 @@
   ...
 }:
 let
+  python = let
+    packageOverrides = self: super: {
+      imageio = super.imageio.overridePythonAttrs (old: {
+        disabledTests = [
+          "test_read_stream"
+          "test_uri_reading"
+          "test_trim_filter"
+          "test_tifffile_reading_writing"
+        ];
+      });
+    };
+  in
+    pkgs.python313.override { inherit packageOverrides; self = python; };
   wanikani-stats-flask = pkgs.writeShellApplication {
     name = "wanikani-stats-flask";
     runtimeInputs = [
-      (pkgs.python3.withPackages (
-        ppkgs: with pkgs.python3Packages; [
+      (python.withPackages (
+        ppkgs: with python.pkgs; [
           flask
           pandas
           numpy
