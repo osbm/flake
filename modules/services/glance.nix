@@ -175,7 +175,7 @@
                   widgets = [
                     {
                       type = "iframe";
-                      source = "http://localhost:8501";
+                      source = "http://pochita:8501";
                       height = 1600;
                     }
                   ];
