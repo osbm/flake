@@ -118,8 +118,8 @@ def get_plotly_html(df, column, title, ylabel):
         template="plotly_dark",
         plot_bgcolor='#151519',
         paper_bgcolor='#151519',
-        width=1000,
-        height=500,
+        width=1200,
+        height=600,
         margin=dict(l=50, r=50, t=50, b=50)
     )
 
