@@ -30,6 +30,7 @@
       "nvidia-settings"
       "cuda-merged"
     ];
+  nixpkgs.config.allowAliases = false;
 
   # enable nix flakes
   nix.settings.experimental-features = [

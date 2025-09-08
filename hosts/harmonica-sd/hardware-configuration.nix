@@ -61,7 +61,7 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_rpi02w;
+    kernelPackages = pkgs.linuxKernel.packages.linux_rpi3;
 
     initrd.availableKernelModules = [
       "xhci_pci"

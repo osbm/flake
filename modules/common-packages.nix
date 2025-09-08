@@ -46,7 +46,7 @@
     nix-inspect
     bat
     fd
-    du-dust
+    dust
     dysk
     gnupg
     attic-client

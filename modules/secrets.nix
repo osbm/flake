@@ -20,7 +20,7 @@
   config = lib.mkMerge [
     (lib.mkIf config.myModules.enableSecrets {
       environment.systemPackages = [
-        inputs.agenix.packages.${pkgs.hostPlatform.system}.agenix
+        inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.agenix
         pkgs.age
       ];
 
