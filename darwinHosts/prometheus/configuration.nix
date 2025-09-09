@@ -1,4 +1,4 @@
-{pkgs, inputs, config, ...}: {
+{pkgs, inputs, lib, config, ...}: {
   imports = [
     # ../../modules
     ../../modules/common-packages.nix
