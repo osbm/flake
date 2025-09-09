@@ -10,14 +10,14 @@
     enableGTK = lib.mkEnableOption "enableGTK";
   };
 
-  config = {
+  config = lib.mkIf config.enableGTK {
     home.pointerCursor = {
       name = "Dracula";
       package = pkgs.dracula-theme;
-      gtk.enable = config.enableGTK;
+      gtk.enable = true;
     };
     gtk = {
-      enable = config.enableGTK;
+      enable = true;
       theme = {
         name = "Dracula";
         package = pkgs.dracula-theme;
