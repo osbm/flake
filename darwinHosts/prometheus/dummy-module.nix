@@ -1,5 +1,5 @@
 {
-  config = {
-    mymodules.enableKDE = true;
+  options = {
+    myModules.enableKDE = true;
   };
 }
