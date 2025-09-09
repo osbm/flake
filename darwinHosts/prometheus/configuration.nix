@@ -102,7 +102,7 @@
     # blender
     # libreoffice
     code-cursor
-    ungoogled-chromium
+    # ungoogled-chromium
   ];
   system.stateVersion = 6;
   nixpkgs.hostPlatform = "x86_64-darwin";
