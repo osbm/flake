@@ -6,6 +6,7 @@
     ./cloudflared.nix
     ./nextcloud.nix
     ./ollama.nix
+    ./openssh.nix
     ./forgejo.nix
     ./glance.nix
     ./hydra.nix
