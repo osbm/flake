@@ -5,7 +5,6 @@
     ../../modules/home.nix
     ../../modules/nix-settings.nix
     ../../modules/secrets.nix
-    ../../modules/i18n.nix
   ];
 
   myModules.setUsers = false;
