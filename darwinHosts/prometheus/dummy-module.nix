@@ -1,5 +1,10 @@
+{lib, ...}:
 {
   options = {
-    myModules.enableKDE = true;
+    myModules.enableKDE = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Enable KDE Plasma";
+    };
   };
 }
