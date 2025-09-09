@@ -12,7 +12,7 @@
     useUserPackages = true;
     verbose = true;
     backupFileExtension = "hmbak";
-    users.osbm = import ../../home/home.nix {
+    users.mac = import ../../home/home.nix {
       inherit config pkgs;
       username = "mac";
       homeDirectory = "/Users/mac";
