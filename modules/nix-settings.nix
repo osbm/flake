@@ -78,7 +78,7 @@
   # nix.nixPath = ["nixpkgs=${pkgs.path}"];
 
   # disable the database error TODO add nix-index search
-  programs.command-not-found.enable = false;
+  # programs.command-not-found.enable = false; # TODO fix ts
 
   system.configurationRevision = inputs.self.rev or "dirty";
 }
