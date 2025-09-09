@@ -14,6 +14,9 @@
     backupFileExtension = "hmbak";
     users.osbm = import ../../home/home.nix {
       inherit config pkgs;
+      username = "mac";
+      homeDirectory = "/Users/mac";
+      stateVersion = "24.11";
     };
   };
 

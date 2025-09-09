@@ -1,4 +1,7 @@
 {
+  username,
+  homeDirectory,
+  stateVersion,
   config,
   pkgs,
   ...
@@ -22,14 +25,14 @@
     ./zoxide.nix
   ];
 
-  home.username = "osbm";
-  home.homeDirectory = "/home/osbm";
+  home.username = username;
+  home.homeDirectory = homeDirectory;
 
   home.packages = [
     pkgs.lazygit
   ];
 
-  home.stateVersion = config.system.stateVersion;
+  home.stateVersion = stateVersion;
 
   enableGTK = config.myModules.enableKDE;
   enableFirefox = config.myModules.enableKDE;
