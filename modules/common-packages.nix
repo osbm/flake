@@ -47,7 +47,7 @@
     bat
     fd
     dust
-    dysk
+    # dysk
     gnupg
     attic-client
   ];
