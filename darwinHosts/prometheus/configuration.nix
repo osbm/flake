@@ -99,7 +99,7 @@
     # ghostty
     kitty
     vscode
-    blender
+    # blender
     libreoffice
     code-cursor
     ungoogled-chromium
