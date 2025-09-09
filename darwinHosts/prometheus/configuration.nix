@@ -20,6 +20,8 @@
     };
   };
 
+  programs.fish.enable = true;
+
   # myModules.setUsers = false;
   users.users.mac = {
     description = "mac";
