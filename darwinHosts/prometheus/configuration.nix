@@ -100,7 +100,7 @@
     kitty
     vscode
     # blender
-    libreoffice
+    # libreoffice
     code-cursor
     ungoogled-chromium
   ];
