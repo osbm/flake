@@ -17,6 +17,7 @@
       username = "mac";
       homeDirectory = "/Users/mac";
       stateVersion = "24.11";
+      enableGTK = false;
     };
   };
 

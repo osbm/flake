@@ -3,6 +3,7 @@
   homeDirectory,
   stateVersion,
   config,
+  enableGTK ? config.myModules.enableKDE,
   pkgs,
   ...
 }:
@@ -34,7 +35,7 @@
 
   home.stateVersion = stateVersion;
 
-  enableGTK = config.myModules.enableKDE;
+  enableGTK = enableKDE;
   enableFirefox = config.myModules.enableKDE;
   enableAlacritty = config.myModules.enableKDE;
   enableGhostty = config.myModules.enableKDE;
