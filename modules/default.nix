@@ -19,6 +19,7 @@
     ./security.nix
     ./sound.nix
     ./users.nix
+    ./virtualisation.nix
     ./wake-on-lan.nix
     ./getty.nix
   ];
