@@ -36,3 +36,4 @@
       root.initialHashedPassword = "$6$IamAbigfailure$irfkAsWev8CMAr78wUwUggclplXL98sbI21fpGY9nMDz47bU88RZWFLO7FcN5SdRA18ZSidkMqS76uLCMH68f.";
     };
   };
+}
