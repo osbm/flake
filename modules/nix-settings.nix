@@ -66,6 +66,7 @@
   nix.settings.trusted-users = [
     "root"
     "osbm"
+    "mac" # TODO change mac user to osbm
   ];
 
   nix.gc = {
