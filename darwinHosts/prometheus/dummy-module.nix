@@ -1,5 +1,5 @@
 {
   config = {
-    mymodules.enableKDE = lib.mkDefault true;
+    mymodules.enableKDE = true;
   };
 }
