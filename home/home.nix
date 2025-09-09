@@ -4,6 +4,7 @@
   stateVersion,
   config,
   enableGTK ? config.myModules.enableKDE,
+  enableGhostty ? config.myModules.enableKDE,
   pkgs,
   ...
 }:
@@ -38,6 +39,6 @@
   enableGTK = enableGTK;
   enableFirefox = config.myModules.enableKDE;
   enableAlacritty = config.myModules.enableKDE;
-  enableGhostty = config.myModules.enableKDE;
+  enableGhostty = enableGhostty;
   enableWezterm = config.myModules.enableKDE;
 }

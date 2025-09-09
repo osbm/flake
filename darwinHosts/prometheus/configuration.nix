@@ -17,6 +17,7 @@
       homeDirectory = "/Users/mac";
       stateVersion = "24.11";
       enableGTK = false;
+      enableGhostty = false;
     };
   };
   # Allow unfree packages
@@ -95,7 +96,7 @@
   };
   environment.systemPackages = with pkgs; [
     alacritty
-    ghostty
+    # ghostty
     kitty
     vscode
     blender
