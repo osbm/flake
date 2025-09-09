@@ -6,7 +6,7 @@
     inputs.home-manager.darwinModules.home-manager
   ];
 
-  mymodules.enableKDE = lib.mkDefault true;
+  config = [ mymodules.enableKDE = lib.mkDefault true;];
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
