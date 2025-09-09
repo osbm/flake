@@ -4,10 +4,6 @@
   ...
 }:
 {
-  imports = [
-    inputs.nix-index-database.nixosModules.nix-index
-  ];
-  programs.nix-index-database.comma.enable = true;
   # Allow unfree packages
   nixpkgs.config.allowUnfreePredicate =
     pkg:
@@ -76,9 +72,6 @@
   };
 
   # nix.nixPath = ["nixpkgs=${pkgs.path}"];
-
-  # disable the database error TODO add nix-index search
-  # programs.command-not-found.enable = false; # TODO fix ts
 
   system.configurationRevision = inputs.self.rev or "dirty";
 }

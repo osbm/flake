@@ -12,6 +12,7 @@
     ./home.nix
     ./i18n.nix
     # ./minegrub.nix
+    ./nix-index.nix
     ./nix-settings.nix
     ./remote-builds.nix
     ./secrets.nix
