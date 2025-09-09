@@ -25,6 +25,10 @@
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-on-droid = {
       url = "github:nix-community/nix-on-droid";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -46,6 +50,7 @@
       self,
       nixpkgs,
       nix-on-droid,
+      nix-darwin,
       deploy-rs,
       ...
     }@inputs:
@@ -74,7 +79,11 @@
         pkgs = import nixpkgs { system = "aarch64-linux"; };
         modules = [ ./nixOnDroidHosts/atreus/configuration.nix ];
       };
-
+      darwinConfigurations.prometheus = nix-darwin.lib.darwinSystem {
+        system = "x86_64-darwin";
+        modules = [ ./darwinHosts/prometheus/configuration.nix ];
+        specialArgs = { inherit inputs outputs; };
+      };
       lib = import ./lib { inherit (nixpkgs) lib; };
       formatter = forAllSystems (system: (makePkgs system).nixfmt-tree);
       deploy.nodes.harmonica = {
