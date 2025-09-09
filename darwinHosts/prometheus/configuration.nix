@@ -1,11 +1,19 @@
-{pkgs, ...}: {
+{pkgs, inputs, ...}: {
   imports = [
     # ../../modules
     ../../modules/common-packages.nix
-    ../../modules/home.nix
     ../../modules/nix-settings.nix
-    ../../modules/secrets.nix
+    inputs.home-manager.darwinModules.home-manager
   ];
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    verbose = true;
+    backupFileExtension = "hmbak";
+    users.osbm = import ../../home/home.nix {
+      inherit config pkgs;
+    };
+  };
 
   # myModules.setUsers = false;
   users.users.mac = {
