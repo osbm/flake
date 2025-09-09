@@ -4,11 +4,9 @@
     ../../modules/common-packages.nix
     ../../modules/nix-settings.nix
     inputs.home-manager.darwinModules.home-manager
+    ./dummy-module.nix
   ];
 
-  config = {
-    mymodules.enableKDE = lib.mkDefault true;
-  };
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
