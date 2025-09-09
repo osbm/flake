@@ -7,7 +7,7 @@
     ../../modules/secrets.nix
   ];
 
-  myModules.setUsers = false;
+  # myModules.setUsers = false;
   users.users.mac = {
     description = "mac";
     shell = pkgs.fish;
