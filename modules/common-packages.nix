@@ -24,7 +24,7 @@
     '')
     btop
     pciutils
-    lm_sensors
+    # lm_sensors
     cloc
     neofetch
     pfetch
