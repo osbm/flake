@@ -35,7 +35,7 @@
 
   home.stateVersion = stateVersion;
 
-  enableGTK = enableKDE;
+  enableGTK = enableGTK;
   enableFirefox = config.myModules.enableKDE;
   enableAlacritty = config.myModules.enableKDE;
   enableGhostty = config.myModules.enableKDE;
