@@ -21,7 +21,7 @@
     enableSound = true;
     enableADB = true;
     enableOllama = true;
-    enableMinegrubTheme = true;
+    # enableMinegrubTheme = true;
     enableNextcloud = true;
   };
 
