@@ -18,14 +18,12 @@
         enable = true;
         environmentFile = "/persist/attic.env";
         settings = {
-          listen = "[::]:5000";
-          allowed-hosts = [
-            "cache.osbm.dev"
-            "wallfacer.curl-boga.ts.net"
-            "localhost"
-            "wallfacer"
-          ];
-          jwt = { };
+          listen = "[::]:7080";
+          compression = {
+            type = "zstd";
+            level = 9;
+          };
+          # jwt = { };
           # storage = {
           #   type = "local";
           #   # path = "/data/atreus/attic";
