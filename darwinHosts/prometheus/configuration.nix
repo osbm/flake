@@ -2,6 +2,7 @@
   imports = [
     # ../../modules
     ../../modules/common-packages.nix
+    # inputs.home-manager-darwin.darwinModules.home-manager
     inputs.home-manager.darwinModules.home-manager
     ./dummy-module.nix
   ];
@@ -20,6 +21,13 @@
       enableGhostty = false;
     };
   };
+  nix.registry = {
+    nixpkgs.to.path = lib.mkForce inputs.nixpkgs;
+  };
+  services.tailscale = {
+    enable = true;
+  };
+
   # Allow unfree packages
   nixpkgs.config.allowUnfreePredicate =
     pkg:
@@ -98,7 +106,7 @@
     alacritty
     # ghostty
     kitty
-    vscode
+    vscode git lazygit
     # blender
     # libreoffice
     code-cursor
