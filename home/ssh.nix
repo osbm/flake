@@ -4,7 +4,7 @@ let
   sshBlock = hostname: {
     hostname = hostname;
     user = "osbm";
-    identityFile = "/home/osbm/.ssh/id_ed25519";
+    identityFile = "~/.ssh/id_ed25519";
     extraOptions = {
       # [ERROR] - (starship::print): Under a 'dumb' terminal (TERM=dumb).
       "RemoteCommand" = "fish";
@@ -17,7 +17,7 @@ let
   sshBlockAtreus = hostname: {
     hostname = hostname;
     user = "osbm";
-    identityFile = "/home/osbm/.ssh/id_ed25519";
+    identityFile = "~/.ssh/id_ed25519";
     port = 8022;
     hashKnownHosts = true;
     compression = true;
