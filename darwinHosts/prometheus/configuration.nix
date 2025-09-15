@@ -11,10 +11,10 @@
     useUserPackages = true;
     verbose = true;
     backupFileExtension = "hmbak";
-    users.mac = import ../../home/home.nix {
+    users.osbm = import ../../home/home.nix {
       inherit config pkgs;
-      username = "mac";
-      homeDirectory = "/Users/mac";
+      username = "osbm";
+      homeDirectory = "/Users/osbm";
       stateVersion = "24.11";
       enableGTK = false;
       enableGhostty = false;
@@ -89,10 +89,10 @@
   programs.fish.enable = true;
 
   # myModules.setUsers = false;
-  users.users.mac = {
-    description = "mac";
+  users.users.osbm = {
+    description = "osbm";
     shell = pkgs.fish;
-    home = "/Users/mac";
+    home = "/Users/osbm";
   };
   environment.systemPackages = with pkgs; [
     alacritty
