@@ -1,6 +1,7 @@
 {
   inputs,
   lib,
+  pkgs,
   ...
 }:
 {
@@ -40,7 +41,7 @@
 
   nix.registry = {
     self.flake = inputs.self;
-    nixpkgs.flake = inputs.nixpkgs;
+    nixpkgs.to.path = pkgs.path;
     osbm-nvim.flake = inputs.osbm-nvim;
     my-nixpkgs.to = {
       owner = "osbm";
