@@ -3,12 +3,13 @@
   inputs,
   ...
 }:
-  {
-    environment.systemPackages = with pkgs; [
-    (if !pkgs.stdenv.hostPlatform.isDarwin
-    then
-      inputs.osbm-nvim.packages."${pkgs.stdenv.hostPlatform.system}".default
-    else nano
+{
+  environment.systemPackages = with pkgs; [
+    (
+      if !pkgs.stdenv.hostPlatform.isDarwin then
+        inputs.osbm-nvim.packages."${pkgs.stdenv.hostPlatform.system}".default
+      else
+        nano
     )
     wget
     git

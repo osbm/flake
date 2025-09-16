@@ -1,4 +1,11 @@
-{pkgs, inputs, lib, config, ...}: {
+{
+  pkgs,
+  inputs,
+  lib,
+  config,
+  ...
+}:
+{
   imports = [
     # ../../modules
     ../../modules/common-packages.nix
@@ -89,7 +96,6 @@
     "mac" # TODO change mac user to osbm
   ];
 
-
   # nix.nixPath = ["nixpkgs=${pkgs.path}"];
 
   system.configurationRevision = inputs.self.rev or "dirty";
@@ -106,11 +112,14 @@
     alacritty
     # ghostty
     kitty
-    vscode git lazygit
+    vscode
+    git
+    lazygit
     # blender
     # libreoffice
     # ungoogled-chromium
-    code-cursor ollama 
+    code-cursor
+    ollama
   ];
   system.stateVersion = 6;
   nixpkgs.hostPlatform = "x86_64-darwin";

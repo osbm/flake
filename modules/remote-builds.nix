@@ -1,7 +1,7 @@
 {
-   config,
-   outputs,
-   lib,
+  config,
+  outputs,
+  lib,
   ...
 }:
 {
@@ -12,7 +12,10 @@
       nix.buildMachines = [
         {
           hostName = "ymir";
-          systems = ["x86_64-linux" "aarch64-linux"];
+          systems = [
+            "x86_64-linux"
+            "aarch64-linux"
+          ];
           supportedFeatures = outputs.nixosConfigurations.ymir.config.nix.settings.system-features;
           sshKey = config.age.secrets.ssh-key-private.path;
           sshUser = "osbm";
@@ -20,7 +23,7 @@
         }
         {
           hostName = "wallfacer";
-          systems = ["x86_64-linux"];
+          systems = [ "x86_64-linux" ];
           supportedFeatures = outputs.nixosConfigurations.wallfacer.config.nix.settings.system-features;
           sshKey = config.age.secrets.ssh-key-private.path;
           sshUser = "osbm";
