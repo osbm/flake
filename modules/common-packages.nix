@@ -8,7 +8,7 @@
     (if !pkgs.stdenv.hostPlatform.isDarwin
     then
       inputs.osbm-nvim.packages."${pkgs.stdenv.hostPlatform.system}".default
-    else null
+    else nano
     )
     wget
     git
