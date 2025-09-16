@@ -3,21 +3,13 @@
   inputs,
   ...
 }:
-let
-
-  # if the system is darwin use osbm-nvim-darwin otherwise use osbm-nvim
-  osbm-nvim = if
-    pkgs.stdenv.hostPlatform.isDarwin
-  then
-    # inputs.osbm-nvim-darwin.packages."${pkgs.stdenv.hostPlatform.system}".default
-    inputs.osbm-nvim.packages."${pkgs.stdenv.hostPlatform.system}".default
-  else
-    inputs.osbm-nvim.packages."${pkgs.stdenv.hostPlatform.system}".default;
-
-  in
-{
-  environment.systemPackages = with pkgs; [
-    osbm-nvim
+  {
+    environment.systemPackages = with pkgs; [
+    (if !pkgs.stdenv.hostPlatform.isDarwin
+    then
+      inputs.osbm-nvim.packages."${pkgs.stdenv.hostPlatform.system}".default
+    else null
+    )
     wget
     git
     lazygit
