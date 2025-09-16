@@ -65,6 +65,18 @@
     "osbm"
   ];
 
+  nix = {
+    substituters = [
+      "https://nix-community.cachix.org" # nix-community cache
+      "http://wallfacer.curl-boga.ts.net:7080/main" # personal attic cache
+    ];
+
+    trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "main:2AjPdIsbKyoTGuw+4x2ZXMUT/353CXosW9pdbTQtjqw="
+    ];
+  }
+
   nix.gc = {
     automatic = true;
     dates = "01:37";
