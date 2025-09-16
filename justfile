@@ -14,10 +14,14 @@ build *args: check-git
 switch *args: check-git remove-hm-backup-files
   #!/usr/bin/env sh
   if [[ "$(hostname)" == "localhost" ]]; then
-    nix-on-droid switch --flake .
+    nix-on-droid switch --flake . {{args}}
   else
-    nh os switch .
+    nh os switch . {{args}}
   fi
+
+[macos]
+switch *args: check-git
+  nh darwin switch . -- --accept-flake-config {{args}}
 
 remove-hm-backup-files:
   #!/usr/bin/env sh
