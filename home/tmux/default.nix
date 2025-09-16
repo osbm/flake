@@ -10,7 +10,7 @@
     baseIndex = 1;
     shortcut = "s";
     mouse = true;
-    shell = "${lib.getExe pkgs.fish} -l";
+    shell = lib.getExe pkgs.fish;
     plugins = with pkgs; [
       tmuxPlugins.sensible
       tmuxPlugins.better-mouse-mode
@@ -32,6 +32,7 @@
       set -g allow-passthrough on
       set -ga update-environment TERM
       set -ga update-environment TERM_PROGRAM
+      set-option -g default-command "${lib.getExe pkgs.fish} -l"
     '';
   };
 }
