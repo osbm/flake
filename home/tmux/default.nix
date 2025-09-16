@@ -10,7 +10,7 @@
     baseIndex = 1;
     shortcut = "s";
     mouse = true;
-    shell = lib.getExe pkgs.fish;
+    shell = "${lib.getExe pkgs.fish} -l";
     plugins = with pkgs; [
       tmuxPlugins.sensible
       tmuxPlugins.better-mouse-mode
