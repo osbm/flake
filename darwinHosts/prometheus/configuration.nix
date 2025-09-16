@@ -109,8 +109,8 @@
     vscode git lazygit
     # blender
     # libreoffice
-    code-cursor
     # ungoogled-chromium
+    code-cursor ollama 
   ];
   system.stateVersion = 6;
   nixpkgs.hostPlatform = "x86_64-darwin";
