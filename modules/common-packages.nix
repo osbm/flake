@@ -14,6 +14,7 @@
     wget
     git
     lazygit
+    lazysql
     git-lfs
     gnumake
     zip
