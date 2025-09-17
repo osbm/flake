@@ -41,7 +41,7 @@
 
   nix.registry = {
     self.flake = inputs.self;
-    nixpkgs.to.path = pkgs.path;
+    nixpkgs.to.flake = pkgs.path;
     osbm-nvim.flake = inputs.osbm-nvim;
     my-nixpkgs.to = {
       owner = "osbm";
