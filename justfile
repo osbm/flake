@@ -16,7 +16,7 @@ switch *args: check-git remove-hm-backup-files
   if [[ "$(hostname)" == "localhost" ]]; then
     nix-on-droid switch --flake . {{args}}
   else
-    nh os switch . -- --accept-flake-config {{args}}
+    nh os switch . {{args}}
   fi
 
 [macos]
