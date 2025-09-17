@@ -65,7 +65,7 @@
     "osbm"
   ];
 
-  nix = {
+  nix.settings = {
     substituters = [
       "https://nix-community.cachix.org" # nix-community cache
       "http://wallfacer.curl-boga.ts.net:7080/main" # personal attic cache
