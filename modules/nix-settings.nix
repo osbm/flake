@@ -41,11 +41,10 @@
 
   nix.registry = {
     self.flake = inputs.self;
-
-    # Commented out because it doesnt match if i switch a system
-    # to another nixpkgs with a different flake input name
     nixpkgs.flake = inputs.nixpkgs;
-    
+
+    # Commented out because i want to make sure it works if i switch a system
+    # to another nixpkgs with a different flake input name
     # nixpkgs = {
     #   from = { type = "indirect"; id = "nixpkgs"; };
     #   to = {
