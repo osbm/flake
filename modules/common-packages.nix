@@ -5,13 +5,9 @@
 }:
 {
   environment.systemPackages = with pkgs; [
-    (
-      if !pkgs.stdenv.hostPlatform.isDarwin then
-        inputs.osbm-nvim.packages."${pkgs.stdenv.hostPlatform.system}".default
-      else
-        nano
-    )
+    inputs.osbm-nvim.packages."${pkgs.stdenv.hostPlatform.system}".default
     wget
+    nano
     git
     lazygit
     lazysql
