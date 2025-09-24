@@ -41,7 +41,19 @@
 
   nix.registry = {
     self.flake = inputs.self;
-    nixpkgs.flake = pkgs.path;
+
+    # Commented out because it doesnt match if i switch a system
+    # to another nixpkgs with a different flake input name
+    # nixpkgs.flake = inputs.nixpkgs;
+    
+    nixpkgs = {
+      from = { type = "indirect"; id = "nixpkgs"; };
+      to = {
+        path = pkgs.path;
+        type = "path";
+      };
+    };
+    
     osbm-nvim.flake = inputs.osbm-nvim;
     my-nixpkgs.to = {
       owner = "osbm";
