@@ -77,6 +77,7 @@
         repo = "devshells";
         type = "github";
       };
+    };
   };
 
   nix.settings.trusted-users = [
