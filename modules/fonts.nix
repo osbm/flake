@@ -40,6 +40,8 @@
         iosevka
         dejavu_fonts
       ];
+      # to fix firefox
+      fonts.fontconfig.useEmbeddedBitmaps = true;
       # fonts.fontconfig = {
       #   defaultFonts.emoji = ["Noto Color Emoji"];
       # };
