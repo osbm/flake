@@ -54,21 +54,29 @@
     # };
     
     osbm-nvim.flake = inputs.osbm-nvim;
-    my-nixpkgs.to = {
-      owner = "osbm";
-      repo = "nixpkgs";
-      type = "github";
+    my-nixpkgs = {
+      from = { type = "indirect"; id = "my-nixpkgs"; };
+      to = {
+        owner = "osbm";
+        repo = "nixpkgs";
+        type = "github";
+      };
     };
-    osbm-dev.to = {
-      owner = "osbm";
-      repo = "osbm.dev";
-      type = "github";
+    osbm-dev = {
+      from = { type = "indirect"; id = "osbm-dev"; };
+      to = {
+        owner = "osbm";
+        repo = "osbm.dev";
+        type = "github";
+      };
     };
-    devshells.to = {
-      owner = "osbm";
-      repo = "devshells";
-      type = "github";
-    };
+    devshells = {
+      from = { type = "indirect"; id = "devshells"; };
+      to = {
+        owner = "osbm";
+        repo = "devshells";
+        type = "github";
+      };
   };
 
   nix.settings.trusted-users = [
