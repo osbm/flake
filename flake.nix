@@ -21,37 +21,21 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # home-manager-darwin = {
-    #   url = "github:nix-community/home-manager/release-25.05";
-    #   inputs.nixpkgs.follows = "nixpkgs-darwin";
-    # };
     minegrub-theme = {
       url = "github:Lxtharia/minegrub-theme";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
     nix-darwin = {
-      # url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
-      # inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
-    # nixvim-darwin = {
-    #   url = "github:nix-community/nixvim/nixos-25.05";
-    #   inputs.nixpkgs.follows = "nixpkgs-darwin";
-    # };
     nix-on-droid = {
       url = "github:nix-community/nix-on-droid";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     osbm-nvim.url = "github:osbm/osbm-nvim";
-    # osbm-nvim-darwin = {
-    #   url = "github:osbm/osbm-nvim";
-    #   inputs.nixpkgs.follows = "nixpkgs-darwin";
-    #   inputs.nixvim.follows = "nixvim-darwin";
-    # };
     raspberry-pi-nix = {
       url = "github:nix-community/raspberry-pi-nix";
     };
