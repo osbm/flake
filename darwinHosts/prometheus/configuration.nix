@@ -72,7 +72,14 @@
 
   nix.registry = {
     self.flake = inputs.self;
-    nixpkgs.flake = inputs.nixpkgs;
+    # nixpkgs.flake = inputs.nixpkgs;
+    nixpkgs = {
+      from = { type = "indirect"; id = "nixpkgs"; };
+      to = {
+        path = inputs.nixpkgs.outPath;
+        type = "path";
+      };
+    };
 
     # Commented out because i want to make sure it works if i switch a system
     # to another nixpkgs with a different flake input name
