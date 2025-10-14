@@ -28,9 +28,7 @@
       enableGhostty = false;
     };
   };
-  nix.registry = {
-    nixpkgs.to.path = lib.mkForce inputs.nixpkgs;
-  };
+  
   services.tailscale = {
     enable = true;
   };
