@@ -27,7 +27,8 @@ in
 {
   programs.ssh = {
     enable = true;
-
+    enableDefaultConfig = false;
+    
     matchBlocks = {
       ymir = sshBlock "192.168.0.2";
       ymir-ts = sshBlock "ymir.curl-boga.ts.net";
