@@ -100,5 +100,28 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   # Mark /persist as needed for boot (required by impermanence)
-  fileSystems."/persist".neededForBoot = true;
+fileSystems."/" = {
+    device = "none";
+    fsType = "tmpfs";
+    options = [ "defaults" "size=2G" "mode=755" ];
+};
+
+fileSystems."/boot" = {
+    device = "/dev/disk/by-partlabel/disk-main-ESP";
+    fsType = "vfat";
+};
+
+fileSystems."/nix" = {
+    device = "rpool/local/nix";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+};
+
+fileSystems."/persist" = {
+    device = "rpool/safe/persist";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+    neededForBoot = true;
+};
+
 }
