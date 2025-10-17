@@ -22,6 +22,8 @@
   system.stateVersion = "25.11";
   networking.hostName = "apollo";
 
+  networking.hostId = "0f7de22e"; # Generate your own with: head -c 8 /etc/machine-id
+
   # Enable zram swap
   zramSwap.enable = true;
 
