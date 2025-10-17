@@ -7,18 +7,19 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/common-packages.nix
-    ../../modules/services
+    # ../../modules/services/tailscale.nix
+    # ../../modules/services/openssh.nix
     ../../modules/nix-settings.nix
     inputs.disko.nixosModules.disko
     inputs.impermanence.nixosModules.impermanence
   ];
 
-  myModules = {
-    enableKDE = false;
-    enableFonts = false;
-    blockYoutube = false;
-    blockTwitter = false;
-  };
+  # myModules = {
+  #   enableKDE = false;
+  #   enableFonts = false;
+  #   blockYoutube = false;
+  #   blockTwitter = false;
+  # };
 
   i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method
   system.stateVersion = "25.11";
