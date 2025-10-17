@@ -42,8 +42,8 @@
   # Remote ZFS unlocking in initrd
   boot = {
     # Static IP in initrd - adjust these values for your network
-    # kernelParams = [ "ip=<ipv4_address>::<ipv4_gateway>:<ipv4_netmask>::<interface>:none" ];
-    
+    kernelParams = [ "ip=152.53.152.129::152.53.152.1:255.255.252.0::ens3:none" ];
+
     initrd = {
       # Network driver for initrd - change to match your hardware
       # Common options: "virtio_pci" (VMs), "e1000e", "igb", "r8169"
@@ -98,21 +98,20 @@
     ];
   };
 
-  # Static networking (if needed for VPS)
-  # networking = {
-  #   useDHCP = false;
-  #   interfaces.ens3 = {
-  #     useDHCP = false;
-  #     ipv4.addresses = [{
-  #       address = "<ipv4_address>";
-  #       prefixLength = <prefix_length>;
-  #     }];
-  #     ipv6.addresses = [{
-  #       address = "<ipv6_address>";
-  #       prefixLength = <prefix_length>;
-  #     }];
-  #   };
-  #   defaultGateway = "<ipv4_gateway>";
-  #   defaultGateway6 = { address = "<ipv6_gateway>"; interface = "ens3"; };
-  # };
+  networking = {
+    useDHCP = false;
+    interfaces.ens3 = {
+      useDHCP = false;
+      ipv4.addresses = [{
+        address = "152.53.152.129";
+        prefixLength = 22;
+      }];
+      ipv6.addresses = [{
+        address = "2a00:11c0:47:3b2a::1";
+        prefixLength = 64;
+      }];
+    };
+    defaultGateway = "152.53.152.1";
+    defaultGateway6 = { address = "fe80::1"; interface = "ens3"; };
+  };
 }
