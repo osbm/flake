@@ -6,7 +6,9 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules
+    ../../modules/common-packages.nix
+    ../../modules/services
+    ../../modules/nix-settings.nix
     inputs.disko.nixosModules.disko
     inputs.impermanence.nixosModules.impermanence
   ];
@@ -26,6 +28,9 @@
 
   # Enable zram swap
   zramSwap.enable = true;
+
+  users.users.root.initialPassword = "changeme";
+  users.mutableUsers = false;
 
   # Persistence configuration
   environment.persistence."/persist" = {
