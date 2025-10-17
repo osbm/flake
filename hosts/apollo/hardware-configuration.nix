@@ -97,7 +97,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
     
   # Required for ZFS
-  networking.hostId = "8425e349"; # Generate your own with: head -c 8 /etc/machine-id
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   # Mark /persist as needed for boot (required by impermanence)
