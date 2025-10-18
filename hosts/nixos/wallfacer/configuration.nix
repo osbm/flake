@@ -2,7 +2,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules
+    ../../../modules
   ];
   myModules = {
     enableKDE = false;

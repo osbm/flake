@@ -75,20 +75,20 @@
         configName:
         nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/${configName}/configuration.nix ];
+          modules = [ ./hosts/nixos/${configName}/configuration.nix ];
         };
-      configNames = builtins.attrNames (builtins.readDir ./hosts);
+      nixosConfigNames = builtins.attrNames (builtins.readDir ./hosts/nixos);
     in
     {
-      nixosConfigurations = nixpkgs.lib.genAttrs configNames (name: makeNixosConfig name);
+      nixosConfigurations = nixpkgs.lib.genAttrs nixosConfigNames (name: makeNixosConfig name);
       nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
         extraSpecialArgs = { inherit inputs outputs; };
         pkgs = import nixpkgs { system = "aarch64-linux"; };
-        modules = [ ./nixOnDroidHosts/atreus/configuration.nix ];
+        modules = [ ./hosts/nixOnDroidHosts/atreus/configuration.nix ];
       };
       darwinConfigurations.prometheus = nix-darwin.lib.darwinSystem {
         system = "x86_64-darwin";
-        modules = [ ./darwinHosts/prometheus/configuration.nix ];
+        modules = [ ./hosts/darwinHosts/prometheus/configuration.nix ];
         specialArgs = { inherit inputs outputs; };
       };
       lib = import ./lib { inherit (nixpkgs) lib; };
@@ -108,7 +108,7 @@
             nixpkgs.lib.nixosSystem {
               specialArgs = { inherit inputs outputs; };
               modules = [
-                ./hosts/${configName}/configuration.nix
+                ./hosts/nixos/${configName}/configuration.nix
                 { nixpkgs.hostPlatform = nixpkgs.lib.mkForce system; }
               ];
             };

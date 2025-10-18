@@ -6,10 +6,10 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/common-packages.nix
+    ../../../modules/common-packages.nix
     # ../../modules/services/tailscale.nix
     # ../../modules/services/openssh.nix
-    ../../modules/nix-settings.nix
+    ../../../modules/nix-settings.nix
     inputs.disko.nixosModules.disko
     inputs.impermanence.nixosModules.impermanence
   ];
@@ -56,7 +56,7 @@
       # Network driver for initrd - change to match your hardware
       # Common options: "virtio_pci" (VMs), "e1000e", "igb", "r8169"
       availableKernelModules = [ "virtio_pci" ];
-      
+
       network = {
         enable = true;
         ssh = {
@@ -65,7 +65,7 @@
           # Generate with: ssh-keygen -t ed25519 -N "" -f /persist/etc/ssh/ssh_host_ed25519_key_initrd
           hostKeys = [ "/persist/etc/ssh/ssh_host_ed25519_key_initrd" ];
           # Add your SSH public key here
-          authorizedKeys = [ 
+          authorizedKeys = [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfnV+qqUCJf92npNW4Jy0hIiepCJFBDJHXBHnUlNX0k"
           ];
         };
