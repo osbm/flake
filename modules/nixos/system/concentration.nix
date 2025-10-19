@@ -1,7 +1,7 @@
 { lib, config, ... }:
 let
   cfg = config.osbmModules.concentration;
-  
+
   blockedSites = lib.flatten [
     (lib.optional cfg.blockYoutube [
       "youtube.com"
@@ -24,7 +24,7 @@ let
       "www.bluesky.app"
     ])
   ];
-  
+
   hostsEntries = lib.concatMapStrings (site: "127.0.0.1 ${site}\n") blockedSites;
 in
 {
