@@ -11,9 +11,9 @@
   ];
 
   osbmModules = {
-    enableKDE = true;
-    enableAarch64Emulation = true;
-    enableSound = true;
+    desktopEnvironment = "plasma";
+    emulation.aarch64.enable = true;
+    hardware.sound.enable = true;
   };
 
   # Bootloader.

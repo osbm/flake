@@ -13,14 +13,14 @@
   ];
 
   osbmModules = {
-    enableKDE = false;
-    enableFonts = false;
-    enableForgejo = true;
-    # enableCaddy = true;
-    # enableCloudflareDyndns = true;
-    enableCloudflared = true;
-    enableVaultwarden = true;
-    enableGlance = true;
+    desktopEnvironment = "none";
+    fonts.enable = false;
+    services.forgejo.enable = true;
+    # services.caddy.enable = true;
+    # services.cloudflare-dyndns.enable = true;
+    services.cloudflared.enable = true;
+    services.vaultwarden.enable = true;
+    services.glance.enable = true;
   };
 
   services.wanikani-bypass-lessons.enable = true;

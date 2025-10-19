@@ -5,13 +5,13 @@
     ../../../modules/nixos
   ];
   osbmModules = {
-    enableKDE = false;
-    enableFonts = false;
-    enableNextcloud = true;
-    enableHydra = true;
-    # enableCaddy = true;
-    enableAttic = true;
-    enableCloudflared = true;
+    desktopEnvironment = "none";
+    fonts.enable = false;
+    services.nextcloud.enable = true;
+    services.hydra.enable = true;
+    # services.caddy.enable = true;
+    services.attic.enable = true;
+    services.cloudflared.enable = true;
   };
 
   boot.loader.systemd-boot.enable = true;

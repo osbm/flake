@@ -12,9 +12,9 @@
   ];
 
   osbmModules = {
-    enableKDE = false;
-    enableFonts = false;
-    enableTailscale = true;
+    desktopEnvironment = "none";
+    fonts.enable = false;
+    services.tailscale.enable = true;
   };
 
   i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method

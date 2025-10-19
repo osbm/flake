@@ -10,8 +10,8 @@
   ];
 
   osbmModules = {
-    enableKDE = false;
-    enableFonts = false;
+    desktopEnvironment = "none";
+    fonts.enable = false;
   };
 
   i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method

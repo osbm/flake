@@ -10,15 +10,14 @@
   ];
 
   osbmModules = {
-    enableKDE = true;
-    enableJellyfin = true;
-    enableAarch64Emulation = true;
-    disableHibernation = true;
-    enableWakeOnLan = true;
-    enableSound = true;
-    enableADB = true;
-    enableOllama = true;
-    # enableMinegrubTheme = true;
+    desktopEnvironment = "plasma";
+    services.jellyfin.enable = true;
+    emulation.aarch64.enable = true;
+    hardware.hibernation.enable = false;
+    hardware.wakeOnLan.enable = true;
+    hardware.sound.enable = true;
+    programs.adbFastboot.enable = true;
+    services.ollama.enable = true;
   };
 
   # Bootloader.

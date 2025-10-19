@@ -332,7 +332,16 @@
       };
     };
 
-
+    # Emulation
+    emulation = {
+      aarch64 = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Enable aarch64 emulation via binfmt";
+        };
+      };
+    };
 
     # Internationalization
     i18n = {

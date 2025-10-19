@@ -1,12 +1,14 @@
 { lib, config, ... }:
 let
   cfg = config.osbmModules;
+  # Filter out 'root' from the users list since it's a special system user
+  regularUsers = builtins.filter (u: u != "root") cfg.users;
 in
 {
   config = lib.mkIf (cfg.users != []) {
     users.users = lib.mkMerge [
-      # Create users based on the list
-      (lib.genAttrs cfg.users (username: {
+      # Create users based on the list (excluding root)
+      (lib.genAttrs regularUsers (username: {
         isNormalUser = true;
         description = username;
         extraGroups = [ "networkmanager" ]
@@ -15,7 +17,7 @@ in
           ++ lib.optional config.osbmModules.programs.adbFastboot.enable "adbusers";
       }))
 
-      # Additional configuration for default user
+      # Additional configuration for default user (including root if it's default)
       {
         ${cfg.defaultUser} = {
           openssh.authorizedKeys.keys = lib.mkDefault [

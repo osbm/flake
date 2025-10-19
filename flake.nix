@@ -93,38 +93,38 @@
       };
       lib = import ./lib { inherit (nixpkgs) lib; };
       formatter = forAllSystems (system: (makePkgs system).nixfmt-tree);
-      deploy.nodes.harmonica = {
-        hostname = "192.168.0.11";
-        profiles.system = {
-          user = "osbm";
-          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.harmonica;
-        };
-      };
-      packages = forAllSystems (
-        system:
-        let
-          makeNixosConfigWithSystemOverride =
-            configName:
-            nixpkgs.lib.nixosSystem {
-              specialArgs = { inherit inputs outputs; };
-              modules = [
-                ./hosts/nixos/${configName}/configuration.nix
-                { nixpkgs.hostPlatform = nixpkgs.lib.mkForce system; }
-              ];
-            };
-          dotfilesMachineNames = [
-            "ymir"
-            "pochita"
-            "tartarus"
-            "wallfacer"
-          ];
-        in
-        builtins.listToAttrs (
-          map (name: {
-            name = "${name}-dotfiles";
-            value = (makeNixosConfigWithSystemOverride name).config.home-manager.users.osbm.home-files;
-          }) dotfilesMachineNames
-        )
-      );
+      # deploy.nodes.harmonica = {
+      #   hostname = "192.168.0.11";
+      #   profiles.system = {
+      #     user = "osbm";
+      #     path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.harmonica;
+      #   };
+      # };
+      # packages = forAllSystems (
+      #   system:
+      #   let
+      #     makeNixosConfigWithSystemOverride =
+      #       configName:
+      #       nixpkgs.lib.nixosSystem {
+      #         specialArgs = { inherit inputs outputs; };
+      #         modules = [
+      #           ./hosts/nixos/${configName}/configuration.nix
+      #           { nixpkgs.hostPlatform = nixpkgs.lib.mkForce system; }
+      #         ];
+      #       };
+      #     dotfilesMachineNames = [
+      #       "ymir"
+      #       "pochita"
+      #       "tartarus"
+      #       "wallfacer"
+      #     ];
+      #   in
+      #   builtins.listToAttrs (
+      #     map (name: {
+      #       name = "${name}-dotfiles";
+      #       value = (makeNixosConfigWithSystemOverride name).config.home-manager.users.osbm.home-files;
+      #     }) dotfilesMachineNames
+      #   )
+      # );
     };
 }
