@@ -3,7 +3,7 @@
     ./sound.nix
     ./nvidia.nix
     ./hibernation.nix
-    ./wake-on-lan.nix
+    ./wakeOnLan.nix
     ./disko.nix
   ];
 }
