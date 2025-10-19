@@ -5,16 +5,18 @@ let
   regularUsers = builtins.filter (u: u != "root") cfg.users;
 in
 {
-  config = lib.mkIf (cfg.users != []) {
+  config = lib.mkIf (cfg.users != [ ]) {
     users.users = lib.mkMerge [
       # Create users based on the list (excluding root)
       (lib.genAttrs regularUsers (username: {
         isNormalUser = true;
         description = username;
-        extraGroups = [ "networkmanager" ]
-          ++ lib.optional (username == cfg.defaultUser) "wheel"
-          ++ lib.optional config.osbmModules.virtualization.docker.enable "docker"
-          ++ lib.optional config.osbmModules.programs.adbFastboot.enable "adbusers";
+        extraGroups = [
+          "networkmanager"
+        ]
+        ++ lib.optional (username == cfg.defaultUser) "wheel"
+        ++ lib.optional config.osbmModules.virtualization.docker.enable "docker"
+        ++ lib.optional config.osbmModules.programs.adbFastboot.enable "adbusers";
       }))
 
       # Additional configuration for default user (including root if it's default)

@@ -1,8 +1,14 @@
-{ inputs, lib, config, ... }:
+{
+  inputs,
+  lib,
+  config,
+  ...
+}:
 {
   config = lib.mkIf config.osbmModules.nixSettings.enable {
     # Allow unfree packages
-    nixpkgs.config.allowUnfreePredicate = pkg:
+    nixpkgs.config.allowUnfreePredicate =
+      pkg:
       builtins.elem (lib.getName pkg) [
         "vscode"
         "discord"

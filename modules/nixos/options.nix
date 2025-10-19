@@ -3,14 +3,23 @@
   options.osbmModules = {
     # Desktop Environment
     desktopEnvironment = lib.mkOption {
-      type = lib.types.enum [ "plasma" "none" ];
+      type = lib.types.enum [
+        "plasma"
+        "none"
+      ];
       default = "none";
       description = "Which desktop environment to use";
     };
 
     # Machine Type
     machineType = lib.mkOption {
-      type = lib.types.enum [ "desktop" "laptop" "server" "embedded" "mobile" ];
+      type = lib.types.enum [
+        "desktop"
+        "laptop"
+        "server"
+        "embedded"
+        "mobile"
+      ];
       default = "server";
       description = "Type of machine for appropriate defaults";
     };
@@ -18,7 +27,10 @@
     # Users
     users = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ "osbm" "bayram" ];
+      default = [
+        "osbm"
+        "bayram"
+      ];
       description = "List of users to create. `osbm` is my main user, and `bayram` is for my family.";
     };
 
@@ -188,7 +200,10 @@
         };
 
         fileSystem = lib.mkOption {
-          type = lib.types.enum [ "zfs" "ext4" ];
+          type = lib.types.enum [
+            "zfs"
+            "ext4"
+          ];
           default = "ext4";
           description = "Root filesystem type";
         };

@@ -1,4 +1,9 @@
-{ lib, config, inputs, ... }:
+{
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 {
   imports = lib.optionals (inputs ? home-manager) [

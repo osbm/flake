@@ -1,4 +1,10 @@
-{ config, inputs, lib, pkgs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.osbmModules.hardware.disko;
   inherit (config.networking) hostName;
@@ -9,9 +15,11 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHYSJ9ywFRJ747tkhvYWFkx/Y9SkLqv3rb7T1UuXVBWo"
   ];
 
-  authorizedKeys = if cfg.initrd-ssh.authorizedKeys != []
-                   then cfg.initrd-ssh.authorizedKeys
-                   else defaultAuthorizedKeys;
+  authorizedKeys =
+    if cfg.initrd-ssh.authorizedKeys != [ ] then
+      cfg.initrd-ssh.authorizedKeys
+    else
+      defaultAuthorizedKeys;
 in
 {
   imports = [
@@ -52,9 +60,12 @@ in
         # ZFS does not support swapfiles
         kernelParams = [
           "nohibernate"
-          "zfs.zfs_arc_max=17179869184"  # 16GB ARC max
+          "zfs.zfs_arc_max=17179869184" # 16GB ARC max
         ];
-        supportedFilesystems = [ "vfat" "zfs" ];
+        supportedFilesystems = [
+          "vfat"
+          "zfs"
+        ];
         zfs = {
           devNodes = "/dev/disk/by-id/";
           forceImportAll = true;
@@ -117,7 +128,10 @@ in
                       type = "filesystem";
                       format = "vfat";
                       mountpoint = "/boot";
-                      mountOptions = [ "defaults" "umask=0077" ];
+                      mountOptions = [
+                        "defaults"
+                        "umask=0077"
+                      ];
                     };
                   };
 

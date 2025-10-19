@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 {
   config = lib.mkIf config.osbmModules.programs.commandLine.enable {
     environment.systemPackages = with pkgs; [

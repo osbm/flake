@@ -1,4 +1,10 @@
-{ lib, inputs, config, pkgs, ... }:
+{
+  lib,
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
 {
   config = lib.mkIf config.osbmModules.programs.neovim.enable {
     environment.systemPackages = [

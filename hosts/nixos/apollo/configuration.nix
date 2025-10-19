@@ -48,10 +48,10 @@
           enable = true;
           hostID = "0f7de22e";
           root = {
-            useTmpfs = false;  # Use ZFS root, not tmpfs
+            useTmpfs = false; # Use ZFS root, not tmpfs
             encrypt = true;
             disk1 = "vda";
-            impermanenceRoot = true;  # Wipe root on boot with ZFS snapshots
+            impermanenceRoot = true; # Wipe root on boot with ZFS snapshots
           };
         };
       };
@@ -73,17 +73,24 @@
     useDHCP = false;
     interfaces.ens3 = {
       useDHCP = false;
-      ipv4.addresses = [{
-        address = "152.53.152.129";
-        prefixLength = 22;
-      }];
-      ipv6.addresses = [{
-        address = "2a00:11c0:47:3b2a::1";
-        prefixLength = 64;
-      }];
+      ipv4.addresses = [
+        {
+          address = "152.53.152.129";
+          prefixLength = 22;
+        }
+      ];
+      ipv6.addresses = [
+        {
+          address = "2a00:11c0:47:3b2a::1";
+          prefixLength = 64;
+        }
+      ];
     };
     defaultGateway = "152.53.152.1";
-    defaultGateway6 = { address = "fe80::1"; interface = "ens3"; };
+    defaultGateway6 = {
+      address = "fe80::1";
+      interface = "ens3";
+    };
   };
 
   # Override initrd kernel params for static IP

@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 {
   config = lib.mkIf config.osbmModules.fonts.enable {
     fonts.packages = with pkgs; [
@@ -12,14 +17,23 @@
       dina-font
       proggyfonts
       jetbrains-mono
-      (nerdfonts.override { fonts = [ "FiraCode" "JetBrainsMono" "Iosevka" ]; })
+      (nerdfonts.override {
+        fonts = [
+          "FiraCode"
+          "JetBrainsMono"
+          "Iosevka"
+        ];
+      })
     ];
 
     fonts.fontconfig = {
       defaultFonts = {
         serif = [ "Noto Serif" ];
         sansSerif = [ "Noto Sans" ];
-        monospace = [ "JetBrainsMono Nerd Font" "Fira Code" ];
+        monospace = [
+          "JetBrainsMono Nerd Font"
+          "Fira Code"
+        ];
         emoji = [ "Noto Color Emoji" ];
       };
     };

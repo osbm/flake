@@ -67,7 +67,6 @@
 
   nix.channel.enable = false;
 
-
   nix.registry = {
     self.flake = inputs.self;
     nixpkgs.flake = inputs.nixpkgs;
@@ -91,7 +90,10 @@
 
     osbm-nvim.flake = inputs.osbm-nvim;
     my-nixpkgs = {
-      from = { type = "indirect"; id = "my-nixpkgs"; };
+      from = {
+        type = "indirect";
+        id = "my-nixpkgs";
+      };
       to = {
         owner = "osbm";
         repo = "nixpkgs";
@@ -99,7 +101,10 @@
       };
     };
     osbm-dev = {
-      from = { type = "indirect"; id = "osbm-dev"; };
+      from = {
+        type = "indirect";
+        id = "osbm-dev";
+      };
       to = {
         owner = "osbm";
         repo = "osbm.dev";
@@ -107,7 +112,10 @@
       };
     };
     devshells = {
-      from = { type = "indirect"; id = "devshells"; };
+      from = {
+        type = "indirect";
+        id = "devshells";
+      };
       to = {
         owner = "osbm";
         repo = "devshells";
