@@ -7,7 +7,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../../modules
+    ../../../modules/nixos
   ];
 
   osbmModules = {

@@ -7,7 +7,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../../modules
+    ../../../modules/nixos
     inputs.raspberry-pi-nix.nixosModules.raspberry-pi
     inputs.nixos-hardware.nixosModules.raspberry-pi-5
   ];

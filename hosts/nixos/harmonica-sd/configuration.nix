@@ -8,7 +8,7 @@
     ./sd-image.nix
     "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
     ./hardware-configuration.nix
-    ../../../modules
+    ../../../modules/nixos
   ];
 
   osbmModules = {
