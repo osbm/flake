@@ -35,7 +35,7 @@
         enable = true;
         fileSystem = "zfs";
         systemd-boot = true;
-        
+
         initrd-ssh = {
           enable = true;
           authorizedKeys = [
@@ -43,7 +43,7 @@
           ];
           ethernetDrivers = [ "virtio_pci" ];
         };
-        
+
         zfs = {
           enable = true;
           hostID = "0f7de22e";
