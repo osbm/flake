@@ -71,8 +71,8 @@
 
     # Environment variables
     environment.variables = {
-      EDITOR = lib.mkDefault "nvim";
-      VISUAL = lib.mkDefault "nvim";
+      EDITOR = "nvim";
+      VISUAL = "nvim";
     };
   };
 }
