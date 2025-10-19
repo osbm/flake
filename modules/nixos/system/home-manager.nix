@@ -7,10 +7,10 @@ in
     home-manager = {
       useGlobalPkgs = true;
       useUserPackages = true;
-      
+
       # Pass inputs and outputs to home-manager modules
       extraSpecialArgs = { inherit inputs; };
-      
+
       # Configure home-manager for each user
       users = lib.genAttrs cfg.users (username: {
         home.stateVersion = lib.mkDefault "24.05";
