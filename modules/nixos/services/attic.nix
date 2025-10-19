@@ -8,7 +8,7 @@ let
 in
 {
   options = {
-    myModules.enableAttic = lib.mkOption {
+    osbmModules.enableAttic = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable Attic nix cache service";
@@ -16,7 +16,7 @@ in
   };
 
   config = lib.mkMerge [
-    (lib.mkIf config.myModules.enableAttic {
+    (lib.mkIf config.osbmModules.enableAttic {
       services.atticd = {
         enable = true;
         environmentFile = "/persist/attic.env";

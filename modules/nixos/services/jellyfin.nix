@@ -5,7 +5,7 @@
 }:
 {
   options = {
-    myModules.enableJellyfin = lib.mkOption {
+    osbmModules.enableJellyfin = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable Jellyfin media server";
@@ -13,7 +13,7 @@
   };
 
   config = lib.mkMerge [
-    (lib.mkIf config.myModules.enableJellyfin {
+    (lib.mkIf config.osbmModules.enableJellyfin {
       services.jellyfin = {
         enable = true;
         openFirewall = true;

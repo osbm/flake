@@ -6,7 +6,7 @@
 }:
 {
   options = {
-    myModules.enableCaddy = lib.mkOption {
+    osbmModules.enableCaddy = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable Caddy server";
@@ -14,7 +14,7 @@
   };
 
   config = lib.mkMerge [
-    (lib.mkIf config.myModules.enableCaddy {
+    (lib.mkIf config.osbmModules.enableCaddy {
       services.caddy = {
         enable = true;
         # package = pkgs.caddy.withPlugins {

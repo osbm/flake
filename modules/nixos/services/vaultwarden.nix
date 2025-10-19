@@ -5,7 +5,7 @@
 }:
 {
   options = {
-    myModules.enableVaultwarden = lib.mkOption {
+    osbmModules.enableVaultwarden = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable Vaultwarden server";
@@ -13,7 +13,7 @@
   };
 
   config = lib.mkMerge [
-    (lib.mkIf config.myModules.enableVaultwarden {
+    (lib.mkIf config.osbmModules.enableVaultwarden {
       services.vaultwarden = {
         enable = true;
       };

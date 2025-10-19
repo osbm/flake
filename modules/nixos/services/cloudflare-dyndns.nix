@@ -29,7 +29,7 @@ let
 in
 {
   options = {
-    myModules.enableCloudflareDyndns = lib.mkOption {
+    osbmModules.enableCloudflareDyndns = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable a service to push my public IP address to my Cloudflare domain.";
@@ -37,7 +37,7 @@ in
   };
 
   config = lib.mkMerge [
-    (lib.mkIf config.myModules.enableCloudflareDyndns {
+    (lib.mkIf config.osbmModules.enableCloudflareDyndns {
       services.cloudflare-dyndns = {
         package = cloudflare-dyndns-5-3;
         enable = true;

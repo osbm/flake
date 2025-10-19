@@ -6,7 +6,7 @@
 }:
 {
   options = {
-    myModules.enableNextcloud = lib.mkOption {
+    osbmModules.enableNextcloud = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable Nextcloud server";
@@ -14,7 +14,7 @@
   };
 
   config = lib.mkMerge [
-    (lib.mkIf config.myModules.enableNextcloud {
+    (lib.mkIf config.osbmModules.enableNextcloud {
       environment.etc."nextcloud-admin-pass".text = "m7eJ4KJ1NK33JE%51";
       services.nextcloud = {
         enable = true;

@@ -5,7 +5,7 @@
 }:
 {
   options = {
-    myModules.enableSyncthing = lib.mkOption {
+    osbmModules.enableSyncthing = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable Syncthing file synchronization service";
@@ -13,7 +13,7 @@
   };
 
   config = lib.mkMerge [
-    (lib.mkIf config.myModules.enableSyncthing {
+    (lib.mkIf config.osbmModules.enableSyncthing {
       services.syncthing = {
         enable = true;
         openDefaultPorts = true;
