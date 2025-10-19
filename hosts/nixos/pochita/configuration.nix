@@ -15,8 +15,6 @@
   osbmModules = {
     enableKDE = false;
     enableFonts = false;
-    blockYoutube = false;
-    blockTwitter = false;
     enableForgejo = true;
     # enableCaddy = true;
     # enableCloudflareDyndns = true;

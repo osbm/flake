@@ -11,9 +11,6 @@
   ];
 
   osbmModules = {
-    blockYoutube = false;
-    blockTwitter = true;
-    blockBluesky = false;
     enableKDE = true;
     enableAarch64Emulation = true;
     enableSound = true;

@@ -14,8 +14,6 @@
   osbmModules = {
     enableKDE = false;
     enableFonts = false;
-    blockYoutube = false;
-    blockTwitter = false;
     enableTailscale = true;
   };
 

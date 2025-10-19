@@ -12,8 +12,6 @@
   osbmModules = {
     enableKDE = false;
     enableFonts = false;
-    blockYoutube = false;
-    blockTwitter = false;
   };
 
   i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method
