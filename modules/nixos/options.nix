@@ -233,6 +233,18 @@
           };
 
           root = {
+            useTmpfs = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "Use tmpfs for root instead of ZFS (with ZFS datasets for /nix and /persist)";
+            };
+
+            tmpfsSize = lib.mkOption {
+              type = lib.types.str;
+              default = "2G";
+              description = "Size of tmpfs root filesystem";
+            };
+
             encrypt = lib.mkOption {
               type = lib.types.bool;
               default = true;
