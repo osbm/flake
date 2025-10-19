@@ -44,7 +44,7 @@
 
   # ZFS configuration
   boot.zfs.requestEncryptionCredentials = true;
-  
+
   # Initrd SSH for remote unlocking
   boot.initrd.network.enable = true;
   boot.initrd.availableKernelModules = [ "virtio_pci" ];
