@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, inputs, lib, pkgs, ... }:
 let
   cfg = config.osbmModules.hardware.disko;
   inherit (config.networking) hostName;
@@ -14,6 +14,10 @@ let
                    else defaultAuthorizedKeys;
 in
 {
+  imports = [
+    inputs.disko.nixosModules.default
+  ];
+
   config = lib.mkMerge [
     # Systemd-boot setup
     (lib.mkIf (cfg.enable && cfg.systemd-boot) {
