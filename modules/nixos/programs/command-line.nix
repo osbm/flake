@@ -1,0 +1,48 @@
+{ pkgs, inputs, lib, config, ... }:
+{
+  config = lib.mkIf config.osbmModules.programs.commandLine.enable {
+    environment.systemPackages = with pkgs; [
+      wget
+      nano
+      git
+      lazygit
+      lazysql
+      git-lfs
+      gnumake
+      zip
+      fish
+      trash-cli
+      tmux
+      zoxide
+      htop
+      unzip
+      tlrc
+      btop
+      pciutils
+      cloc
+      neofetch
+      pfetch
+      inxi
+      jq
+      dig
+      onefetch
+      just
+      nixd
+      eza
+      gh
+      starship
+      tree
+      nix-output-monitor
+      yazi
+      ripgrep
+      nh
+      comma
+      nix-inspect
+      bat
+      fd
+      du-dust
+      duf
+      ncdu
+    ];
+  };
+}

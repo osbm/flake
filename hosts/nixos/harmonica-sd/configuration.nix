@@ -11,7 +11,7 @@
     ../../../modules
   ];
 
-  myModules = {
+  osbmModules = {
     enableKDE = false;
     enableFonts = false;
     blockYoutube = false;

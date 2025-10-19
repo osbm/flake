@@ -4,7 +4,7 @@
     ./hardware-configuration.nix
     ../../../modules
   ];
-  myModules = {
+  osbmModules = {
     enableKDE = false;
     enableFonts = false;
     enableNextcloud = true;

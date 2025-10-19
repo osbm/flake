@@ -14,7 +14,7 @@
     inputs.impermanence.nixosModules.impermanence
   ];
 
-  # myModules = {
+  # osbmModules = {
   #   enableKDE = false;
   #   enableFonts = false;
   #   blockYoutube = false;

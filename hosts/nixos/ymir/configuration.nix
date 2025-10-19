@@ -9,7 +9,7 @@
     ../../../modules
   ];
 
-  myModules = {
+  osbmModules = {
     blockYoutube = false;
     blockTwitter = true;
     blockBluesky = false;

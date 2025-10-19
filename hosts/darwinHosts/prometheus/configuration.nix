@@ -88,7 +88,7 @@
     #     type = "path";
     #   };
     # };
-    
+
     osbm-nvim.flake = inputs.osbm-nvim;
     my-nixpkgs = {
       from = { type = "indirect"; id = "my-nixpkgs"; };
@@ -128,7 +128,7 @@
 
   programs.fish.enable = true;
 
-  # myModules.setUsers = false;
+  # osbmModules.setUsers = false;
   users.users.osbm = {
     description = "osbm";
     shell = pkgs.fish;

@@ -12,6 +12,71 @@ I didnt get these setup yet.
 - Raspberry Pi Zero 2W **harmonica** (small machine for small tasks and cronjobs) (not setup yet)
 - Android phone (termux) **android** (not setup yet)
 
+My options:
+
+I implemented a module system for my configurations. Each machine has its own set of options that can be enabled or disabled. The options are defined in the `modules/options.nix` file. Each option is a module that can be imported into the machine configuration.
+
+I am containing my options in the `osbmModules` attribute set. I dont like to interfere with the global configuration namespace. Here is all the available options:
+
+```nix
+osbmModules = {
+  desktopEnvironment = "plasma"; # options: "plasma", "none"
+  homeManager.enable = true;
+  machineType = "desktop"; # options: "desktop", "laptop", "server", "embedded", "mobile"
+  users = [ "osbm" "bayram" ];
+  defaultUser = "osbm";
+  agenix.enable = true;
+  nixSettings.enable = true;
+  programs = {
+    steam.enable = true;
+    graphical.enable = true;
+    commandLine.enable = true;
+    neovim.enable = true;
+    arduino.enable = true;
+    adbFastboot.enable = true;
+  };
+  services = {
+    # list services to enable
+  };
+  hardware = {
+    sound.enable = true;
+    nvidiaDriver.enable = false;
+    hibernation.enable = false;
+    disko = {
+      enable = true;
+      fileSystem = "zfs"; # options: "zfs", "ext4"
+        systemd-boot = true;
+        initrd-ssh = {
+          enable = true;
+          ethernetDrivers = [ "igc" ];
+        };
+        zfs = {
+          enable = true;
+          hostID = "49e95c43";
+          root = {
+            disk1 = "nvme0n1";
+            disk2 = "nvme1n1";
+            reservation = "200G";
+            impermanenceRoot = true;
+          };
+          storage = {
+            enable = true;
+            disks = [
+              "sda"
+              "sdb"
+            ];
+            reservation = "1500G";
+            mirror = true;
+            #amReinstalling = true;
+          };
+        };
+      };
+  }
+};
+```
+
+
+
 
 <details>
   <summary> How to bootstrap raspberry pi 5</summary>
@@ -39,7 +104,7 @@ and voila! when you plug the sd card to the raspberry pi 5 it will boot up with 
 
 </details>
 build iso with:
- nix build .#nixosConfigurations.myISO.config.system.build.isoImage 
+ nix build .#nixosConfigurations.myISO.config.system.build.isoImage
 
 # To-do list
 

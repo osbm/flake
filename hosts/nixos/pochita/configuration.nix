@@ -12,7 +12,7 @@
     inputs.nixos-hardware.nixosModules.raspberry-pi-5
   ];
 
-  myModules = {
+  osbmModules = {
     enableKDE = false;
     enableFonts = false;
     blockYoutube = false;
