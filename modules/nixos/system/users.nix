@@ -25,8 +25,5 @@ in
       }
     ];
 
-    # Set default shell
-    users.defaultUserShell = lib.mkDefault config.pkgs.fish;
-    programs.fish.enable = lib.mkDefault true;
   };
 }
