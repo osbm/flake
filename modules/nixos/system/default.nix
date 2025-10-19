@@ -7,7 +7,6 @@
     ./home-manager.nix
     ./virtualization.nix
     ./emulation.nix
-    ./remote-builds.nix
     ./i18n.nix
     ./fonts.nix
     ./nix-index.nix
