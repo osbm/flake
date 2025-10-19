@@ -1,4 +1,4 @@
-{ pkgs, inputs, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 {
   config = lib.mkIf config.osbmModules.programs.commandLine.enable {
     environment.systemPackages = with pkgs; [
@@ -40,7 +40,7 @@
       nix-inspect
       bat
       fd
-      du-dust
+      dust
       duf
       (pkgs.writeShellScriptBin "wake-ymir" ''
         echo waking up ymir
