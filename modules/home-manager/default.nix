@@ -3,7 +3,9 @@
   # Import all home-manager modules
   imports = [
     ./programs
-    ./services
+    # no home manager services yet
+    # ./services 
+
   ];
 
   # Basic home-manager configuration
