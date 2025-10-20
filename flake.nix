@@ -35,6 +35,10 @@
     raspberry-pi-nix = {
       url = "github:nix-community/raspberry-pi-nix";
     };
+    # colmena = {
+    #   url = "github:zhaofengli/colmena";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,6 +49,8 @@
     };
     impermanence = {
       url = "github:nix-community/impermanence";
+      # inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.home-manager.follows = "home-manager";
     };
   };
 
