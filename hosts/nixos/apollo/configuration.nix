@@ -41,8 +41,15 @@
           authorizedKeys = [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfnV+qqUCJf92npNW4Jy0hIiepCJFBDJHXBHnUlNX0k"
           ];
-          ethernetDrivers = [ "virtio_pci"       # QEMU support
-      "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "virtio_console" "virtio_gpu" ];
+          ethernetDrivers = [
+            "virtio_pci" # QEMU support
+            "virtio_net"
+            "virtio_pci"
+            "virtio_blk"
+            "virtio_balloon"
+            "virtio_console"
+            "virtio_gpu"
+          ];
         };
 
         zfs = {
@@ -92,7 +99,10 @@
       address = "fe80::1";
       interface = "eth0";
     };
-    nameservers = [ "1.1.1.1" "8.8.8.8" ]; # Cloudflare and Google DNS
+    nameservers = [
+      "1.1.1.1"
+      "8.8.8.8"
+    ]; # Cloudflare and Google DNS
   };
 
   # Override initrd kernel params for static IP
