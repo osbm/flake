@@ -35,10 +35,6 @@
     raspberry-pi-nix = {
       url = "github:nix-community/raspberry-pi-nix";
     };
-    deploy-rs = {
-      url = "github:serokell/deploy-rs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -58,7 +54,6 @@
       nixpkgs,
       nix-on-droid,
       nix-darwin,
-      deploy-rs,
       ...
     }@inputs:
     let
