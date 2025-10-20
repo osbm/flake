@@ -127,3 +127,11 @@ build iso with:
 - [ ] enable swap on pochita
 - [ ] learnis it possible to enable swap with sd-image?
 
+
+nano /tmp/secret.key
+sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode destroy,format,mount --flake github:osbm/flake#apollo
+
+sudo mkdir -p /mnt/etc/ssh
+sudo ssh-keygen -t ed25519 -N "" -f /mnt/etc/ssh/initrd
+
+sudo nixos-install --flake github:osbm/flake#apollo --root /mnt --no-root-passwd
