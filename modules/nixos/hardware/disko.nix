@@ -37,10 +37,10 @@ in
     (lib.mkIf (cfg.enable && cfg.initrd-ssh.enable) {
       boot.initrd.network.enable = true;
       boot.initrd.availableKernelModules = cfg.initrd-ssh.ethernetDrivers;
-      boot.kernelParams = [ "ip=::::${hostName}-initrd::dhcp" ];
+      boot.kernelParams = [ "ip=152.53.152.129::152.53.152.1:255.255.252.0::eth0:none" ];
       boot.initrd.network.ssh = {
         enable = true;
-        port = 22;
+        port = 2222; # different port to avoid conflicts
         shell = "/bin/cryptsetup-askpass";
         authorizedKeys = authorizedKeys;
         hostKeys = [ "/etc/ssh/initrd" ];
