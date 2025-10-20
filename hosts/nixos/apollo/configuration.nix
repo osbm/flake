@@ -41,7 +41,8 @@
           authorizedKeys = [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfnV+qqUCJf92npNW4Jy0hIiepCJFBDJHXBHnUlNX0k"
           ];
-          ethernetDrivers = [ "virtio_pci" ];
+          ethernetDrivers = [ "virtio_pci"       # QEMU support
+      "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "virtio_console" "virtio_gpu" ];
         };
 
         zfs = {
@@ -71,7 +72,7 @@
   # Network configuration
   networking = {
     useDHCP = false;
-    interfaces.ens3 = {
+    interfaces.eth0 = {
       useDHCP = false;
       ipv4.addresses = [
         {
@@ -89,10 +90,10 @@
     defaultGateway = "152.53.152.1";
     defaultGateway6 = {
       address = "fe80::1";
-      interface = "ens3";
+      interface = "eth0";
     };
   };
 
   # Override initrd kernel params for static IP
-  boot.kernelParams = [ "ip=152.53.152.129::152.53.152.1:255.255.252.0::ens3:none" ];
+  boot.kernelParams = [ "ip=152.53.152.129::152.53.152.1:255.255.252.0::eth0:none" ];
 }
