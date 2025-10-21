@@ -7,7 +7,6 @@
   imports = [
     ./hardware-configuration.nix
     ../../../modules/nixos
-    inputs.impermanence.nixosModules.impermanence
   ];
 
   osbmModules = {

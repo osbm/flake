@@ -8,6 +8,7 @@
     ./virtualization.nix
     ./emulation.nix
     ./i18n.nix
+    ./impermanence.nix
     ./fonts.nix
     ./nix-index.nix
   ];

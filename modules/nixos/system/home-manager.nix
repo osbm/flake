@@ -38,28 +38,6 @@
             ++ lib.optionals systemConfig.osbmModules.hardware.disko.zfs.root.impermanenceRoot [
               # Import impermanence home-manager module when impermanence is enabled
               inputs.impermanence.homeManagerModules.impermanence
-              # Configure persistence
-              {
-                home.persistence."/persist/home/${username}" = {
-                  directories = [
-                    "Pictures"
-                    "Documents"
-                    "Videos"
-                    ".gnupg"
-                    ".ssh"
-                    ".local/share/keyrings"
-                    ".local/share/direnv"
-                    # {
-                    #   directory = ".local/share/Steam";
-                    #   method = "symlink";
-                    # }
-                  ];
-                  files = [
-                    ".screenrc"
-                  ];
-                  allowOther = true;
-                };
-              }
             ];
           });
       };
