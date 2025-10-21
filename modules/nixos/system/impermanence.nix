@@ -33,9 +33,9 @@ in
           "/var/lib/systemd/coredump"
           "/etc/NetworkManager/system-connections"
         ];
-        files = [
-          "/etc/machine-id"
-        ];
+        # files = [ # the fuck is this file
+        #   "/etc/machine-id"
+        # ];
         users = userPersistence;
       };
     })
