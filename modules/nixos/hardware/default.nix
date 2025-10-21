@@ -1,5 +1,6 @@
 {
   imports = [
+    ./boot.nix
     ./sound.nix
     ./nvidia.nix
     ./hibernation.nix

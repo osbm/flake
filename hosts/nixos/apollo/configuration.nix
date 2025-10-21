@@ -34,7 +34,6 @@
       disko = {
         enable = true;
         fileSystem = "zfs";
-        systemd-boot = true;
 
         initrd-ssh = {
           enable = true;

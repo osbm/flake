@@ -185,6 +185,12 @@
         };
       };
 
+      systemd-boot.enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Use systemd-boot bootloader";
+      };
+
       # Disko configuration (inspired by ZFS.nix)
       disko = {
         enable = lib.mkOption {
@@ -206,12 +212,6 @@
           ];
           default = "ext4";
           description = "Root filesystem type";
-        };
-
-        systemd-boot = lib.mkOption {
-          type = lib.types.bool;
-          default = true;
-          description = "Use systemd-boot bootloader";
         };
 
         initrd-ssh = {

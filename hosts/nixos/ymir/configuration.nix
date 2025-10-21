@@ -21,10 +21,6 @@
     i18n.enable = true;
   };
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
   networking.hostName = "ymir"; # Define your hostname.
 
   networking.firewall.allowedTCPPorts = [

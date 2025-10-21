@@ -45,7 +45,6 @@ osbmModules = {
     disko = {
       enable = true;
       fileSystem = "zfs"; # options: "zfs", "ext4"
-        systemd-boot = true;
         initrd-ssh = {
           enable = true;
           ethernetDrivers = [ "igc" ];

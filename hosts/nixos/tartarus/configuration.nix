@@ -16,10 +16,6 @@
     hardware.sound.enable = true;
   };
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
   networking.hostName = "tartarus"; # Define your hostname.
 
   # Enable networking

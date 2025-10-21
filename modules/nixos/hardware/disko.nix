@@ -7,7 +7,6 @@
 }:
 let
   cfg = config.osbmModules.hardware.disko;
-  inherit (config.networking) hostName;
 
   # Default authorized keys for initrd SSH
   defaultAuthorizedKeys = [
@@ -27,12 +26,6 @@ in
   ];
 
   config = lib.mkMerge [
-    # Systemd-boot setup
-    (lib.mkIf (cfg.enable && cfg.systemd-boot) {
-      boot.loader.systemd-boot.enable = true;
-      boot.loader.efi.canTouchEfiVariables = true;
-    })
-
     # Initrd SSH for remote unlocking
     (lib.mkIf (cfg.enable && cfg.initrd-ssh.enable) {
       boot.initrd.network.enable = true;
