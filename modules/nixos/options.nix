@@ -54,7 +54,7 @@
     agenix = {
       enable = lib.mkOption {
         type = lib.types.bool;
-        default = false;
+        default = true;
         description = "Enable agenix for secrets management";
       };
     };
