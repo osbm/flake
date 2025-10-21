@@ -11,7 +11,7 @@
   osbmModules = {
     desktopEnvironment = "none";
     machineType = "server";
-    hardware.systemd-boot.enable = false;  # Uses extlinux bootloader
+    hardware.systemd-boot.enable = false; # Uses extlinux bootloader
   };
 
 

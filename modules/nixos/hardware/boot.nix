@@ -1,4 +1,4 @@
-{config, lib, ...}:
+{ config, lib, ... }:
 
 {
   config = lib.mkIf (config.osbmModules.hardware.systemd-boot.enable) {

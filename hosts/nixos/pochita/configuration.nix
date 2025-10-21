@@ -15,7 +15,7 @@
   osbmModules = {
     desktopEnvironment = "none";
     machineType = "server";
-    hardware.systemd-boot.enable = false;  # Raspberry Pi uses init-script bootloader
+    hardware.systemd-boot.enable = false; # Raspberry Pi uses init-script bootloader
     services = {
       forgejo.enable = true;
       cloudflared.enable = true;
