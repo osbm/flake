@@ -19,13 +19,9 @@
     useUserPackages = true;
     verbose = true;
     backupFileExtension = "hmbak";
-    users.osbm = import ../../../modules/home-manager/default.nix {
-      inherit config pkgs lib;
-      username = "osbm";
-      homeDirectory = "/Users/osbm";
-      stateVersion = "24.11";
-      enableGTK = false;
-      enableGhostty = false;
+    users.osbm = {
+      imports = [ ../../../modules/home-manager ];
+      home.stateVersion = "24.11";
     };
   };
 

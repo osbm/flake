@@ -25,16 +25,17 @@
         extraSpecialArgs = { inherit inputs; };
 
         # Configure home-manager for each user (excluding root)
-        users = 
+        users =
           let
             # Capture the NixOS system config before entering the home-manager scope
             systemConfig = config;
           in
           lib.genAttrs (builtins.filter (u: u != "root") config.osbmModules.users) (username: {
-            home.stateVersion = lib.mkDefault "24.05";
-            imports = [ 
-              ../../home-manager 
-            ] 
+            # Use the system's stateVersion for home-manager
+            home.stateVersion = lib.mkDefault systemConfig.system.stateVersion;
+            imports = [
+              ../../home-manager
+            ]
             ++ lib.optionals systemConfig.osbmModules.hardware.disko.zfs.root.impermanenceRoot [
               # Import impermanence home-manager module when impermanence is enabled
               inputs.impermanence.homeManagerModules.impermanence
