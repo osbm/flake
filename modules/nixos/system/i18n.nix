@@ -16,7 +16,7 @@
       LC_NUMERIC = "tr_TR.UTF-8";
       LC_PAPER = "tr_TR.UTF-8";
       LC_TELEPHONE = "tr_TR.UTF-8";
-      LC_TIME = "tr_TR.UTF-8";
+      LC_TIME = "ja_JP.UTF-8";
     };
   };
 }
