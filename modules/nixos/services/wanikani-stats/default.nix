@@ -53,7 +53,7 @@ in
   options.services.wanikani-stats = {
     enable = lib.mkEnableOption {
       description = "Enable WaniKani Stats Service";
-      default = false;
+      default = config.osbmModules.services.wanikani-stats.enable or false;
     };
 
     logDirectory = lib.mkOption {

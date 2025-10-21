@@ -18,7 +18,7 @@ in
 {
   options.services.wanikani-fetch-data.enable = lib.mkEnableOption {
     description = "Enable WaniKani Fetch Data";
-    default = false;
+    default = config.osbmModules.services.wanikani-fetch-data.enable or false;
   };
 
   config = lib.mkIf config.services.wanikani-fetch-data.enable {

@@ -150,6 +150,9 @@
       glance.enable = lib.mkEnableOption "glance";
       hydra.enable = lib.mkEnableOption "hydra";
       vscode-server.enable = lib.mkEnableOption "vscode-server";
+      wanikani-bypass-lessons.enable = lib.mkEnableOption "wanikani-bypass-lessons";
+      wanikani-fetch-data.enable = lib.mkEnableOption "wanikani-fetch-data";
+      wanikani-stats.enable = lib.mkEnableOption "wanikani-stats";
     };
 
     # Hardware
