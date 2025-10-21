@@ -1,13 +1,20 @@
 {
   lib,
   config,
+  nixosConfig ? null,  # Receive the NixOS config
   ...
 }:
 {
-  options.enableFirefox = lib.mkEnableOption "enableFirefox";
-  config = {
-    programs.firefox = {
-      enable = config.enableFirefox;
+  config = lib.mkMerge [
+    # Auto-enable Firefox if system has a desktop environment
+    (lib.mkIf (nixosConfig != null && nixosConfig.osbmModules.desktopEnvironment != "none") {
+      # Set enableFirefox to true by default when there's a desktop environment
+      programs.firefox.enable = lib.mkDefault true;
+    })
+
+    # Firefox configuration
+    {
+      programs.firefox = {
       languagePacks = [
         "ja"
         "tr"
@@ -100,5 +107,6 @@
         };
       };
     };
-  };
+    }
+  ];
 }

@@ -22,7 +22,11 @@
         useUserPackages = true;
 
         # Pass inputs and outputs to home-manager modules
-        extraSpecialArgs = { inherit inputs; };
+        extraSpecialArgs = {
+          inherit inputs;
+          # Pass the NixOS system config to home-manager modules
+          nixosConfig = config;
+        };
 
         # Configure home-manager for each user (excluding root)
         users =
