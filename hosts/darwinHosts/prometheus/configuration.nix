@@ -9,10 +9,12 @@
   imports = [
     ../../../modules/nixos/options.nix
     ../../../modules/nixos/programs/command-line.nix
-    # inputs.home-manager-darwin.darwinModules.home-manager
     inputs.home-manager.darwinModules.home-manager
-    ./dummy-module.nix
   ];
+
+  osbmModules = {
+    programs.neovim.enable = true;
+  };
 
   home-manager = {
     useGlobalPkgs = true;
