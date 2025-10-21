@@ -75,10 +75,6 @@
     # Optimize store automatically
     nix.settings.auto-optimise-store = lib.mkDefault true;
 
-    # Environment variables
-    environment.variables = {
-      EDITOR = "nvim";
-      VISUAL = "nvim";
-    };
+
   };
 }
