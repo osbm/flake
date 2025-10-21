@@ -1,8 +1,6 @@
 {
   programs.git = {
     enable = true;
-    userEmail = "osbm@osbm.dev";
-    userName = "osbm";
     signing = {
       format = "openpgp";
     };
@@ -14,7 +12,11 @@
       "result" # nix
       "node_modules" # node
     ];
-    extraConfig = {
+    settings = {
+      user = {
+        email = "osbm@osbm.dev";
+        name = "osbm";
+      };
       credential = {
         helper = "store";
       };
