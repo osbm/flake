@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   nixosConfig ? null,  # Receive the NixOS config
   ...
 }:
