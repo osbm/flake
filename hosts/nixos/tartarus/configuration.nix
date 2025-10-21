@@ -12,6 +12,7 @@
 
   osbmModules = {
     desktopEnvironment = "plasma";
+    machineType = "laptop";
     emulation.aarch64.enable = true;
     hardware.sound.enable = true;
   };

@@ -11,6 +11,7 @@
 
   osbmModules = {
     desktopEnvironment = "plasma";
+    machineType = "desktop";
     programs.adbFastboot.enable = true;
     emulation.aarch64.enable = true;
     hardware.hibernation.enable = false;

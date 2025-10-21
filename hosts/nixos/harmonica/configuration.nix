@@ -12,6 +12,7 @@
   osbmModules = {
     desktopEnvironment = "none";
     fonts.enable = false;
+    machineType = "server";
   };
 
   i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method
