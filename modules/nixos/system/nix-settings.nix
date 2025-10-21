@@ -73,7 +73,7 @@
     };
 
     # Optimize store automatically
-    nix.settings.auto-optimise-store = lib.mkDefault true;
+    nix.optimise.automatic = true;
 
     system.configurationRevision = inputs.self.rev or "dirty";
 
