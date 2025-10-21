@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ lib, ... }:
 {
   # Disko configuration is now managed by osbmModules.hardware.disko
   # All disk configuration moved to configuration.nix
