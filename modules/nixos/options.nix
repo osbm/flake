@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, config, ... }:
 {
   options.osbmModules = {
     # Desktop Environment
@@ -80,7 +80,7 @@
       graphical = {
         enable = lib.mkOption {
           type = lib.types.bool;
-          default = false;
+          default = config.osbmModules.desktopEnvironment != "none";
           description = "Enable graphical applications";
         };
       };
