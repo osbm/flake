@@ -16,20 +16,18 @@
     desktopEnvironment = "none";
     machineType = "server";
     hardware.systemd-boot.enable = false;  # Raspberry Pi uses init-script bootloader
-    services.forgejo.enable = true;
-    services.cloudflared.enable = true;
-    services.vaultwarden.enable = true;
-    services.glance.enable = true;
+    services = {
+      forgejo.enable = true;
+      cloudflared.enable = true;
+      vaultwarden.enable = true;
+      glance.enable = true;
+      wanikani-bypass-lessons.enable = true;
+      wanikani-fetch-data.enable = true;
+      wanikani-stats.enable = true;
+    };
   };
 
-  services.wanikani-bypass-lessons.enable = true;
-  services.wanikani-fetch-data.enable = true;
-  services.wanikani-stats.enable = true;
-
-  # paperless is giving an error
-  # services.paperless = {
-  #   enable = true;
-  # };
+  zramSwap.enable = true;
 
   i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method
 
