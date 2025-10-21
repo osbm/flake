@@ -20,7 +20,7 @@
     verbose = true;
     backupFileExtension = "hmbak";
     users.osbm = import ../../../modules/home-manager/default.nix {
-      inherit config pkgs;
+      inherit config pkgs lib;
       username = "osbm";
       homeDirectory = "/Users/osbm";
       stateVersion = "24.11";
