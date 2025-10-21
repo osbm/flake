@@ -44,6 +44,9 @@ in
       wallfacer-ts = sshBlock "wallfacer.curl-boga.ts.net";
       prometheus = sshBlock "192.168.0.12";
       prometheus-ts = sshBlock "prometheus.curl-boga.ts.net";
+      # apollo
+      # apollo-initrd
+      # artemis
     };
   };
 }
