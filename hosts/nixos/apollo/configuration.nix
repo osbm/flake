@@ -15,7 +15,7 @@
     machineType = "server";
     users = [ "osbm" ];
     defaultUser = "osbm";
-
+    homeManager.enable = true;
     nixSettings.enable = true;
 
     programs = {
@@ -25,6 +25,7 @@
 
     services = {
       openssh.enable = true;
+      tailscale.enable = true;
     };
 
     hardware = {
