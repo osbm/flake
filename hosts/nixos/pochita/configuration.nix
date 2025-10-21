@@ -16,8 +16,6 @@
     desktopEnvironment = "none";
     machineType = "server";
     services.forgejo.enable = true;
-    # services.caddy.enable = true;
-    # services.cloudflare-dyndns.enable = true;
     services.cloudflared.enable = true;
     services.vaultwarden.enable = true;
     services.glance.enable = true;
