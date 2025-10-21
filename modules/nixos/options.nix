@@ -383,7 +383,7 @@
     fonts = {
       enable = lib.mkOption {
         type = lib.types.bool;
-        default = false;
+        default = config.osbmModules.desktopEnvironment != "none";
         description = "Enable custom fonts";
       };
     };
