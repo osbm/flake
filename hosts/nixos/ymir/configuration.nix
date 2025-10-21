@@ -19,7 +19,6 @@
     services.jellyfin.enable = true;
     services.ollama.enable = true;
     i18n.enable = true;
-
   };
 
   # Bootloader.
