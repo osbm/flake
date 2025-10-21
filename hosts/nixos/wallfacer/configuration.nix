@@ -6,7 +6,6 @@
   ];
   osbmModules = {
     desktopEnvironment = "none";
-    fonts.enable = false;
     machineType = "server";
     services.nextcloud.enable = true;
     services.hydra.enable = true;

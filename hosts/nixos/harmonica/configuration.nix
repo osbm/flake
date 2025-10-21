@@ -11,7 +11,6 @@
 
   osbmModules = {
     desktopEnvironment = "none";
-    fonts.enable = false;
     machineType = "server";
   };
 

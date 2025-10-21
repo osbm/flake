@@ -14,7 +14,6 @@
 
   osbmModules = {
     desktopEnvironment = "none";
-    fonts.enable = false;
     machineType = "server";
     services.forgejo.enable = true;
     # services.caddy.enable = true;
