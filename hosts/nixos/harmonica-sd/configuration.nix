@@ -18,7 +18,6 @@
     hardware.systemd-boot.enable = false; # SD card uses extlinux
   };
 
-
   system.stateVersion = "25.05";
 
   networking.hostName = "harmonica";

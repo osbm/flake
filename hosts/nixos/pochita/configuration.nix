@@ -29,7 +29,6 @@
 
   zramSwap.enable = true;
 
-
   networking.hostName = "pochita";
   # log of shame: osbm blamed nix when he wrote "hostname" instead of "hostName"
 
