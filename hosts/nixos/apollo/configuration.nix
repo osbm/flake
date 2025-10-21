@@ -52,7 +52,6 @@
     };
   };
 
-  i18n.inputMethod.enable = lib.mkForce false;
   system.stateVersion = "25.11";
   networking.hostName = "apollo";
 

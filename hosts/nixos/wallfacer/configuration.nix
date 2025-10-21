@@ -14,7 +14,6 @@
     services.cloudflared.enable = true;
   };
 
-  i18n.inputMethod.enable = lib.mkForce false;
   networking.hostName = "wallfacer";
   system.stateVersion = "25.05";
 }

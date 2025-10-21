@@ -18,7 +18,6 @@
     hardware.systemd-boot.enable = false;  # SD card uses extlinux
   };
 
-  i18n.inputMethod.enable = lib.mkForce false; # no need for japanese input method
 
   system.stateVersion = "25.05";
 
