@@ -7,35 +7,51 @@
 {
   config = lib.mkIf config.osbmModules.fonts.enable {
     fonts.packages = with pkgs; [
-      noto-fonts
+      cascadia-code
       noto-fonts-cjk-sans
-      # noto-fonts-emoji
+      noto-fonts-color-emoji
       liberation_ttf
       fira-code
       fira-code-symbols
       mplus-outline-fonts.githubRelease
       dina-font
+      nerd-fonts.fira-code
+      nerd-fonts.ubuntu
+      nerd-fonts.droid-sans-mono
       proggyfonts
-      jetbrains-mono
-      # (nerdfonts.override {
-      #   fonts = [
-      #     "FiraCode"
-      #     "JetBrainsMono"
-      #     "Iosevka"
-      #   ];
-      # })
+      source-sans
+      source-han-sans
+      source-han-mono
+      source-sans-pro
+      source-serif-pro
+      font-awesome
+      font-awesome_5
+      roboto
+      twitter-color-emoji
+      iosevka
+      dejavu_fonts
     ];
-
-    fonts.fontconfig = {
-      defaultFonts = {
-        serif = [ "Noto Serif" ];
-        sansSerif = [ "Noto Sans" ];
-        monospace = [
-          "JetBrainsMono Nerd Font"
-          "Fira Code"
-        ];
-        emoji = [ "Noto Color Emoji" ];
-      };
+    # fonts.fontconfig = {
+    #   defaultFonts.emoji = ["Noto Color Emoji"];
+    # };
+    fonts.fontconfig.defaultFonts = {
+      serif = [
+        "Source Han Serif SC"
+        "Source Han Serif TC"
+        "Noto Color Emoji"
+      ];
+      sansSerif = [
+        "Source Han Sans SC"
+        "Source Han Sans TC"
+        "Noto Color Emoji"
+      ];
+      monospace = [
+        "Droid Sans Mono"
+        "DejaVu Sans Mono"
+        "Source Han Mono"
+        "Cascadia Code"
+      ];
+      emoji = [ "Noto Color Emoji" ];
     };
   };
 }
