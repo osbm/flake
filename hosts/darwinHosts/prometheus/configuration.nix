@@ -19,7 +19,7 @@
     useUserPackages = true;
     verbose = true;
     backupFileExtension = "hmbak";
-    users.osbm = import ../../../modules/home-manager/home.nix {
+    users.osbm = import ../../../modules/home-manager/default.nix {
       inherit config pkgs;
       username = "osbm";
       homeDirectory = "/Users/osbm";
