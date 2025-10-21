@@ -14,11 +14,15 @@
     machineType = "desktop";
     programs.adbFastboot.enable = true;
     emulation.aarch64.enable = true;
-    hardware.hibernation.enable = false;
-    hardware.wakeOnLan.enable = true;
-    hardware.sound.enable = true;
-    services.jellyfin.enable = true;
-    services.ollama.enable = true;
+    hardware = {
+      hibernation.enable = false;
+      wakeOnLan.enable = true;
+      sound.enable = true;
+    };
+    services = {
+      jellyfin.enable = true;
+      ollama.enable = true;
+    };
     i18n.enable = true;
   };
 
