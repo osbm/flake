@@ -14,18 +14,6 @@
     machineType = "server";
     users = [ "osbm" ];
     defaultUser = "osbm";
-    homeManager.enable = true;
-    nixSettings.enable = true;
-
-    programs = {
-      commandLine.enable = true;
-      neovim.enable = true;
-    };
-
-    services = {
-      openssh.enable = true;
-      tailscale.enable = true;
-    };
 
     hardware = {
       sound.enable = false;
