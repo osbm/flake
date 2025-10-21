@@ -76,6 +76,11 @@
   users.users.osbm.initialPassword = "changeme";
   users.mutableUsers = false;
 
+  # Disable sudo lecture message
+  security.sudo.extraConfig = ''
+    Defaults lecture = never
+  '';
+
   # Network configuration
   networking = {
     useDHCP = false;
