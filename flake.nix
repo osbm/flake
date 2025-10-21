@@ -98,7 +98,7 @@
       # Export your module system for use in other flakes
       nixosModules = {
         default = ./modules/nixos;
-        osbm = ./modules/nixos;  # Alias with your name
+        osbm = ./modules/nixos; # Alias with your name
       };
 
       # If you also want to export home-manager modules

@@ -1,15 +1,26 @@
-# impermanence 
-{lib, inputs, config, ...}:
+# impermanence
+{
+  lib,
+  inputs,
+  config,
+  ...
+}:
 let
   # Filter out 'root' from the users list since it's a special system user
   regularUsers = builtins.filter (u: u != "root") config.osbmModules.users;
-  
+
   # Generate user persistence configuration
   userPersistence = lib.genAttrs regularUsers (username: {
     directories = [
       "Documents"
-      { directory = ".gnupg"; mode = "0700"; }
-      { directory = ".ssh"; mode = "0700"; }
+      {
+        directory = ".gnupg";
+        mode = "0700";
+      }
+      {
+        directory = ".ssh";
+        mode = "0700";
+      }
       ".local/share/direnv"
     ];
     # files = [
