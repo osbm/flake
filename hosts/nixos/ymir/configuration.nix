@@ -11,13 +11,15 @@
 
   osbmModules = {
     desktopEnvironment = "plasma";
-    services.jellyfin.enable = true;
+    programs.adbFastboot.enable = true;
     emulation.aarch64.enable = true;
     hardware.hibernation.enable = false;
     hardware.wakeOnLan.enable = true;
     hardware.sound.enable = true;
-    programs.adbFastboot.enable = true;
+    services.jellyfin.enable = true;
     services.ollama.enable = true;
+    i18n.enable = true;
+
   };
 
   # Bootloader.
