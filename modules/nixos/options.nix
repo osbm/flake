@@ -27,11 +27,12 @@
     # Users
     users = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [
-        "osbm"
-        "bayram"
-      ];
-      description = "List of users to create. `osbm` is my main user, and `bayram` is for my family.";
+      default =
+        [ "osbm" ]
+        ++ lib.optionals
+          (config.osbmModules.machineType == "desktop" || config.osbmModules.machineType == "laptop")
+          [ "bayram" ];
+      description = "List of users to create. `osbm` is my main user, and `bayram` is for my family (only on desktop/laptop).";
     };
 
     defaultUser = lib.mkOption {
