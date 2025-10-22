@@ -1,12 +1,11 @@
 {
-  config,
-  lib,
+  inputs,
   pkgs,
   ...
 }:
 {
   imports = [
-    (import "${mobile-nixos}/lib/configuration.nix" { device = "oneplus-enchilada"; })
+    (import "${inputs.mobile-nixos}/lib/configuration.nix" { device = "oneplus-enchilada"; })
   ];
 
   # Allow unfree packages (needed for OnePlus firmware)
@@ -73,4 +72,6 @@
   ];
 
   system.stateVersion = "25.11";
+  # set platform to aarch64-linux
+  nixpkgs.system = "aarch64-linux";
 }
