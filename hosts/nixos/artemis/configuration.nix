@@ -1,4 +1,10 @@
-{config, lib, pkgs, ...}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   imports = [
     (import "${mobile-nixos}/lib/configuration.nix" { device = "oneplus-enchilada"; })
   ];
@@ -27,20 +33,31 @@
 
   # Remove unwanted GNOME applications
   environment.gnome.excludePackages = with pkgs; [
-    baobab      # disk usage analyzer
-    cheese      # photo booth
-    eog         # image viewer
-    epiphany    # web browser
+    baobab # disk usage analyzer
+    cheese # photo booth
+    eog # image viewer
+    epiphany # web browser
     simple-scan # document scanner
-    totem       # video player
-    yelp        # help viewer
-    evince      # document viewer
+    totem # video player
+    yelp # help viewer
+    evince # document viewer
     file-roller # archive manager
-    geary       # email client
-    seahorse    # password manager
-    gnome-calculator gnome-calendar gnome-characters gnome-clocks gnome-contacts
-    gnome-font-viewer gnome-logs gnome-maps gnome-music gnome-screenshot
-    gnome-system-monitor gnome-weather gnome-disk-utility pkgs.gnome-connections
+    geary # email client
+    seahorse # password manager
+    gnome-calculator
+    gnome-calendar
+    gnome-characters
+    gnome-clocks
+    gnome-contacts
+    gnome-font-viewer
+    gnome-logs
+    gnome-maps
+    gnome-music
+    gnome-screenshot
+    gnome-system-monitor
+    gnome-weather
+    gnome-disk-utility
+    pkgs.gnome-connections
   ];
 
   # Minimal essential packages
