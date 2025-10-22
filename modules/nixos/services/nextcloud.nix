@@ -16,7 +16,7 @@
         config.dbtype = "sqlite";
         database.createLocally = true;
         settings.trusted_domains = [
-          "wallfacer.curl-boga.ts.net"
+          "${config.networking.hostName}.curl-boga.ts.net"
           "localhost"
         ];
       };
