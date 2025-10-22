@@ -114,11 +114,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1761005073,
-        "narHash": "sha256-r6qbieh8iC1q1eCaWv15f4UIp8SeGffwswhNSA1Qk3s=",
+        "lastModified": 1761081701,
+        "narHash": "sha256-IwpfaKg5c/WWQiy8b5QGaVPMvoEQ2J6kpwRFdpVpBNQ=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "84e1adb0cdd13f5f29886091c7234365e12b1e7f",
+        "rev": "9b4a2a7c4fbd75b422f00794af02d6edb4d9d315",
         "type": "github"
       },
       "original": {
@@ -224,6 +224,22 @@
         "owner": "raspberrypi",
         "ref": "v1.0.7",
         "repo": "libpisp",
+        "type": "github"
+      }
+    },
+    "mobile-nixos": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1759261417,
+        "narHash": "sha256-TjuoBb8+isL3KTdGgtYh90XPyeUMFbgNAOG9l23CB3A=",
+        "owner": "mobile-nixos",
+        "repo": "mobile-nixos",
+        "rev": "e6f6d527bf6abf94dd52fbba3143a720cef96431",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mobile-nixos",
+        "repo": "mobile-nixos",
         "type": "github"
       }
     },
@@ -622,6 +638,7 @@
         "disko": "disko",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
+        "mobile-nixos": "mobile-nixos",
         "nix-darwin": "nix-darwin",
         "nix-index-database": "nix-index-database",
         "nix-on-droid": "nix-on-droid",
