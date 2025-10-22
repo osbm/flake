@@ -97,13 +97,6 @@
 
       nixosModules.default = ./modules/nixos;
       homeManagerModules.default = ./modules/home-manager;
-      # deploy.nodes.harmonica = {
-      #   hostname = "192.168.0.11";
-      #   profiles.system = {
-      #     user = "osbm";
-      #     path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.harmonica;
-      #   };
-      # };
       # packages = forAllSystems (
       #   system:
       #   let
