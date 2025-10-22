@@ -41,7 +41,7 @@
           default = "http_status:404";
           credentialsFile = "/home/osbm/.cloudflared/eb9052aa-9867-482f-80e3-97a7d7e2ef04.json";
           ingress = {
-            "${config.osbmModules.services.forgejo.settings.server.DOMAIN}" = {
+            "${config.services.forgejo.settings.server.DOMAIN}" = {
               service = "http://localhost:3000";
             };
           };
