@@ -1,10 +1,18 @@
-{ lib, ... }:
+{ lib, nixosConfig, ... }:
 {
-  programs.mpv = {
-    enable = lib.mkDefault false;
-    config = {
-      hwdec = "auto";
-      vo = "gpu";
-    };
-  };
+  config = lib.mkMerge [
+    (lib.mkIf (nixosConfig != null && nixosConfig.osbmModules.desktopEnvironment != "none") {
+      programs.mpv.enable = lib.mkDefault true;
+    })
+
+    {
+      programs.mpv = {
+        config = {
+          hwdec = "auto";
+          vo = "gpu";
+        };
+      };
+    }
+
+  ];
 }
