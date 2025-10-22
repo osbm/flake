@@ -4,16 +4,8 @@
   ...
 }:
 {
-  options = {
-    osbmModules.enableCloudflared = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable Cloudflare tunnels";
-    };
-  };
-
   config = lib.mkMerge [
-    (lib.mkIf config.osbmModules.enableCloudflared {
+    (lib.mkIf config.osbmModules.services.cloudflared.enable {
       services.cloudflared = {
         enable = true;
         certificateFile = "/home/osbm/.cloudflared/cert.pem";

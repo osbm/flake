@@ -4,16 +4,8 @@
   ...
 }:
 {
-  options = {
-    osbmModules.enableOpenssh = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable OpenSSH service";
-    };
-  };
-
   config = lib.mkMerge [
-    (lib.mkIf config.osbmModules.enableOpenssh {
+    (lib.mkIf config.osbmModules.services.openssh.enable {
       services.openssh = {
         enable = true;
         startWhenNeeded = true;

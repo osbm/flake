@@ -5,13 +5,6 @@
   ...
 }:
 {
-  options = {
-    osbmModules.enableTailscale = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable Tailscale VPN";
-    };
-  };
 
   # i have 4 machines, 2 of them are always at home
   # pochita (raspberry pi 5) and ymir (desktop)
@@ -20,7 +13,7 @@
   # and i have a laptop named tartarus
 
   config = lib.mkMerge [
-    (lib.mkIf config.osbmModules.enableTailscale {
+    (lib.mkIf config.osbmModules.services.tailscale.enable {
       services.tailscale = {
         enable = true;
         port = 51513;

@@ -4,16 +4,8 @@
   ...
 }:
 {
-  options = {
-    osbmModules.enableHydra = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable Hydra continuous integration server";
-    };
-  };
-
   config = lib.mkMerge [
-    (lib.mkIf config.osbmModules.enableHydra {
+    (lib.mkIf config.osbmModules.services.hydra.enable {
       services.hydra = {
         enable = true;
         port = 3000;

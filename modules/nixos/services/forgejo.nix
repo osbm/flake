@@ -4,16 +4,8 @@
   ...
 }:
 {
-  options = {
-    osbmModules.enableForgejo = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable Forgejo server";
-    };
-  };
-
   config = lib.mkMerge [
-    (lib.mkIf config.osbmModules.enableForgejo {
+    (lib.mkIf config.osbmModules.services.forgejo.enable {
       services.forgejo = {
         enable = true;
         lfs.enable = true;

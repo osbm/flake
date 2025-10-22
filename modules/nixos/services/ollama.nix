@@ -4,18 +4,8 @@
   ...
 }:
 {
-  options = {
-    osbmModules = {
-      enableOllama = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Enable Ollama services.";
-      };
-    };
-  };
-
   config = lib.mkMerge [
-    (lib.mkIf config.osbmModules.enableOllama {
+    (lib.mkIf config.osbmModules.services.ollama.enable {
       services.ollama = {
         enable = true;
         acceleration = "cuda";

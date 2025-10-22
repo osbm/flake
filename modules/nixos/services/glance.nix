@@ -4,16 +4,8 @@
   ...
 }:
 {
-  options = {
-    osbmModules.enableGlance = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable Glance server";
-    };
-  };
-
   config = lib.mkMerge [
-    (lib.mkIf config.osbmModules.enableGlance {
+    (lib.mkIf config.osbmModules.services.glance.enable {
       services.glance = {
         enable = true;
         openFirewall = true;
