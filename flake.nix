@@ -95,17 +95,8 @@
       lib = import ./lib { inherit (nixpkgs) lib; };
       formatter = forAllSystems (system: (makePkgs system).nixfmt-tree);
 
-      # Export your module system for use in other flakes
-      nixosModules = {
-        default = ./modules/nixos;
-        osbm = ./modules/nixos; # Alias with your name
-      };
-
-      # If you also want to export home-manager modules
-      homeManagerModules = {
-        default = ./modules/home-manager;
-        osbm = ./modules/home-manager;
-      };
+      nixosModules.default = ./modules/nixos;
+      homeManagerModules.default = ./modules/home-manager;
       # deploy.nodes.harmonica = {
       #   hostname = "192.168.0.11";
       #   profiles.system = {
