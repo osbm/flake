@@ -33,6 +33,9 @@
           };
         };
       };
+    })
+
+    (lib.mkIf (config.osbmModules.services.cloudflared.enable && config.osbmModules.services.forgejo.enable) {
       services.cloudflared.tunnels = {
         "eb9052aa-9867-482f-80e3-97a7d7e2ef04" = {
           default = "http_status:404";

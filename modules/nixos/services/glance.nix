@@ -163,6 +163,8 @@
         };
       };
       networking.firewall.allowedTCPPorts = [ config.services.glance.settings.server.port ];
+    })
+    (lib.mkIf (config.osbmModules.services.cloudflared.enable && config.osbmModules.services.glance.enable) {
       services.cloudflared.tunnels = {
         "91b13f9b-81be-46e1-bca0-db2640bf2d0a" = {
           default = "http_status:404";
