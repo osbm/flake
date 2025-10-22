@@ -4,24 +4,16 @@
   ...
 }:
 let
-  atticPort = 7080;
+  atticdPort = 7080;
 in
 {
-  options = {
-    osbmModules.enableAttic = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable Attic nix cache service";
-    };
-  };
-
   config = lib.mkMerge [
-    (lib.mkIf config.osbmModules.enableAttic {
+    (lib.mkIf config.osbmModules.services.atticd.enable {
       services.atticd = {
         enable = true;
         environmentFile = "/persist/attic.env";
         settings = {
-          listen = "[::]:${toString atticPort}";
+          listen = "[::]:${toString atticdPort}";
           compression = {
             type = "zstd";
             level = 9;
@@ -34,14 +26,14 @@ in
           # };
         };
       };
-      networking.firewall.allowedTCPPorts = [ atticPort ];
+      networking.firewall.allowedTCPPorts = [ atticdPort ];
       services.cloudflared.tunnels = {
         "fa301a21-b259-4149-b3d0-b1438c7c81f8" = {
           default = "http_status:404";
           credentialsFile = "/home/osbm/.cloudflared/fa301a21-b259-4149-b3d0-b1438c7c81f8.json";
           ingress = {
             "cache.osbm.dev" = {
-              service = "http://localhost:${toString atticPort}";
+              service = "http://localhost:${toString atticdPort}";
             };
           };
         };

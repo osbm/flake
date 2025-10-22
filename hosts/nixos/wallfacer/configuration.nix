@@ -10,7 +10,7 @@
     services.nextcloud.enable = true;
     services.hydra.enable = true;
     # services.caddy.enable = true;
-    services.attic.enable = true;
+    services.atticd.enable = true;
     services.cloudflared.enable = true;
   };
 
