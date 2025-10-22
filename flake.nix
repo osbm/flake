@@ -47,10 +47,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    impermanence = {
-      url = "github:nix-community/impermanence";
-      # inputs.nixpkgs.follows = "nixpkgs";
-      # inputs.home-manager.follows = "home-manager";
+    impermanence.url = "github:nix-community/impermanence";
+    mobile-nixos = {
+      url = "github:mobile-nixos/mobile-nixos";
+      flake = false;
     };
   };
 
