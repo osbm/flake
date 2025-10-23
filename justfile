@@ -65,3 +65,11 @@ flash-sd-image-harmonica:
   nom build -L .#nixosConfigurations.harmonica-sd.config.system.build.sdImage
   sudo dd if=result/sd-image/nixos-image-sd-card-25.05.20250224.0196c01-aarch64-linux.img of=/dev/sda bs=4M status=progress conv=fsync
 
+setup-apollo-nixos:
+  nano /tmp/secret.key
+  sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode destroy,format,mount --flake github:osbm/flake#apollo
+
+  sudo mkdir -p /mnt/etc/ssh
+  sudo ssh-keygen -t ed25519 -N "" -f /mnt/etc/ssh/initrd
+
+  sudo nixos-install --flake github:osbm/flake#apollo --root /mnt --no-root-passwd
