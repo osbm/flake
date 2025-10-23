@@ -5,7 +5,6 @@
     desktopEnvironment = lib.mkOption {
       type = lib.types.enum [
         "plasma"
-        "gnome"
         "none"
       ];
       default = "none";
