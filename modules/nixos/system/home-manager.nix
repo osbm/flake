@@ -20,6 +20,7 @@
       home-manager = {
         useGlobalPkgs = true;
         useUserPackages = true;
+        backupFileExtension = ".nixbak";
 
         # Pass inputs and outputs to home-manager modules
         extraSpecialArgs = {
