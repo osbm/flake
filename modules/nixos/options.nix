@@ -158,6 +158,14 @@
 
     # Hardware
     hardware = {
+      bluetooth = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = config.osbmModules.desktopEnvironment != "none";
+          description = "Enable Bluetooth support";
+        };
+      };
+
       sound = {
         enable = lib.mkOption {
           type = lib.types.bool;
