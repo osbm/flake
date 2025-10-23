@@ -18,6 +18,8 @@ in
       environment.plasma6.excludePackages = with pkgs.kdePackages; [
         kate
         konsole
+        yakuake
+        # kfind ??
       ];
 
       # Enable printing
