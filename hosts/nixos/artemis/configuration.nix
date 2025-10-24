@@ -20,10 +20,12 @@
   # mobile-nixos needs aliases (uses nettools instead of net-tools)
   nixpkgs.config.allowAliases = true;
 
-  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-    "oneplus-sdm845-firmware-zstd"
-    "oneplus-sdm845-firmware"
-  ];
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
+    builtins.elem (lib.getName pkg) [
+      "oneplus-sdm845-firmware-zstd"
+      "oneplus-sdm845-firmware"
+    ];
 
   # Minimal essential packages
   environment.systemPackages = with pkgs; [
