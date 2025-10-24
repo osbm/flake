@@ -73,3 +73,6 @@ setup-apollo-nixos:
   sudo ssh-keygen -t ed25519 -N "" -f /mnt/etc/ssh/initrd
 
   sudo nixos-install --flake github:osbm/flake#apollo --root /mnt --no-root-passwd
+
+sweep *args:
+   nix run github:jzbor/nix-sweep -- {{args}}
