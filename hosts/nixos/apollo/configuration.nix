@@ -11,6 +11,7 @@
     services = {
       glance.enable = true;
       anubis.enable = true;
+      nginx.enable = true;
     };
 
 
