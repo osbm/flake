@@ -10,6 +10,7 @@
     users = [ "osbm" ];
     services = {
       glance.enable = true;
+      anubis.enable = true;
     };
 
 
