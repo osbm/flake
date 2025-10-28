@@ -14,7 +14,6 @@
       nginx.enable = true;
     };
 
-
     hardware = {
       sound.enable = false;
       hibernation.enable = false;
