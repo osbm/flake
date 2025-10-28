@@ -53,7 +53,6 @@
   # Enable zram swap
   zramSwap.enable = true;
 
-  users.users.osbm.initialPassword = "changeme";
   users.mutableUsers = false;
 
   # Disable sudo lecture message
