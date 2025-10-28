@@ -9,6 +9,7 @@
     machineType = "desktop";
     programs.adbFastboot.enable = true;
     emulation.aarch64.enable = true;
+    virtualisation.docker.enable = true;
     hardware = {
       hibernation.enable = false;
       wakeOnLan.enable = true;
