@@ -157,7 +157,7 @@
                 }
               ];
               name = "Home";
-              content = "Welcome to Pochita's home page!";
+              content = "Welcome to osbm's home page!";
             }
           ];
         };
