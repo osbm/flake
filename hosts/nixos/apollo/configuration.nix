@@ -8,6 +8,10 @@
     desktopEnvironment = "none";
     machineType = "server";
     users = [ "osbm" ];
+    services = {
+      glance.enable = true;
+    };
+
 
     hardware = {
       sound.enable = false;
