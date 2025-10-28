@@ -144,6 +144,7 @@
       jellyfin.enable = lib.mkEnableOption "jellyfin";
       nextcloud.enable = lib.mkEnableOption "nextcloud";
       vaultwarden.enable = lib.mkEnableOption "vaultwarden";
+      nginx.enable = lib.mkEnableOption "nginx";
       ollama.enable = lib.mkEnableOption "ollama";
       forgejo.enable = lib.mkEnableOption "forgejo";
       caddy.enable = lib.mkEnableOption "caddy";

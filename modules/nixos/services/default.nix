@@ -12,6 +12,7 @@
     ./glance.nix
     ./hydra.nix
     ./jellyfin.nix
+    ./nginx.nix
     ./syncthing.nix
     ./tailscale.nix
     ./vaultwarden.nix
