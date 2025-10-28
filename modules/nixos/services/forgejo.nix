@@ -51,5 +51,27 @@
         };
       }
     )
+    (lib.mkIf (config.osbmModules.services.nginx.enable && config.osbmModules.services.forgejo.enable) {
+      services.nginx.virtualHosts."${config.services.forgejo.settings.server.DOMAIN}" = {
+        forceSSL = true;
+        locations."/".proxyPass = "http://localhost:3000";
+        locations."/".proxyWebsockets = true;
+      };
+    })
+
+    (lib.mkIf
+      (
+        config.osbmModules.services.forgejo.enable
+        && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot
+      )
+      {
+        environment.persistence."/persist" = {
+          hideMounts = true;
+          directories = [
+            "/var/lib/forgejo"
+          ];
+        };
+      }
+    )
   ];
 }
