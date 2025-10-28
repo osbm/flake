@@ -55,7 +55,7 @@
       presets.nvidia-gpu.enable = true;
     };
 
-    # Enable nvidia-container-toolkit if virtualization is enabled
-    hardware.nvidia-container-toolkit.enable = lib.mkIf config.osbmModules.virtualization.docker.enable true;
+    # Enable nvidia-container-toolkit if virtualisation is enabled
+    hardware.nvidia-container-toolkit.enable = lib.mkIf config.osbmModules.virtualisation.docker.enable true;
   };
 }

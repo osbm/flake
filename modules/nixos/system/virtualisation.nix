@@ -1,6 +1,6 @@
 { lib, config, ... }:
 let
-  cfg = config.osbmModules.virtualization;
+  cfg = config.osbmModules.virtualisation;
 in
 {
   config = lib.mkMerge [

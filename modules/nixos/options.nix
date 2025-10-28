@@ -340,7 +340,7 @@
       };
     };
 
-    virtualization = {
+    virtualisation = {
       docker = {
         enable = lib.mkOption {
           type = lib.types.bool;

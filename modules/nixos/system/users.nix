@@ -14,7 +14,7 @@ in
           "networkmanager"
         ]
         ++ lib.optional (username == config.osbmModules.defaultUser) "wheel"
-        ++ lib.optional config.osbmModules.virtualization.docker.enable "docker"
+        ++ lib.optional config.osbmModules.virtualisation.docker.enable "docker"
         ++ lib.optional config.osbmModules.programs.adbFastboot.enable "adbusers";
       }))
 

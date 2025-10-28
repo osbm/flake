@@ -5,7 +5,7 @@
     ./nix-settings.nix
     ./agenix.nix
     ./home-manager.nix
-    ./virtualization.nix
+    ./virtualisation.nix
     ./emulation.nix
     ./i18n.nix
     ./impermanence.nix
