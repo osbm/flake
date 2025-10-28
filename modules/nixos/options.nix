@@ -139,6 +139,7 @@
         };
       };
 
+      anubis.enable = lib.mkEnableOption "anubis";
       syncthing.enable = lib.mkEnableOption "syncthing";
       jellyfin.enable = lib.mkEnableOption "jellyfin";
       nextcloud.enable = lib.mkEnableOption "nextcloud";

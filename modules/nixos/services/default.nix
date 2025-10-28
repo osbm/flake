@@ -1,5 +1,6 @@
 {
   imports = [
+    ./anubis.nix
     ./atticd.nix
     ./caddy.nix
     ./cloudflare-dyndns.nix
@@ -11,11 +12,13 @@
     ./glance.nix
     ./hydra.nix
     ./jellyfin.nix
-    ./system-logger
     ./syncthing.nix
     ./tailscale.nix
     ./vaultwarden.nix
     ./vscode-server.nix
+
+    # custom services
+    ./system-logger
     ./wanikani-bypass-lessons.nix
     ./wanikani-fetch-data
     ./wanikani-stats
