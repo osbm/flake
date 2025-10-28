@@ -340,14 +340,7 @@
       };
     };
 
-    # Virtualization
     virtualization = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Enable virtualization support (libvirt, docker, etc.)";
-      };
-
       docker = {
         enable = lib.mkOption {
           type = lib.types.bool;
