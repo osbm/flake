@@ -7,47 +7,65 @@
 {
   config = lib.mkIf config.osbmModules.programs.commandLine.enable {
     environment.systemPackages = with pkgs; [
+      # networking
       wget
+      dig
+
+      # text editors
       nano
+
+      # version control
       git
       lazygit
-      lazysql
       git-lfs
-      gnumake
-      zip
-      fish
-      trash-cli
-      tmux
-      zoxide
-      htop
-      unzip
-      tlrc
-      btop
-      pciutils
-      cloc
-      neofetch
-      pfetch
-      inxi
-      jq
-      dig
-      onefetch
-      just
-      nixd
-      eza
       gh
-      starship
-      tree
+
+      # nix tools
       nix-output-monitor
-      yazi
-      ripgrep
-      nh
-      comma
+      nixd
       nix-inspect
-      bat
-      fd
-      dust
-      duf
+      comma
+      nh
+
+      # information and vanity
+      neofetch
+      onefetch
+      pfetch
+      htop
+      btop
+      cloc
+      inxi
+      tlrc
+      pciutils
+
+      # basic quality of life
+      eza
       dysk
+      trash-cli
+      zoxide
+      lazysql
+      jq
+      ripgrep
+      dust
+      bat
+      just
+      tree
+      fd
+      yazi
+      duf
+
+      # archives
+      zip
+      unzip
+
+      # shell
+      fish
+      starship
+
+      # multiplexers
+      tmux
+
+
       (pkgs.writeShellScriptBin "wake-ymir" ''
         echo waking up ymir
         ${pkgs.wakeonlan}/bin/wakeonlan 04:7c:16:e6:d9:13
