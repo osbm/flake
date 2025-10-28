@@ -6,11 +6,13 @@
   osbmModules = {
     desktopEnvironment = "none";
     machineType = "server";
-    services.nextcloud.enable = true;
-    services.hydra.enable = true;
-    # services.caddy.enable = true;
-    services.atticd.enable = true;
-    services.cloudflared.enable = true;
+    services = {
+      nextcloud.enable = true;
+      hydra.enable = true;
+      # caddy.enable = true;
+      atticd.enable = true;
+      cloudflared.enable = true;
+    };
   };
 
   networking.hostName = "wallfacer";
