@@ -19,7 +19,7 @@ in
         kate
         konsole
         yakuake
-        # kfind ??
+        krunner # fuckass program keeps opening
       ];
 
       # Enable printing
