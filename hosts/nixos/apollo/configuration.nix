@@ -8,7 +8,6 @@
     desktopEnvironment = "none";
     machineType = "server";
     users = [ "osbm" ];
-    defaultUser = "osbm";
 
     hardware = {
       sound.enable = false;
