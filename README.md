@@ -40,7 +40,7 @@ osbmModules = {
   };
   hardware = {
     sound.enable = true;
-    nvidiaDriver.enable = false;
+    nvidia.enable = false;
     hibernation.enable = false;
     disko = {
       enable = true;
