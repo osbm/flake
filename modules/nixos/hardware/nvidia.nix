@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 {
   config = lib.mkIf config.osbmModules.hardware.nvidia.enable {
     # Enable OpenGL
@@ -43,7 +48,6 @@
     environment.systemPackages = [
       pkgs.nvidia-container-toolkit
     ];
-
 
     # TODO explain why this is needed
     programs.nix-required-mounts = {
