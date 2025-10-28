@@ -54,6 +54,7 @@
     (lib.mkIf (config.osbmModules.services.nginx.enable && config.osbmModules.services.forgejo.enable) {
       services.nginx.virtualHosts."${config.services.forgejo.settings.server.DOMAIN}" = {
         forceSSL = true;
+        enableACME = true;
         locations."/".proxyPass = "http://localhost:3000";
         locations."/".proxyWebsockets = true;
       };
