@@ -10,6 +10,7 @@ in
       (lib.genAttrs regularUsers (username: {
         isNormalUser = true;
         description = username;
+        initialPassword = "changeme";
         extraGroups = [
           "networkmanager"
         ]
@@ -26,6 +27,16 @@ in
           ];
         };
       }
+
+      {
+        root = {
+          initialPassword = "changeme";
+          openssh.authorizedKeys.keys = lib.mkDefault [
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfnV+qqUCJf92npNW4Jy0hIiepCJFBDJHXBHnUlNX0k"
+          ];
+        };
+      }
+
     ];
 
   };
