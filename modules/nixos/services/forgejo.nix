@@ -67,9 +67,14 @@
       )
       {
         environment.persistence."/persist" = {
-          hideMounts = true;
           directories = [
-            "/var/lib/forgejo"
+            # "/var/lib/forgejo"
+            {
+              directory = "/var/lib/forgejo";
+              user = config.services.forgejo.user;
+              group = config.services.forgejo.group;
+              # mode = "u=rwx,g=rx,o=";
+            }
           ];
         };
       }
