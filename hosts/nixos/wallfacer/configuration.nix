@@ -7,7 +7,6 @@
     desktopEnvironment = "none";
     machineType = "server";
     services = {
-      nextcloud.enable = true;
       hydra.enable = true;
       atticd.enable = true;
       cloudflared.enable = true;

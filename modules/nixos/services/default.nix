@@ -4,7 +4,6 @@
     ./atticd.nix
     ./cloudflare-dyndns.nix
     ./cloudflared.nix
-    ./nextcloud.nix
     ./ollama.nix
     ./openssh.nix
     ./forgejo.nix
