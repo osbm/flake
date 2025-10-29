@@ -10,6 +10,8 @@
         enable = true;
       };
 
+      networking.firewall.allowedTCPPorts = [ 80 443 ];
+
       security.acme = {
         acceptTerms = true;
         defaults.email = "osbm@osbm.dev";
