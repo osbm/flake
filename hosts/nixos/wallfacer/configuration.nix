@@ -9,7 +9,6 @@
     services = {
       nextcloud.enable = true;
       hydra.enable = true;
-      # caddy.enable = true;
       atticd.enable = true;
       cloudflared.enable = true;
     };

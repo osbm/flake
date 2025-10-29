@@ -2,7 +2,6 @@
   imports = [
     ./anubis.nix
     ./atticd.nix
-    ./caddy.nix
     ./cloudflare-dyndns.nix
     ./cloudflared.nix
     ./nextcloud.nix

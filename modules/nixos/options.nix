@@ -147,7 +147,6 @@
       nginx.enable = lib.mkEnableOption "nginx";
       ollama.enable = lib.mkEnableOption "ollama";
       forgejo.enable = lib.mkEnableOption "forgejo";
-      caddy.enable = lib.mkEnableOption "caddy";
       atticd.enable = lib.mkEnableOption "atticd";
       cloudflared.enable = lib.mkEnableOption "cloudflared";
       cloudflare-dyndns.enable = lib.mkEnableOption "cloudflare-dyndns";
