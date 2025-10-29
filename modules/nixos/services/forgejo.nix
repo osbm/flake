@@ -68,12 +68,11 @@
       {
         environment.persistence."/persist" = {
           directories = [
-            # "/var/lib/forgejo"
             {
               directory = "/var/lib/forgejo";
               user = config.services.forgejo.user;
               group = config.services.forgejo.group;
-              # mode = "u=rwx,g=rx,o=";
+              mode = "0750";
             }
           ];
         };
