@@ -182,18 +182,15 @@
     )
 
     # if nginx and glance are both enabled, set up a reverse proxy
-    (lib.mkIf
-      (config.osbmModules.services.nginx.enable && config.osbmModules.services.glance.enable)
-      {
-        services.nginx.virtualHosts."home.osbm.dev" = {
+    (lib.mkIf (config.osbmModules.services.nginx.enable && config.osbmModules.services.glance.enable) {
+      services.nginx.virtualHosts."home.osbm.dev" = {
         forceSSL = true;
         enableACME = true;
         locations."/" = {
-            proxyPass = "http://localhost:${toString config.services.glance.settings.server.port}";
-            proxyWebsockets = true;
-          };
+          proxyPass = "http://localhost:${toString config.services.glance.settings.server.port}";
+          proxyWebsockets = true;
         };
-      }
-    )
+      };
+    })
   ];
 }
