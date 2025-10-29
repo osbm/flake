@@ -12,7 +12,7 @@
       glance.enable = true;
       # anubis.enable = true;
       # nginx.enable = true;
-      # forgejo.enable = true;
+      forgejo.enable = true;
     };
 
     hardware = {
