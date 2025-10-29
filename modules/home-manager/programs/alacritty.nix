@@ -1,4 +1,9 @@
-{ lib, nixosConfig, ... }:
+{
+  lib,
+  pkgs,
+  nixosConfig,
+  ...
+}:
 {
   config = lib.mkMerge [
     (lib.mkIf (nixosConfig != null && nixosConfig.osbmModules.desktopEnvironment != "none") {
@@ -9,16 +14,25 @@
     {
       programs.alacritty = {
         settings = {
-          window = {
-            opacity = 0.95;
-            padding = {
-              x = 10;
-              y = 10;
-            };
-          };
           font = {
-            size = 11.0;
+            size = 14.0;
+            normal.family = "Cascadia Code";
           };
+          terminal.shell = {
+            args = [
+              "new-session"
+              "-A"
+              "-s"
+              "general"
+            ];
+            program = lib.getExe pkgs.tmux;
+          };
+          window = {
+            decorations = "None";
+            opacity = 1;
+            startup_mode = "Maximized";
+          };
+          env.TERM = "xterm-256color";
         };
       };
     }
