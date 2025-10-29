@@ -186,9 +186,11 @@
       (config.osbmModules.services.nginx.enable && config.osbmModules.services.glance.enable)
       {
         services.nginx.virtualHosts."home.osbm.dev" = {
-          forceSSL = true;
-          locations."/" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
             proxyPass = "http://localhost:${toString config.services.glance.settings.server.port}";
+            proxyWebsockets = true;
           };
         };
       }
