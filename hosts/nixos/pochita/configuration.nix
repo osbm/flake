@@ -16,10 +16,7 @@
     machineType = "server";
     hardware.systemd-boot.enable = false; # Raspberry Pi uses init-script bootloader
     services = {
-      forgejo.enable = true;
-      cloudflared.enable = true;
       vaultwarden.enable = true;
-      glance.enable = true;
       wanikani-bypass-lessons.enable = true;
       wanikani-fetch-data.enable = true;
       wanikani-stats.enable = true;
