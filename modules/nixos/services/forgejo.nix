@@ -76,6 +76,12 @@
             }
           ];
         };
+
+        # forgejo-secrets service keep giving error
+        systemd.services."forgejo-secrets" = {
+          wants = [ "var-lib-forgejo.mount" ];
+          after = [ "var-lib-forgejo.mount" ];
+        };
       }
     )
   ];
