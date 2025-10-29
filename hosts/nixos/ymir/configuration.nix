@@ -7,7 +7,10 @@
   osbmModules = {
     desktopEnvironment = "plasma";
     machineType = "desktop";
-    programs.adbFastboot.enable = true;
+    programs = {
+      adbFastboot.enable = true;
+      steam.enable = true;
+    };
     emulation.aarch64.enable = true;
     virtualisation.docker.enable = true;
     hardware = {
