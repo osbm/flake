@@ -66,22 +66,25 @@
         && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot
       )
       {
-        environment.persistence."/persist" = {
-          directories = [
-            {
-              directory = "/var/lib/forgejo";
-              user = config.services.forgejo.user;
-              group = config.services.forgejo.group;
-              mode = "0750";
-            }
-          ];
-        };
+        # environment.persistence."/persist" = {
+        #   directories = [
+        #     {
+        #       directory = "/var/lib/forgejo";
+        #       user = config.services.forgejo.user;
+        #       group = config.services.forgejo.group;
+        #       mode = "0750";
+        #     }
+        #   ];
+        # };
 
-        # forgejo-secrets service keep giving error
-        systemd.services."forgejo-secrets" = {
-          wants = [ "var-lib-forgejo.mount" ];
-          after = [ "var-lib-forgejo.mount" ];
-        };
+        # # forgejo-secrets service keep giving error
+        # systemd.services."forgejo-secrets" = {
+        #   wants = [ "var-lib-forgejo.mount" ];
+        #   after = [ "var-lib-forgejo.mount" ];
+        # };
+
+        # fuckass thing
+        services.forgejo.stateDir = "/persist/var/lib/forgejo";
       }
     )
   ];
