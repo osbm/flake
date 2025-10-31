@@ -66,6 +66,7 @@
               user = config.systemd.services.vaultwarden.serviceConfig.User;
               group = config.systemd.services.vaultwarden.serviceConfig.Group;
               mode = "0750";
+              method = "symlink";
             }
           ];
         };
