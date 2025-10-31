@@ -142,6 +142,7 @@
       anubis.enable = lib.mkEnableOption "anubis";
       syncthing.enable = lib.mkEnableOption "syncthing";
       jellyfin.enable = lib.mkEnableOption "jellyfin";
+      mailserver.enable = lib.mkEnableOption "mailserver";
       vaultwarden.enable = lib.mkEnableOption "vaultwarden";
       nginx.enable = lib.mkEnableOption "nginx";
       ollama.enable = lib.mkEnableOption "ollama";

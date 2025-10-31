@@ -10,6 +10,7 @@
     ./glance.nix
     ./hydra.nix
     ./jellyfin.nix
+    ./mailserver.nix
     ./nginx.nix
     ./syncthing.nix
     ./tailscale.nix
