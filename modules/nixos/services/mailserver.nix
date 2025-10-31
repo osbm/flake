@@ -1,4 +1,9 @@
-{ config, inputs, lib, ... }:
+{
+  config,
+  inputs,
+  lib,
+  ...
+}:
 {
   imports = [
     inputs.simple-nixos-mailserver.nixosModule
@@ -17,7 +22,7 @@
         loginAccounts = {
           "osbm@osbm.dev" = {
             hashedPasswordFile = "/persist/osbm.passwd"; # TODO: Make this into agenix secret
-            aliases = ["postmaster@osbm.dev"];
+            aliases = [ "postmaster@osbm.dev" ];
           };
         };
 
