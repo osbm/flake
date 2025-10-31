@@ -11,6 +11,11 @@
       enable = true;
     };
 
+    nixpkgs.config = {
+      cudaSupport = true;
+      cudaCapabilities = [ "8.9" ]; # 4090
+    };
+
     # Load nvidia driver for Xorg and Wayland
     services.xserver.videoDrivers = [ "nvidia" ];
 
