@@ -17,6 +17,7 @@
     ];
 
     age.secrets = {
+      vaultwarden.file = ../../../secrets/vaultwarden.age;
       network-manager.file = ../../../secrets/network-manager.age;
       ssh-key-private = {
         file = ../../../secrets/ssh-key-private.age;
