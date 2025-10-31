@@ -57,6 +57,7 @@
       )
       {
         systemd.services.vaultwarden.serviceConfig.ReadWritePaths = [ "/var/lib/vaultwarden" ];
+        # TODO try if not using bindMounts fixes this
 
         environment.persistence."/persist" = {
           directories = [
