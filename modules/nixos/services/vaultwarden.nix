@@ -8,7 +8,7 @@
     (lib.mkIf config.osbmModules.services.vaultwarden.enable {
       services.vaultwarden = {
         enable = true;
-        backupDir = "/var/local/vaultwarden/backup";
+        backupDir = "/persist/backup/vaultwarden";
         # in order to avoid having  ADMIN_TOKEN in the nix store it can be also set with the help of an environment file
         # be aware that this file must be created by hand (or via secrets management like sops)
         environmentFile = config.age.secrets.vaultwarden.path;
