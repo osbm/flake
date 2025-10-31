@@ -9,6 +9,7 @@
     environment.systemPackages = with pkgs; [
       # networking
       wget
+      curl
       dig
 
       # text editors
