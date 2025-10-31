@@ -49,12 +49,17 @@
 
     # impermanence with vaultwarden
     (lib.mkIf (config.osbmModules.services.vaultwarden.enable && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot) {
-        environment.persistence."/persist" = {
-          directories = [
-            "/var/lib/vaultwarden"
-            "/var/local/vaultwarden"
-          ];
-        };
+      environment.persistence."/persist" = {
+        directories = [
+          {
+            directory = "/var/lib/vaultwarden";
+            user = config.systemd.services.vaultwarden.serviceConfig.User;
+            group = config.systemd.services.vaultwarden.serviceConfig.Group;
+            mode = "0750";
+          }
+        ];
+      };
     })
   ];
 }
+    
