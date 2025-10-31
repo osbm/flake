@@ -20,7 +20,6 @@
       nvidia.enable = true;
     };
     services = {
-      jellyfin.enable = true;
       ollama.enable = true;
     };
     i18n.enable = true;
