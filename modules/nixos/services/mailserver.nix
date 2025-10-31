@@ -5,7 +5,7 @@
   ];
 
   config = lib.mkMerge [
-    (lib.optionalAttrs config.osbmModules.services.mailserver.enable {
+    (lib.mkIf config.osbmModules.services.mailserver.enable {
       mailserver = {
         enable = true;
         stateVersion = 3;
