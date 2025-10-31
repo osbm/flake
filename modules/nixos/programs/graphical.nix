@@ -17,6 +17,7 @@
       blender
       vscode
       chromium
+      thunderbird
     ];
   };
 }
