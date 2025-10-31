@@ -52,6 +52,10 @@
       url = "github:mobile-nixos/mobile-nixos";
       flake = false;
     };
+    simple-nixos-mailserver = {
+      url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
