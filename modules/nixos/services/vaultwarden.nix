@@ -56,6 +56,8 @@
         && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot
       )
       {
+        systemd.services.vaultwarden.serviceConfig.ReadWritePaths = [ "/var/lib/vaultwarden" ];
+
         environment.persistence."/persist" = {
           directories = [
             {
