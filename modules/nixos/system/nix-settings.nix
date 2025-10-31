@@ -20,13 +20,22 @@
         "spotify"
         "cursor"
         # NVIDIA related
+        "libcurand"
         "nvidia-x11"
         "cuda_cudart"
-        "libcublas"
-        "cuda_cccl"
         "cuda_nvcc"
+        "cuda_cccl"
+        "libcublas"
+        "libcusparse"
+        "libnvjitlink"
+        "libcufft"
+        "cudnn"
+        "cuda_nvrtc"
+        "libnpp"
         "nvidia-settings"
-        "cuda-merged"
+        # blender with cuda is not foss?!?
+        "blender"
+
       ];
 
     nixpkgs.config.allowAliases = false;
