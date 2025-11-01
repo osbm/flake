@@ -1,6 +1,7 @@
 {
   lib,
   nixosConfig ? null, # Receive the NixOS config
+  pkgs,
   ...
 }:
 {
@@ -14,6 +15,10 @@
     # Firefox configuration
     {
       programs.firefox = {
+        # TODO Firefox fails as the closure contains a reference to stdenv.cc
+        # Relax this assertion until the underlying issue is fixed
+        # https://github.com/NixOS/nixpkgs/pull/457424
+        package = pkgs.firefox.overrideAttrs { disallowedRequisites = [ ]; };
         languagePacks = [
           "ja"
           "tr"
