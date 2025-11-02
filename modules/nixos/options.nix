@@ -153,6 +153,7 @@
       cloudflare-dyndns.enable = lib.mkEnableOption "cloudflare-dyndns";
       glance.enable = lib.mkEnableOption "glance";
       hydra.enable = lib.mkEnableOption "hydra";
+      immich.enable = lib.mkEnableOption "immich";
       vscode-server.enable = lib.mkEnableOption "vscode-server";
       wanikani-bypass-lessons.enable = lib.mkEnableOption "wanikani-bypass-lessons";
       wanikani-fetch-data.enable = lib.mkEnableOption "wanikani-fetch-data";

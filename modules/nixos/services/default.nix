@@ -10,6 +10,7 @@
     ./forgejo.nix
     ./glance.nix
     ./hydra.nix
+    ./immich.nix
     ./jellyfin.nix
     ./mailserver.nix
     ./nginx.nix
