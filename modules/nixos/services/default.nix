@@ -14,6 +14,7 @@
     ./jellyfin.nix
     ./mailserver.nix
     ./nginx.nix
+    ./seafile.nix
     ./syncthing.nix
     ./tailscale.nix
     ./vaultwarden.nix
