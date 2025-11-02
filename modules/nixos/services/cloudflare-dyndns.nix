@@ -12,7 +12,6 @@
         proxied = false; # TODO please revert
         domains = [
           "git.osbm.dev"
-          "aifred.osbm.dev"
         ];
       };
     })
