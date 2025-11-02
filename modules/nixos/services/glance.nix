@@ -110,24 +110,9 @@
                           url = "https://git.osbm.dev";
                         }
                         {
-                          icon = "si:ollama";
-                          title = "Open Webui";
-                          url = "http://ymir.curl-boga.ts.net:7070/";
-                        }
-                        {
-                          icon = "sh:jellyfin";
-                          title = "Jellyfin";
-                          url = "http://ymir.curl-boga.ts.net:8096/";
-                        }
-                        {
-                          icon = "sh:nixos";
-                          title = "Hydra";
-                          url = "http://wallfacer.curl-boga.ts.net:3000";
-                        }
-                        {
-                          icon = "sh:nixos";
-                          title = "Attix Binary Cache";
-                          url = "https://cache.osbm.dev";
+                          icon = "sh:bitwarden";
+                          title = "Bitwarden Vault";
+                          url = "https://bitwarden.osbm.dev";
                         }
                         {
                           icon = "sh:visual-studio-code";
