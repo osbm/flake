@@ -1,4 +1,4 @@
-{config, lib, ...}:
+{ config, lib, ... }:
 
 {
   config = lib.mkMerge [
@@ -30,7 +30,9 @@
         && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot
       )
       {
-        systemd.services.firefox-syncserver.serviceConfig.ReadWritePaths = [ "/var/lib/firefox-syncserver" ];
+        systemd.services.firefox-syncserver.serviceConfig.ReadWritePaths = [
+          "/var/lib/firefox-syncserver"
+        ];
 
         environment.persistence."/persist" = {
           directories = [
