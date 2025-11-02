@@ -143,6 +143,7 @@
       syncthing.enable = lib.mkEnableOption "syncthing";
       jellyfin.enable = lib.mkEnableOption "jellyfin";
       mailserver.enable = lib.mkEnableOption "mailserver";
+      firefox-syncserver.enable = lib.mkEnableOption "firefox-syncserver";
       vaultwarden.enable = lib.mkEnableOption "vaultwarden";
       nginx.enable = lib.mkEnableOption "nginx";
       ollama.enable = lib.mkEnableOption "ollama";
