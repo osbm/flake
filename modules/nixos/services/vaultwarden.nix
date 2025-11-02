@@ -29,7 +29,7 @@
           SMTP_PORT = 25;
           SMTP_SSL = false;
 
-          SMTP_FROM = "admin@bitwarden.osbm.dev";
+          SMTP_FROM = "osbm@osbm.dev";
           SMTP_FROM_NAME = "osbm.dev Bitwarden server";
         };
       };
