@@ -102,34 +102,36 @@ def get_plotly_html(df, column, title, ylabel):
     """Generate an interactive Plotly HTML for a given DataFrame column."""
     fig = go.Figure()
 
-    fig.add_trace(go.Scatter(
-        x=df["date"],
-        y=df[column],
-        mode='lines+markers',
-        name=column.capitalize(),
-        line=dict(width=2),
-        marker=dict(size=6)
-    ))
+    fig.add_trace(
+        go.Scatter(
+            x=df["date"],
+            y=df[column],
+            mode="lines+markers",
+            name=column.capitalize(),
+            line=dict(width=2),
+            marker=dict(size=6),
+        )
+    )
 
     fig.update_layout(
         title=title,
         xaxis_title="Date",
         yaxis_title=ylabel,
         template="plotly_dark",
-        plot_bgcolor='#151519',
-        paper_bgcolor='#151519',
+        plot_bgcolor="#151519",
+        paper_bgcolor="#151519",
         width=1200,
         height=600,
-        margin=dict(l=50, r=50, t=50, b=50)
+        margin=dict(l=50, r=50, t=50, b=50),
     )
 
     # Show every 10th date label for better readability
     date_indices = list(range(0, len(df), 10))
     fig.update_xaxes(
-        tickmode='array',
+        tickmode="array",
         tickvals=[df.iloc[i]["date"] for i in date_indices],
         ticktext=[df.iloc[i]["date"] for i in date_indices],
-        tickangle=45
+        tickangle=45,
     )
 
     return fig.to_html(include_plotlyjs=True, div_id=f"plot_{column}")
@@ -140,72 +142,74 @@ def get_apprentice_distribution_html(df):
     fig = go.Figure()
 
     # Add stacked area traces
-    fig.add_trace(go.Scatter(
-        x=df["date"],
-        y=df["apprentice_1"],
-        mode='lines',
-        name='Apprentice I',
-        stackgroup='one',
-        fillcolor='rgba(255, 107, 107, 0.8)',
-        line=dict(width=0.5, color='#ff6b6b')
-    ))
+    fig.add_trace(
+        go.Scatter(
+            x=df["date"],
+            y=df["apprentice_1"],
+            mode="lines",
+            name="Apprentice I",
+            stackgroup="one",
+            fillcolor="rgba(255, 107, 107, 0.8)",
+            line=dict(width=0.5, color="#ff6b6b"),
+        )
+    )
 
-    fig.add_trace(go.Scatter(
-        x=df["date"],
-        y=df["apprentice_2"],
-        mode='lines',
-        name='Apprentice II',
-        stackgroup='one',
-        fillcolor='rgba(78, 205, 196, 0.8)',
-        line=dict(width=0.5, color='#4ecdc4')
-    ))
+    fig.add_trace(
+        go.Scatter(
+            x=df["date"],
+            y=df["apprentice_2"],
+            mode="lines",
+            name="Apprentice II",
+            stackgroup="one",
+            fillcolor="rgba(78, 205, 196, 0.8)",
+            line=dict(width=0.5, color="#4ecdc4"),
+        )
+    )
 
-    fig.add_trace(go.Scatter(
-        x=df["date"],
-        y=df["apprentice_3"],
-        mode='lines',
-        name='Apprentice III',
-        stackgroup='one',
-        fillcolor='rgba(69, 183, 209, 0.8)',
-        line=dict(width=0.5, color='#45b7d1')
-    ))
+    fig.add_trace(
+        go.Scatter(
+            x=df["date"],
+            y=df["apprentice_3"],
+            mode="lines",
+            name="Apprentice III",
+            stackgroup="one",
+            fillcolor="rgba(69, 183, 209, 0.8)",
+            line=dict(width=0.5, color="#45b7d1"),
+        )
+    )
 
-    fig.add_trace(go.Scatter(
-        x=df["date"],
-        y=df["apprentice_4"],
-        mode='lines',
-        name='Apprentice IV',
-        stackgroup='one',
-        fillcolor='rgba(150, 206, 180, 0.8)',
-        line=dict(width=0.5, color='#96ceb4')
-    ))
+    fig.add_trace(
+        go.Scatter(
+            x=df["date"],
+            y=df["apprentice_4"],
+            mode="lines",
+            name="Apprentice IV",
+            stackgroup="one",
+            fillcolor="rgba(150, 206, 180, 0.8)",
+            line=dict(width=0.5, color="#96ceb4"),
+        )
+    )
 
     fig.update_layout(
         title="Apprentice Stage Distribution Over Time",
         xaxis_title="Date",
         yaxis_title="Number of Items",
         template="plotly_dark",
-        plot_bgcolor='#151519',
-        paper_bgcolor='#151519',
+        plot_bgcolor="#151519",
+        paper_bgcolor="#151519",
         width=1200,
         height=600,
         margin=dict(l=50, r=50, t=50, b=50),
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1
-        )
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
 
     # Show every 10th date label for better readability
     date_indices = list(range(0, len(df), 10))
     fig.update_xaxes(
-        tickmode='array',
+        tickmode="array",
         tickvals=[df.iloc[i]["date"] for i in date_indices],
         ticktext=[df.iloc[i]["date"] for i in date_indices],
-        tickangle=45
+        tickangle=45,
     )
 
     return fig.to_html(include_plotlyjs=True, div_id="apprentice_distribution")
@@ -214,8 +218,12 @@ def get_apprentice_distribution_html(df):
 def generate_standalone_html(df, output_path=None):
     """Generate a completely self-contained HTML file with all charts."""
     # Generate all chart HTML
-    reviews_html = get_plotly_html(df, "num_reviews", "Daily Reviews", "Number of Reviews")
-    lessons_html = get_plotly_html(df, "num_lessons", "Daily Lessons", "Number of Lessons")
+    reviews_html = get_plotly_html(
+        df, "num_reviews", "Daily Reviews", "Number of Reviews"
+    )
+    lessons_html = get_plotly_html(
+        df, "num_lessons", "Daily Lessons", "Number of Lessons"
+    )
     progression_html = get_plotly_html(
         df, "progression", "SRS Progression", "Progression (%)"
     )
@@ -223,7 +231,9 @@ def generate_standalone_html(df, output_path=None):
     srs_stage_apprentice_html = get_plotly_html(
         df, "apprentice", "Apprentice Stage", "Number of Subjects"
     )
-    srs_stage_guru_html = get_plotly_html(df, "guru", "Guru Stage", "Number of Subjects")
+    srs_stage_guru_html = get_plotly_html(
+        df, "guru", "Guru Stage", "Number of Subjects"
+    )
     srs_stage_master_html = get_plotly_html(
         df, "master", "Master Stage", "Number of Subjects"
     )
@@ -295,7 +305,7 @@ def generate_standalone_html(df, output_path=None):
 
     # Save to file if output_path is provided
     if output_path:
-        with open(output_path, 'w', encoding='utf-8') as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             f.write(html_content)
         print(f"Standalone HTML dashboard saved to: {output_path}")
 
@@ -319,14 +329,20 @@ def download_dashboard():
     html_content = generate_standalone_html(df)
 
     response = Response(html_content, content_type="text/html")
-    response.headers["Content-Disposition"] = "attachment; filename=wanikani_dashboard.html"
+    response.headers["Content-Disposition"] = (
+        "attachment; filename=wanikani_dashboard.html"
+    )
     return response
 
 
 def render_html(df):
     """Render the DataFrame as HTML with interactive Plotly charts."""
-    reviews_html = get_plotly_html(df, "num_reviews", "Daily Reviews", "Number of Reviews")
-    lessons_html = get_plotly_html(df, "num_lessons", "Daily Lessons", "Number of Lessons")
+    reviews_html = get_plotly_html(
+        df, "num_reviews", "Daily Reviews", "Number of Reviews"
+    )
+    lessons_html = get_plotly_html(
+        df, "num_lessons", "Daily Lessons", "Number of Lessons"
+    )
     progression_html = get_plotly_html(
         df, "progression", "SRS Progression", "Progression (%)"
     )
@@ -338,7 +354,9 @@ def render_html(df):
     srs_stage_apprentice_html = get_plotly_html(
         df, "apprentice", "Apprentice Stage", "Number of Subjects"
     )
-    srs_stage_guru_html = get_plotly_html(df, "guru", "Guru Stage", "Number of Subjects")
+    srs_stage_guru_html = get_plotly_html(
+        df, "guru", "Guru Stage", "Number of Subjects"
+    )
     srs_stage_master_html = get_plotly_html(
         df, "master", "Master Stage", "Number of Subjects"
     )
@@ -444,7 +462,9 @@ if __name__ == "__main__":
 
         generate_standalone_html(df, output_file)
         print(f"✅ Standalone HTML dashboard generated: {output_file}")
-        print("📊 You can now open this file in any web browser to view your interactive WaniKani stats!")
+        print(
+            "📊 You can now open this file in any web browser to view your interactive WaniKani stats!"
+        )
 
     else:
         # Start Flask server
