@@ -55,9 +55,11 @@ in
         files = [
           # the fuck is this file
           # "/etc/machine-id"
-          
+
           # user passwords
-          "/etc/shadow"
+          # "/etc/shadow"
+          # fuck me if i move the shadow file to the persist folder,
+          # i cant use sudo command to rebuild my system
         ];
         users = userPersistence;
       };
