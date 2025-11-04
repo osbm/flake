@@ -20,5 +20,24 @@
         defaults.email = "osbm@osbm.dev";
       };
     })
+
+    (lib.mkIf
+      (
+        config.osbmModules.services.nginx.enable
+        && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot
+      )
+      {
+        environment.persistence."/persist" = {
+          directories = [
+            {
+              directory = "/var/lib/acme";
+              user = "acme";
+              group = "acme";
+              mode = "0750";
+            }
+          ];
+        };
+      }
+    )
   ];
 }
