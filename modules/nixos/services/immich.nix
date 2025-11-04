@@ -35,6 +35,12 @@
               group = config.services.immich.group;
               mode = "0750";
             }
+            {
+              directory = "/var/lib/postgresql";
+              user = "postgres";
+              group = "postgres";
+              mode = "0750";
+            }
           ];
         };
       }
