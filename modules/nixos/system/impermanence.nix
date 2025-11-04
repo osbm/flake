@@ -39,9 +39,16 @@ in
       environment.persistence."/persist" = {
         hideMounts = true;
         directories = [
+          # systemd and other machine logs
           "/var/log"
+
+          # information about nixos users and groups
           "/var/lib/nixos"
+
+          # systemd coredumps to debug crashes 
           "/var/lib/systemd/coredump"
+
+          # NetworkManager connection profiles and WiFi passwords
           "/etc/NetworkManager/system-connections"
         ];
         # files = [ # the fuck is this file
