@@ -50,9 +50,9 @@
               mode = "0750";
             }
             {
-              directory = "/var/spool/redis-spamd";
-              user = "redis-spamd";
-              group = "redis-spamd";
+              directory = "/var/spool/redis-rspamd";
+              user = "redis-rspamd";
+              group = "redis-rspamd";
               mode = "0750";
             }
           ];
