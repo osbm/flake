@@ -44,13 +44,13 @@
             "/var/lib/dovecot" # owned by root
             "/var/lib/postfix" # owned by root
             {
-              path = "/var/lib/rspamd";
+              directory = "/var/lib/rspamd";
               user = "rspamd";
               group = "rspamd";
               mode = "0750";
             }
             {
-              path = "/var/spool/redis-spamd";
+              directory = "/var/spool/redis-spamd";
               user = "redis-spamd";
               group = "redis-spamd";
               mode = "0750";
