@@ -50,6 +50,9 @@ in
 
           # NetworkManager connection profiles and WiFi passwords
           "/etc/NetworkManager/system-connections"
+
+          # user passwords
+          "/etc/shadow"
         ];
         # files = [ # the fuck is this file
         #   "/etc/machine-id"
