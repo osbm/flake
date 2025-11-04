@@ -31,5 +31,32 @@
         certificateScheme = "acme-nginx";
       };
     })
+
+    # mailserver and impermanence
+    (lib.mkIf
+      (
+        config.osbmModules.services.mailserver.enable
+        && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot
+      )
+      {
+        environment.persistence."/persist" = {
+          directories = [
+            "/var/lib/dovecot" # owned by root
+            "/var/lib/postfix" # owned by root
+            {
+              path = "/var/lib/rspamd";
+              user = "rspamd";
+              group = "rspamd";
+              mode = "0750";
+            }
+            {
+              path = "/var/spool/redis-spamd";
+              user = "redis-spamd";
+              group = "redis-spamd";
+              mode = "0750";
+            }
+          ];
+        };
+      })
   ];
 }
