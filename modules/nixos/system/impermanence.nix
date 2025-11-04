@@ -51,12 +51,14 @@ in
           # NetworkManager connection profiles and WiFi passwords
           "/etc/NetworkManager/system-connections"
 
+        ];
+        files = [
+          # the fuck is this file
+          # "/etc/machine-id"
+          
           # user passwords
           "/etc/shadow"
         ];
-        # files = [ # the fuck is this file
-        #   "/etc/machine-id"
-        # ];
         users = userPersistence;
       };
     })
