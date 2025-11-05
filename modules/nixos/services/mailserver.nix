@@ -39,12 +39,12 @@
         && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot
       )
       {
-        # environment.persistence."/persist" = {
-        #   directories = [
-        #     # TODO write justifications for each of these
+        environment.persistence."/persist" = {
+          directories = [
+            # TODO write justifications for each of these
             # Dovecot is an open source IMAP and POP3 server
             # which means it handles email retrieval for users.
-        #     "/var/lib/dovecot" # owned by root
+            "/var/lib/dovecot" # owned by root
         #     "/var/lib/postfix" # owned by root
         #     {
         #       directory = "/var/lib/rspamd";
@@ -77,8 +77,8 @@
         #       mode = "0755";
         #     }
         #     "/var/spool"
-        #   ];
-        # };
+          ];
+        };
       })
   ];
 }
