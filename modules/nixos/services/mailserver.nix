@@ -57,19 +57,19 @@
         #       mode = "0750";
         #     }
         #     {
-        #       directory = "/var/sieve";
+        #       directory = config.mailserver.sieveDirectory;
         #       user = "virtualMail";
         #       group = "virtualMail";
         #       mode = "0770";
         #     }
         #     {
-        #       directory = "/var/vmail";
-        #       user = "virtualMail";
-        #       group = "virtualMail";
+        #       directory = config.mailserver.mailDirectory;
+        #       user = config.mailserver.vmailUserName;
+        #       group = config.mailserver.vmailGroupName;
         #       mode = "0700";
         #     }
         #     {
-        #       directory = "/var/dkim";
+        #       directory = config.mailserver.dkimKeyDirectory;
         #       user = "rspamd";
         #       group = "rspamd";
         #       mode = "0755";
