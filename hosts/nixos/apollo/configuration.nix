@@ -70,6 +70,9 @@
     Defaults lecture = never
   '';
 
+  # server is in germany
+  time.timeZone = "Europe/Berlin";  # or "Europe/Amsterdam"
+
   # Network configuration
   networking = {
     useDHCP = false;
