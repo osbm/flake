@@ -32,7 +32,7 @@
             {
               directory = "/var/lib/acme";
               user = "acme";
-              group = "acme";
+              group = "nginx";
               mode = "0750";
             }
           ];
