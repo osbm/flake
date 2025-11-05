@@ -42,6 +42,8 @@
         # environment.persistence."/persist" = {
         #   directories = [
         #     # TODO write justifications for each of these
+            # Dovecot is an open source IMAP and POP3 server
+            # which means it handles email retrieval for users.
         #     "/var/lib/dovecot" # owned by root
         #     "/var/lib/postfix" # owned by root
         #     {
