@@ -39,44 +39,44 @@
         && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot
       )
       {
-        environment.persistence."/persist" = {
-          directories = [
-            # TODO write justifications for each of these
-            "/var/lib/dovecot" # owned by root
-            "/var/lib/postfix" # owned by root
-            {
-              directory = "/var/lib/rspamd";
-              user = "rspamd";
-              group = "rspamd";
-              mode = "0750";
-            }
-            {
-              directory = "/var/spool/redis-rspamd";
-              user = "redis-rspamd";
-              group = "redis-rspamd";
-              mode = "0750";
-            }
-            {
-              directory = "/var/sieve";
-              user = "virtualMail";
-              group = "virtualMail";
-              mode = "0770";
-            }
-            {
-              directory = "/var/vmail";
-              user = "virtualMail";
-              group = "virtualMail";
-              mode = "0700";
-            }
-            {
-              directory = "/var/dkim";
-              user = "rspamd";
-              group = "rspamd";
-              mode = "0755";
-            }
-            "/var/spool"
-          ];
-        };
+        # environment.persistence."/persist" = {
+        #   directories = [
+        #     # TODO write justifications for each of these
+        #     "/var/lib/dovecot" # owned by root
+        #     "/var/lib/postfix" # owned by root
+        #     {
+        #       directory = "/var/lib/rspamd";
+        #       user = "rspamd";
+        #       group = "rspamd";
+        #       mode = "0750";
+        #     }
+        #     {
+        #       directory = "/var/spool/redis-rspamd";
+        #       user = "redis-rspamd";
+        #       group = "redis-rspamd";
+        #       mode = "0750";
+        #     }
+        #     {
+        #       directory = "/var/sieve";
+        #       user = "virtualMail";
+        #       group = "virtualMail";
+        #       mode = "0770";
+        #     }
+        #     {
+        #       directory = "/var/vmail";
+        #       user = "virtualMail";
+        #       group = "virtualMail";
+        #       mode = "0700";
+        #     }
+        #     {
+        #       directory = "/var/dkim";
+        #       user = "rspamd";
+        #       group = "rspamd";
+        #       mode = "0755";
+        #     }
+        #     "/var/spool"
+        #   ];
+        # };
       })
   ];
 }

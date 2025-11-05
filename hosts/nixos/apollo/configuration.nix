@@ -11,7 +11,7 @@
     services = {
       glance.enable = true;
       # anubis.enable = true;
-      mailserver.enable = true;
+      # mailserver.enable = true;
       nginx.enable = true;
       forgejo.enable = true;
       vaultwarden.enable = true;
