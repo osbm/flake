@@ -8,6 +8,15 @@
     (lib.mkIf config.osbmModules.services.nginx.enable {
       services.nginx = {
         enable = true;
+        
+        # Ensure ACME challenge directory is accessible for all domains
+        commonHttpConfig = ''
+          # Allow access to ACME challenge directory
+          location /.well-known/acme-challenge {
+            root /var/lib/acme/acme-challenge;
+            allow all;
+          }
+        '';
       };
 
       networking.firewall.allowedTCPPorts = [
