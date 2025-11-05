@@ -6,7 +6,7 @@
 }:
 {
   config = lib.mkIf config.osbmModules.i18n.enable {
-    time.timeZone = "Europe/Istanbul";
+    time.timeZone = lib.mkDefault "Europe/Istanbul";
 
     # Select internationalisation properties.
     i18n.defaultLocale = "en_US.UTF-8";
