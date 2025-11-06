@@ -13,7 +13,13 @@
           url = "https://firefox.osbm.dev";
           capacity = 1;
         };
-        settings.host = "0.0.0.0";
+        settings = {
+          host = "0.0.0.0";
+          # Override database URLs to use Unix socket for authentication
+          # This allows the firefox-syncserver user to authenticate via unix_socket
+          syncstorage.database_url = "mysql://firefox-syncserver@localhost/firefox_syncserver?socket=%2Frun%2Fmysqld%2Fmysqld.sock";
+          tokenserver.database_url = "mysql://firefox-syncserver@localhost/firefox_syncserver?socket=%2Frun%2Fmysqld%2Fmysqld.sock";
+        };
       };
     })
 
