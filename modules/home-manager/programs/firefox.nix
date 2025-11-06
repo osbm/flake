@@ -86,6 +86,7 @@
           '';
           settings = {
             # "Open previous windows and tabs"
+            "identity.sync.tokenserver.uri" = "https://firefox.osbm.dev/1.0/sync/1.5";
             "browser.startup.page" = 3;
             "browser.contentblocking.category" = true;
             "extensions.pocket.enabled" = false;
