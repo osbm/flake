@@ -1,3 +1,4 @@
+{ lib, ... }:
 {
   imports = [
     ../../../modules/nixos
