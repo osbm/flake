@@ -1,6 +1,5 @@
 {
   imports = [
-    ./hardware-configuration.nix
     ../../../modules/nixos
   ];
 
@@ -105,4 +104,5 @@
 
   # Override initrd kernel params for static IP
   boot.kernelParams = [ "ip=152.53.152.129::152.53.152.1:255.255.252.0::eth0:none" ];
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }
