@@ -5,6 +5,11 @@
     (lib.mkIf config.osbmModules.services.actual.enable {
       services.actual = {
         enable = true;
+        settings = {
+          port = 51514;
+          
+          # dataDir = "/var/lib/actual"
+        };
       };
     })
 
