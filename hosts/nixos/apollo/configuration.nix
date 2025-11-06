@@ -16,6 +16,7 @@
       forgejo.enable = true;
       vaultwarden.enable = true;
       immich.enable = true;
+      actual.enable = true;
       # seafile.enable = true;
     };
 
