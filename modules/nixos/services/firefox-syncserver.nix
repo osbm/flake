@@ -3,9 +3,17 @@
 {
   config = lib.mkMerge [
     (lib.mkIf config.osbmModules.services.firefox-syncserver.enable {
+      services.mysql.package = pkgs.mariadb; # Use MariaDB as the database backend
       services.firefox-syncserver = {
         enable = true;
-        settings.port = 5000;
+        secrets = "/persist/firefox-syncserver-secrets.env"; # TODO: Make this into agenix secret
+        logLevel = "trace";
+        singleNode = {
+          enable = true;
+          url = "https://firefox.osbm.dev";
+          capacity = 1;
+        };
+        settings.host = "0.0.0.0";
       };
     })
 
