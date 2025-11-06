@@ -37,8 +37,9 @@
             # blender with cuda is not foss?!?
             "blender"
         ];
-        allowAliases = false
+        allowAliases = false;
       };
+    };
 
     # Enable Nix flakes
     nix = {
