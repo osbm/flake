@@ -9,7 +9,8 @@
     # Allow unfree packages
     nixpkgs = {
       config = {
-        allowUnfreePredicate = pkg:
+        allowUnfreePredicate =
+          pkg:
           builtins.elem (lib.getName pkg) [
             "vscode"
             "discord"
@@ -36,7 +37,7 @@
             "nvidia-settings"
             # blender with cuda is not foss?!?
             "blender"
-        ];
+          ];
         allowAliases = false;
       };
     };

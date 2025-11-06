@@ -45,7 +45,7 @@ in
           # information about nixos users and groups
           "/var/lib/nixos"
 
-          # systemd coredumps to debug crashes 
+          # systemd coredumps to debug crashes
           "/var/lib/systemd/coredump"
 
           # NetworkManager connection profiles and WiFi passwords

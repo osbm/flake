@@ -72,7 +72,7 @@
   '';
 
   # server is in germany
-  time.timeZone = "Europe/Berlin";  # or "Europe/Amsterdam"
+  time.timeZone = "Europe/Berlin"; # or "Europe/Amsterdam"
 
   # Network configuration
   networking = {

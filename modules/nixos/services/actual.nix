@@ -7,7 +7,7 @@
         enable = true;
         settings = {
           port = 51514;
-          
+
           # dataDir = "/var/lib/actual"
         };
       };
