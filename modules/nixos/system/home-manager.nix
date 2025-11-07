@@ -12,11 +12,11 @@
 
   config = lib.mkMerge [
     # Enable FUSE user_allow_other when impermanence is used
-    (lib.mkIf (config.osbmModules.hardware.disko.zfs.root.impermanenceRoot) {
+    (lib.mkIf config.osbmModules.hardware.disko.zfs.root.impermanenceRoot {
       programs.fuse.userAllowOther = true;
     })
 
-    (lib.mkIf (config.osbmModules.homeManager.enable) {
+    (lib.mkIf config.osbmModules.homeManager.enable {
       home-manager = {
         useGlobalPkgs = true;
         useUserPackages = true;
