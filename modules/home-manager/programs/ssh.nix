@@ -1,7 +1,7 @@
 let
   # define a block that just takes a hostname and returns attrset to not repeat the same fields
   sshBlock = hostname: {
-    hostname = hostname;
+    inherit hostname;
     user = "osbm";
     identityFile = "~/.ssh/id_ed25519";
     extraOptions = {
@@ -14,7 +14,7 @@ let
   };
   # sshBlockAtreus is the same as sshBlock but with 8090 as the port
   sshBlockAtreus = hostname: {
-    hostname = hostname;
+    inherit hostname;
     user = "osbm";
     identityFile = "~/.ssh/id_ed25519";
     port = 8022;

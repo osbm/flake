@@ -35,7 +35,7 @@ in
         enable = true;
         port = 2222; # different port to avoid conflicts
         shell = "/bin/cryptsetup-askpass";
-        authorizedKeys = authorizedKeys;
+        inherit authorizedKeys;
         hostKeys = [ "/etc/ssh/initrd" ];
       };
       boot.initrd.secrets = {
@@ -208,7 +208,7 @@ in
                 options = {
                   canmount = "off";
                   mountpoint = "none";
-                  reservation = cfg.zfs.root.reservation;
+                  inherit (cfg.zfs.root) reservation;
                 };
               };
 
@@ -288,7 +288,7 @@ in
                 options = {
                   canmount = "off";
                   mountpoint = "none";
-                  reservation = cfg.zfs.storage.reservation;
+                  inherit (cfg.zfs.storage) reservation;
                 };
               };
 
