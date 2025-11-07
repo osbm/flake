@@ -35,7 +35,7 @@ in
 
   config = lib.mkMerge [
     # Enable impermanence root if configured
-    (lib.mkIf (config.osbmModules.hardware.disko.zfs.root.impermanenceRoot) {
+    (lib.mkIf config.osbmModules.hardware.disko.zfs.root.impermanenceRoot {
       environment.persistence."/persist" = {
         hideMounts = true;
         directories = [
