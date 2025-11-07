@@ -13,6 +13,8 @@
   ];
 
   osbmModules = {
+    desktopEnvironment = "none"; # fuckass darwin defaults
+    machineType = "laptop";
     programs.neovim.enable = true;
   };
 
