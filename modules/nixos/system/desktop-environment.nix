@@ -44,12 +44,12 @@ in
     (lib.mkIf (cfg.desktopEnvironment == "gnome") {
 
       # Enable GNOME Desktop Environment
-      services.xserver.enable = true;
-      services.desktopManager.gnome.enable = true;
-      services.displayManager.gdm.enable = true;
-
-      # Enable GNOME Keyring for password management
-      services.gnome.gnome-keyring.enable = true;
+      services = {
+        xserver.enable = true;
+        desktopManager.gnome.enable = true;
+        displayManager.gdm.enable = true;
+        gnome.gnome-keyring.enable = true;
+      };
 
       # Enable dconf for GNOME settings
       programs.dconf.enable = true;
