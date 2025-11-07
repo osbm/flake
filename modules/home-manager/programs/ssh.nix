@@ -1,4 +1,3 @@
-{ ... }:
 let
   # define a block that just takes a hostname and returns attrset to not repeat the same fields
   sshBlock = hostname: {
