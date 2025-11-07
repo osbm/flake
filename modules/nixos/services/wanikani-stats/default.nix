@@ -31,7 +31,7 @@ let
     name = "wanikani-stats-flask";
     runtimeInputs = [
       (python.withPackages (
-        ppkgs: with python.pkgs; [
+        ppkgs: with ppkgs; [
           flask
           pandas
           numpy
