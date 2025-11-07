@@ -6,25 +6,25 @@
 }:
 let
   python =
-    let
-      packageOverrides = self: super: {
-        imageio = super.imageio.overridePythonAttrs (old: {
-          disabledTests = [
-            "test_read_stream"
-            "test_uri_reading"
-            "test_trim_filter"
-            "test_process_termination"
-          ];
-        });
-        plotly = super.plotly.overridePythonAttrs (old: {
-          disabledTestPaths = (old.disabledTestPaths or [ ]) ++ [
-            "tests/test_optional/test_kaleido/test_kaleido.py"
-          ];
-        });
-      };
-    in
-    pkgs.python313.override {
-      inherit packageOverrides;
+    # let
+    #   packageOverrides = self: super: {
+    #     imageio = super.imageio.overridePythonAttrs (old: {
+    #       disabledTests = [
+    #         "test_read_stream"
+    #         "test_uri_reading"
+    #         "test_trim_filter"
+    #         "test_process_termination"
+    #       ];
+    #     });
+    #     plotly = super.plotly.overridePythonAttrs (old: {
+    #       disabledTestPaths = (old.disabledTestPaths or [ ]) ++ [
+    #         "tests/test_optional/test_kaleido/test_kaleido.py"
+    #       ];
+    #     });
+    #   };
+    # in
+    pkgs.python3.override {
+      # inherit packageOverrides;
       self = python;
     };
   wanikani-stats-flask = pkgs.writeShellApplication {
