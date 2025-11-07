@@ -5,8 +5,7 @@
   ...
 }:
 {
-  config = (
-    lib.mkIf config.osbmModules.services.vscode-server.enable {
+  config = lib.mkIf config.osbmModules.services.vscode-server.enable {
       services.code-server = {
         # only true if the machine is not pochita
         enable = config.networking.hostName != "pochita";
@@ -53,6 +52,5 @@
         };
       };
       networking.firewall.allowedTCPPorts = [ config.services.code-server.port ];
-    }
-  );
+    };
 }
