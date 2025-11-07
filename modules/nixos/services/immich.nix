@@ -31,8 +31,7 @@
           directories = [
             {
               directory = "/var/lib/immich";
-              user = config.services.immich.user;
-              group = config.services.immich.group;
+              inherit (config.services.immich) user group;
               mode = "0750";
             }
             {
