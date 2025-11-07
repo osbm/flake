@@ -74,7 +74,7 @@
         "x86_64-darwin"
         "aarch64-darwin"
       ];
-      forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
+      forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems f;
       makePkgs = system: import nixpkgs { inherit system; };
       makeNixosConfig =
         configName:
@@ -85,7 +85,7 @@
       nixosConfigNames = builtins.attrNames (builtins.readDir ./hosts/nixos);
     in
     {
-      nixosConfigurations = nixpkgs.lib.genAttrs nixosConfigNames (name: makeNixosConfig name);
+      nixosConfigurations = nixpkgs.lib.genAttrs nixosConfigNames makeNixosConfig;
       nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
         extraSpecialArgs = { inherit inputs outputs; };
         pkgs = import nixpkgs { system = "aarch64-linux"; };
