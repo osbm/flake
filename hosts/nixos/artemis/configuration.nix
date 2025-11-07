@@ -18,15 +18,18 @@
   };
 
   # mobile-nixos needs aliases (uses nettools instead of net-tools)
-  nixpkgs.config.allowAliases = true;
-
-  nixpkgs.config.allowUnfreePredicate =
-    pkg:
-    builtins.elem (lib.getName pkg) [
-      "oneplus-sdm845-firmware-zstd"
-      "oneplus-sdm845-firmware"
-    ];
-
+  nixpkgs = {
+    config = {
+      allowAliases = true;
+      allowUnfreePredicate =
+        pkg:
+        builtins.elem (lib.getName pkg) [
+          "oneplus-sdm845-firmware-zstd"
+          "oneplus-sdm845-firmware"
+        ];
+    };
+    system = "aarch64-linux";
+  };
   # Minimal essential packages
   environment.systemPackages = with pkgs; [
     git
@@ -40,6 +43,4 @@
   ];
 
   system.stateVersion = "25.11";
-  # set platform to aarch64-linux
-  nixpkgs.system = "aarch64-linux";
 }
