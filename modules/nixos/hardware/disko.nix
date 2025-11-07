@@ -28,18 +28,22 @@ in
   config = lib.mkMerge [
     # Initrd SSH for remote unlocking
     (lib.mkIf (cfg.enable && cfg.initrd-ssh.enable) {
-      boot.initrd.network.enable = true;
-      boot.initrd.availableKernelModules = cfg.initrd-ssh.ethernetDrivers;
-      boot.kernelParams = [ "ip=152.53.152.129::152.53.152.1:255.255.252.0::eth0:none" ];
-      boot.initrd.network.ssh = {
-        enable = true;
-        port = 2222; # different port to avoid conflicts
-        shell = "/bin/cryptsetup-askpass";
-        inherit authorizedKeys;
-        hostKeys = [ "/etc/ssh/initrd" ];
-      };
-      boot.initrd.secrets = {
-        "/etc/ssh/initrd" = "/etc/ssh/initrd";
+      boot = {
+        kernelParams = [ "ip=152.53.152.129::152.53.152.1:255.255.252.0::eth0:none" ];
+        initrd = {
+          network.enable = true;
+          availableKernelModules = cfg.initrd-ssh.ethernetDrivers;
+          network.ssh = {
+            enable = true;
+            port = 2222; # different port to avoid conflicts
+            shell = "/bin/cryptsetup-askpass";
+            inherit authorizedKeys;
+            hostKeys = [ "/etc/ssh/initrd" ];
+          };
+          secrets = {
+            "/etc/ssh/initrd" = "/etc/ssh/initrd";
+          };
+        };
       };
     })
 
@@ -318,12 +322,13 @@ in
         };
       };
 
-      # Needed for agenix - SSH keys must be available before ZFS mounts
-      fileSystems."/etc/ssh".neededForBoot = true;
-
-      # Needed for impermanence
-      fileSystems."/persist".neededForBoot = true;
-      fileSystems."/persist/save".neededForBoot = true;
+      fileSystems = {
+        # Needed for agenix - SSH keys must be available before ZFS mounts
+        "/etc/ssh".neededForBoot = true;
+        # Needed for impermanence
+        "/persist".neededForBoot = true;
+        "/persist/save".neededForBoot = true;
+      };
     })
 
     # Impermanence: wipe root on boot
