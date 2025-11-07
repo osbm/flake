@@ -10,7 +10,7 @@ let
   regularUsers = builtins.filter (u: u != "root") config.osbmModules.users;
 
   # Generate user persistence configuration
-  userPersistence = lib.genAttrs regularUsers (username: {
+  userPersistence = lib.genAttrs regularUsers (_username: {
     directories = [
       "Documents"
       {

@@ -35,7 +35,7 @@
             # Capture the NixOS system config before entering the home-manager scope
             systemConfig = config;
           in
-          lib.genAttrs (builtins.filter (u: u != "root") config.osbmModules.users) (username: {
+          lib.genAttrs (builtins.filter (u: u != "root") config.osbmModules.users) (_username: {
             # Use the system's stateVersion for home-manager
             home.stateVersion = lib.mkDefault systemConfig.system.stateVersion;
             imports = [
