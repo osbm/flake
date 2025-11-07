@@ -25,15 +25,17 @@
     i18n.enable = true;
   };
 
-  networking.hostName = "ymir"; # Define your hostname.
+  networking = {
+    hostName = "ymir"; # Define your hostname.
 
-  networking.firewall.allowedTCPPorts = [
-    8889
-    8000
-  ];
+    firewall.allowedTCPPorts = [
+      8889
+      8000
+    ];
 
-  # Enable networking
-  networking.networkmanager.enable = true;
+    # Enable networking
+    networkmanager.enable = true;
+  };
 
   virtualisation.waydroid.enable = true;
 
