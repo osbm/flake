@@ -11,33 +11,31 @@ in
   config = lib.mkMerge [
     # Plasma Desktop Environment
     (lib.mkIf (cfg.desktopEnvironment == "plasma") {
-      services.xserver.enable = true;
-      services.displayManager.sddm.enable = true;
-      services.desktopManager.plasma6.enable = true;
+      services = {
+        xserver.enable = true;
+        displayManager.sddm.enable = true;
+        desktopManager.plasma6.enable = true;
+        printing.enable = true;
+      };
 
-      environment.plasma6.excludePackages = with pkgs.kdePackages; [
-        kate
-        konsole
-        yakuake
-        krunner # fuckass program keeps opening
-      ];
-
-      # Enable printing
-      services.printing.enable = true;
-
-      # Desktop packages
-      environment.systemPackages = with pkgs; [
-        alacritty
-        ghostty
-        obsidian
-        mpv
-        kitty
-        qbittorrent
-        element-desktop
-      ];
-
-      # Wayland support
-      environment.sessionVariables.NIXOS_OZONE_WL = "1";
+      environment = {
+        plasma6.excludePackages = with pkgs.kdePackages; [
+          kate
+          konsole
+          yakuake
+          krunner # fuckass program keeps opening
+        ];
+        systemPackages = with pkgs; [
+          alacritty
+          ghostty
+          obsidian
+          mpv
+          kitty
+          qbittorrent
+          element-desktop
+        ];
+        sessionVariables.NIXOS_OZONE_WL = "1";
+      };
     })
 
     # GNOME Desktop Environment
