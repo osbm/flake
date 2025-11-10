@@ -34,6 +34,7 @@
   # The board and wanted kernel version
   raspberry-pi-nix = {
     board = "bcm2712";
+    libcamera-overlay.enable = false;
     #kernel-version = "v6_10_12";
   };
 
