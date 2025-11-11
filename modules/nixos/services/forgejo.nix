@@ -9,6 +9,7 @@
       services.forgejo = {
         enable = true;
         lfs.enable = true;
+        secrets.mailer.PASSWD = config.age.secrets."forgejo-mail".path;
         dump = {
           enable = true;
           type = "zip";
@@ -30,6 +31,12 @@
           service = {
             DISABLE_REGISTRATION = true;
             LANDING_PAGE = "/osbm";
+          };
+          mailer = {
+            ENABLED = true;
+            PROTOCOL = "smtps";
+            SMTP_ADDR = "osbm.dev";
+            USER = "forgejo@osbm.dev";
           };
         };
       };
