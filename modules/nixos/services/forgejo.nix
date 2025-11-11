@@ -32,6 +32,11 @@
             DISABLE_REGISTRATION = true;
             LANDING_PAGE = "/osbm";
           };
+          other = {
+            SHOW_FOOTER_VERSION = false;
+            SHOW_FOOTER_TEMPLATE_LOAD_TIME = false;
+            ENABLE_FEED = false;
+          };
           mailer = {
             ENABLED = true;
             PROTOCOL = "smtps";
