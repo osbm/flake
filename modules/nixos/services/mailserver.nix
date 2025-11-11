@@ -17,12 +17,31 @@
         fqdn = "mail.osbm.dev";
         domains = [ "osbm.dev" ];
 
+        # Set all no-reply addresses
+        rejectRecipients = [ "noreply@osbm.dev" ];
+
         # A list of all login accounts. To create the password hashes, use
         # nix-shell -p mkpasswd --run 'mkpasswd -sm bcrypt'
         loginAccounts = {
           "osbm@osbm.dev" = {
-            hashedPasswordFile = "/persist/osbm.passwd"; # TODO: Make this into agenix secret
-            aliases = [ "postmaster@osbm.dev" ];
+            hashedPasswordFile = config.age.secrets."osbm-mail".path;
+            aliases = [
+              "osbm"
+              "osman@osbm.dev"
+              "postmaster@osbm.dev"
+              "root@osbm.dev"
+              "mastercontrol@osbm.dev"
+              "admin@osbm.dev"
+            ];
+          };
+          "forgejo@osbm.dev" = {
+            hashedPasswordFile = config.age.secrets."forgejo-mail".path;
+          };
+          "vaultwarden@osbm.dev" = {
+            hashedPasswordFile = config.age.secrets."vaultwarden-mail".path;
+          };
+          "noreply@osbm.dev" = {
+            hashedPasswordFile = config.age.secrets."noreply-mail".path;
           };
         };
 
