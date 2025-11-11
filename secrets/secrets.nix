@@ -22,4 +22,8 @@ in
   "ssh-key-public.age".publicKeys = machines ++ [ osbm ];
   "cloudflare.age".publicKeys = machines ++ [ osbm ];
   "vaultwarden.age".publicKeys = machines ++ [ osbm ];
+  "osbm-mail.age".publicKeys = machines ++ [ osbm ];
+  "forgejo-mail.age".publicKeys = machines ++ [ osbm ];
+  "vaultwarden-mail.age".publicKeys = machines ++ [ osbm ];
+  "noreply-mail.age".publicKeys = machines ++ [ osbm ];
 }
