@@ -120,6 +120,11 @@
                           url = "https://photos.osbm.dev";
                         }
                         {
+                          icon = "sh:actual-budget";
+                          title = "Actual Budget";
+                          url = "https://actual.osbm.dev"; # todo migrate to budget.osbm.dev
+                        }
+                        {
                           icon = "sh:visual-studio-code";
                           title = "Ymir Remote VSCode";
                           url = "http://ymir.curl-boga.ts.net:4444/";
