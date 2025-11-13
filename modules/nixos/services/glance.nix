@@ -115,6 +115,11 @@
                           url = "https://bitwarden.osbm.dev";
                         }
                         {
+                          icon = "sh:immich";
+                          title = "Immich Photo Server";
+                          url = "https://photos.osbm.dev";
+                        }
+                        {
                           icon = "sh:visual-studio-code";
                           title = "Ymir Remote VSCode";
                           url = "http://ymir.curl-boga.ts.net:4444/";
