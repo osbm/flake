@@ -7,7 +7,6 @@
     ./cloudflared.nix
     ./ollama.nix
     ./openssh.nix
-    ./firefox-syncserver.nix
     ./forgejo.nix
     ./glance.nix
     ./hydra.nix
