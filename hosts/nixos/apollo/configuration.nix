@@ -17,7 +17,6 @@
       vaultwarden.enable = true;
       immich.enable = true;
       actual.enable = true;
-      firefox-syncserver.enable = true;
       # seafile.enable = true;
     };
 
