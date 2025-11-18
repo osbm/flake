@@ -48,8 +48,9 @@
     vscode
     git
     lazygit
+    anki
     # blender
-    # libreoffice
+    libreoffice
     # ungoogled-chromium
     code-cursor
     ollama
