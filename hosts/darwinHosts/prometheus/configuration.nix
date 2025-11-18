@@ -48,7 +48,7 @@
     vscode
     git
     lazygit
-    anki
+    # anki
     # blender
     libreoffice
     # ungoogled-chromium
