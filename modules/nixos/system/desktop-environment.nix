@@ -32,6 +32,7 @@ in
           mpv
           kitty
           qbittorrent
+          anki
           # element-desktop # TODO: add another matrix client
         ];
         sessionVariables.NIXOS_OZONE_WL = "1";
