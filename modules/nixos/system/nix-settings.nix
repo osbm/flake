@@ -21,6 +21,7 @@
             "vscode-extension-github-copilot"
             "spotify"
             "cursor"
+            "claude-code"
             # NVIDIA related
             "libcurand"
             "nvidia-x11"

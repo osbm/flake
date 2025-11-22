@@ -18,6 +18,7 @@
       vscode
       chromium
       thunderbird
+      claude-code
     ];
   };
 }
