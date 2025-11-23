@@ -3,7 +3,6 @@
     ./actual.nix
     ./anubis.nix
     ./atticd.nix
-    ./cloudflare-dyndns.nix
     ./cloudflared.nix
     ./ollama.nix
     ./openssh.nix

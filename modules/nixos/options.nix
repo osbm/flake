@@ -138,7 +138,6 @@
       forgejo.enable = lib.mkEnableOption "forgejo";
       atticd.enable = lib.mkEnableOption "atticd";
       cloudflared.enable = lib.mkEnableOption "cloudflared";
-      cloudflare-dyndns.enable = lib.mkEnableOption "cloudflare-dyndns";
       glance.enable = lib.mkEnableOption "glance";
       hydra.enable = lib.mkEnableOption "hydra";
       immich.enable = lib.mkEnableOption "immich";
