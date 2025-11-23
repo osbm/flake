@@ -34,8 +34,13 @@
           let
             # Capture the NixOS system config before entering the home-manager scope
             systemConfig = config;
+            # Build list of regular users based on defaultUser and familyUser options
+            regularUsers = [
+              systemConfig.osbmModules.defaultUser
+            ]
+            ++ lib.optional systemConfig.osbmModules.familyUser.enable "bayram";
           in
-          lib.genAttrs (builtins.filter (u: u != "root") config.osbmModules.users) (_username: {
+          lib.genAttrs regularUsers (_username: {
             # Use the system's stateVersion for home-manager
             home.stateVersion = lib.mkDefault systemConfig.system.stateVersion;
             imports = [

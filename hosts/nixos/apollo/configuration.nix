@@ -6,7 +6,6 @@
 
   osbmModules = {
     machineType = "server";
-    users = [ "osbm" ];
     services = {
       glance.enable = true;
       # anubis.enable = true;

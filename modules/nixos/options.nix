@@ -32,22 +32,16 @@
       description = "Type of machine for appropriate defaults";
     };
 
-    # Users
-    users = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [
-        "osbm"
-      ]
-      ++ lib.optionals (
-        config.osbmModules.machineType == "desktop" || config.osbmModules.machineType == "laptop"
-      ) [ "bayram" ];
-      description = "List of users to create. `osbm` is my main user, and `bayram` is for my family (only on desktop/laptop).";
-    };
-
     defaultUser = lib.mkOption {
       type = lib.types.str;
       default = "osbm";
       description = "Default user for the system";
+    };
+
+    familyUser.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Enable family user account";
     };
 
     # Home Manager

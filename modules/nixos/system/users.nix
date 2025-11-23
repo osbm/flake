@@ -1,33 +1,40 @@
 { lib, config, ... }:
-let
-  # Filter out 'root' from the users list since it's a special system user
-  regularUsers = builtins.filter (u: u != "root") config.osbmModules.users;
-in
 {
-  config = lib.mkIf (config.osbmModules.users != [ ]) {
+  config = {
     users.users = lib.mkMerge [
-      # Create users based on the list (excluding root)
-      (lib.genAttrs regularUsers (username: {
-        isNormalUser = true;
-        description = username;
-        initialPassword = "changeme";
-        extraGroups = [
-          "networkmanager"
-        ]
-        ++ lib.optional (username == config.osbmModules.defaultUser) "wheel"
-        ++ lib.optional config.osbmModules.virtualisation.docker.enable "docker"
-        ++ lib.optional config.osbmModules.programs.adbFastboot.enable "adbusers";
-      }))
-
-      # Additional configuration for default user (including root if it's default)
+      # Default user
       {
         ${config.osbmModules.defaultUser} = {
+          isNormalUser = true;
+          description = config.osbmModules.defaultUser;
+          initialPassword = "changeme";
+          extraGroups = [
+            "wheel"
+            "networkmanager"
+          ]
+          ++ lib.optional config.osbmModules.virtualisation.docker.enable "docker"
+          ++ lib.optional config.osbmModules.programs.adbFastboot.enable "adbusers";
           openssh.authorizedKeys.keys = lib.mkDefault [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfnV+qqUCJf92npNW4Jy0hIiepCJFBDJHXBHnUlNX0k"
           ];
         };
       }
 
+      # Family user (bayram)
+      (lib.mkIf config.osbmModules.familyUser.enable {
+        bayram = {
+          isNormalUser = true;
+          description = "bayram";
+          initialPassword = "changeme";
+          extraGroups = [
+            "networkmanager"
+          ]
+          ++ lib.optional config.osbmModules.virtualisation.docker.enable "docker"
+          ++ lib.optional config.osbmModules.programs.adbFastboot.enable "adbusers";
+        };
+      })
+
+      # Root user
       {
         root = {
           initialPassword = "changeme";
@@ -36,8 +43,6 @@ in
           ];
         };
       }
-
     ];
-
   };
 }

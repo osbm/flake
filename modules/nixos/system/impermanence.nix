@@ -6,8 +6,11 @@
   ...
 }:
 let
-  # Filter out 'root' from the users list since it's a special system user
-  regularUsers = builtins.filter (u: u != "root") config.osbmModules.users;
+  # Build list of regular users based on defaultUser and familyUser options
+  regularUsers = [
+    config.osbmModules.defaultUser
+  ]
+  ++ lib.optional config.osbmModules.familyUser.enable "bayram";
 
   # Generate user persistence configuration
   userPersistence = lib.genAttrs regularUsers (_username: {
