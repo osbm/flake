@@ -5,7 +5,10 @@
   ];
 
   osbmModules = {
-    desktopEnvironment.plasma.enable = true;
+    desktopEnvironment = {
+      plasma.enable = true;
+      niri.enable = true;
+    };
     familyUser.enable = true;
     programs = {
       adbFastboot.enable = true;
