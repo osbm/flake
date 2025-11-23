@@ -90,6 +90,12 @@ in
       programs.niri.enable = true;
     })
 
+    # Hyprland desktop environment
+    (lib.mkIf cfg.desktopEnvironment.hyprland.enable {
+      programs.hyprland.enable = true;
+      environment.sessionVariables.NIXOS_OZONE_WL = "1";
+    })
+
     # Common settings for any desktop environment
     (lib.mkIf (!cfg.desktopEnvironment.none) {
       # Enable X11 keymap

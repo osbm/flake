@@ -8,6 +8,7 @@
     desktopEnvironment = {
       plasma.enable = true;
       niri.enable = true;
+      hyprland.enable = true; # im insane so i enable every DE
     };
     familyUser.enable = true;
     programs = {
