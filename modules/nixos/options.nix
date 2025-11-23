@@ -6,6 +6,7 @@
       plasma.enable = lib.mkEnableOption "plasma";
       gnome.enable = lib.mkEnableOption "gnome";
       niri.enable = lib.mkEnableOption "niri";
+      hyprland.enable = lib.mkEnableOption "hyprland";
       # none is true if all above are false, just for easier checks
       none = lib.mkOption {
         type = lib.types.bool;
@@ -14,6 +15,7 @@
             config.osbmModules.desktopEnvironment.plasma.enable
             || config.osbmModules.desktopEnvironment.gnome.enable
             || config.osbmModules.desktopEnvironment.niri.enable
+            || config.osbmModules.desktopEnvironment.hyprland.enable
           );
         description = "True if no desktop environment is enabled";
       };
