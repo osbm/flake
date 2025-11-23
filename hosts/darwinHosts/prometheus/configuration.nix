@@ -13,7 +13,6 @@
   ];
 
   osbmModules = {
-    machineType = "laptop";
     programs.neovim.enable = true;
   };
 

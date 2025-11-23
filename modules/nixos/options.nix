@@ -19,19 +19,6 @@
       };
     };
 
-    # Machine Type
-    machineType = lib.mkOption {
-      type = lib.types.enum [
-        "desktop"
-        "laptop"
-        "server"
-        "embedded"
-        "mobile"
-      ];
-      default = "server";
-      description = "Type of machine for appropriate defaults";
-    };
-
     defaultUser = lib.mkOption {
       type = lib.types.str;
       default = "osbm";
