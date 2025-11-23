@@ -11,7 +11,6 @@
   ];
 
   osbmModules = {
-    desktopEnvironment = "none";
     fonts.enable = false;
     services.tailscale.enable = true;
     hardware.systemd-boot.enable = false; # SD card uses extlinux

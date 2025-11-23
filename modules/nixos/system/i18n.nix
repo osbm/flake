@@ -27,7 +27,7 @@
 
       inputMethod = {
         type = "fcitx5";
-        enable = config.osbmModules.desktopEnvironment != "none";
+        enable = !config.osbmModules.desktopEnvironment.none;
         fcitx5.addons = with pkgs; [
           fcitx5-mozc
           fcitx5-gtk

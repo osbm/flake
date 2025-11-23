@@ -5,7 +5,7 @@
   ];
 
   osbmModules = {
-    desktopEnvironment = "plasma";
+    desktopEnvironment.plasma.enable = true;
     machineType = "desktop";
     programs = {
       adbFastboot.enable = true;

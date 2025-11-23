@@ -6,7 +6,7 @@
 }:
 {
   config = lib.mkMerge [
-    (lib.mkIf (nixosConfig != null && nixosConfig.osbmModules.desktopEnvironment != "none") {
+    (lib.mkIf (nixosConfig != null && !nixosConfig.osbmModules.desktopEnvironment.none) {
       # Set enableAlacritty to true by default when there's a desktop environment
       programs.alacritty.enable = lib.mkDefault true;
     })

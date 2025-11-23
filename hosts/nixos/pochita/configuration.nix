@@ -12,7 +12,6 @@
   ];
 
   osbmModules = {
-    desktopEnvironment = "none";
     machineType = "server";
     hardware.systemd-boot.enable = false; # Raspberry Pi uses init-script bootloader
     services = {

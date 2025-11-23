@@ -11,7 +11,7 @@
   ];
 
   osbmModules = {
-    desktopEnvironment = "gnome";
+    desktopEnvironment.gnome.enable = true;
     machineType = "mobile";
     hardware.systemd-boot.enable = false; # Mobile devices use different bootloader
     programs.graphical.enable = false;

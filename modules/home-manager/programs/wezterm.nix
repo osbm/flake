@@ -6,7 +6,7 @@
 }:
 {
   config = lib.mkMerge [
-    (lib.mkIf (nixosConfig != null && nixosConfig.osbmModules.desktopEnvironment != "none") {
+    (lib.mkIf (nixosConfig != null && !nixosConfig.osbmModules.desktopEnvironment.none) {
       programs.wezterm.enable = lib.mkDefault true;
     })
 

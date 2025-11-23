@@ -4,7 +4,6 @@
     ../../../modules/nixos
   ];
   osbmModules = {
-    desktopEnvironment = "none";
     machineType = "server";
     services = {
       hydra.enable = true;

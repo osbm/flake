@@ -5,7 +5,6 @@
   ];
 
   osbmModules = {
-    desktopEnvironment = "none";
     machineType = "server";
     users = [ "osbm" ];
     services = {

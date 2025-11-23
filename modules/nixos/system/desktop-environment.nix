@@ -10,7 +10,7 @@ in
 {
   config = lib.mkMerge [
     # Plasma Desktop Environment
-    (lib.mkIf (cfg.desktopEnvironment == "plasma") {
+    (lib.mkIf cfg.desktopEnvironment.plasma.enable {
       services = {
         xserver.enable = true;
         displayManager.sddm.enable = true;
@@ -40,7 +40,7 @@ in
     })
 
     # GNOME Desktop Environment
-    (lib.mkIf (cfg.desktopEnvironment == "gnome") {
+    (lib.mkIf cfg.desktopEnvironment.gnome.enable {
 
       # Enable GNOME Desktop Environment
       services = {
@@ -85,7 +85,7 @@ in
     })
 
     # Common settings for any desktop environment
-    (lib.mkIf (cfg.desktopEnvironment != "none") {
+    (lib.mkIf (!cfg.desktopEnvironment.none) {
       # Enable X11 keymap
       services.xserver.xkb = {
         layout = lib.mkDefault "us";

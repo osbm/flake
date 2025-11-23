@@ -7,7 +7,7 @@
 {
   config = lib.mkMerge [
     # Auto-enable Firefox if system has a desktop environment
-    (lib.mkIf (nixosConfig != null && nixosConfig.osbmModules.desktopEnvironment != "none") {
+    (lib.mkIf (nixosConfig != null && !nixosConfig.osbmModules.desktopEnvironment.none) {
       # Set enableFirefox to true by default when there's a desktop environment
       programs.firefox.enable = lib.mkDefault true;
     })

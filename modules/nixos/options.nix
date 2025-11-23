@@ -2,14 +2,21 @@
 {
   options.osbmModules = {
     # Desktop Environment
-    desktopEnvironment = lib.mkOption {
-      type = lib.types.enum [
-        "plasma"
-        "gnome"
-        "none"
-      ];
-      default = "none";
-      description = "Which desktop environment to use";
+    desktopEnvironment = {
+      plasma.enable = lib.mkEnableOption "plasma";
+      gnome.enable = lib.mkEnableOption "gnome";
+      niri.enable = lib.mkEnableOption "niri";
+      # none is true if all above are false, just for easier checks
+      none = lib.mkOption {
+        type = lib.types.bool;
+        default =
+          !(
+            config.osbmModules.desktopEnvironment.plasma.enable
+            || config.osbmModules.desktopEnvironment.gnome.enable
+            || config.osbmModules.desktopEnvironment.niri.enable
+          );
+        description = "True if no desktop environment is enabled";
+      };
     };
 
     # Machine Type
@@ -83,7 +90,7 @@
       graphical = {
         enable = lib.mkOption {
           type = lib.types.bool;
-          default = config.osbmModules.desktopEnvironment != "none";
+          default = !config.osbmModules.desktopEnvironment.none;
           description = "Enable graphical applications";
         };
       };
@@ -165,7 +172,7 @@
       bluetooth = {
         enable = lib.mkOption {
           type = lib.types.bool;
-          default = config.osbmModules.desktopEnvironment != "none";
+          default = !config.osbmModules.desktopEnvironment.none;
           description = "Enable Bluetooth support";
         };
       };
@@ -393,7 +400,7 @@
     fonts = {
       enable = lib.mkOption {
         type = lib.types.bool;
-        default = config.osbmModules.desktopEnvironment != "none";
+        default = !config.osbmModules.desktopEnvironment.none;
         description = "Enable custom fonts";
       };
     };
