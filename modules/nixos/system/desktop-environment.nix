@@ -84,6 +84,12 @@ in
 
     })
 
+    # niri desktop environment
+    (lib.mkIf cfg.desktopEnvironment.niri.enable {
+      # is this it?
+      programs.niri.enable = true;
+    })
+
     # Common settings for any desktop environment
     (lib.mkIf (!cfg.desktopEnvironment.none) {
       # Enable X11 keymap
