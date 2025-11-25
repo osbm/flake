@@ -19,6 +19,7 @@
       wanikani-fetch-data.enable = true;
       wanikani-stats.enable = true;
     };
+    desktopEnvironment.plasma.enable = true;
   };
 
   zramSwap.enable = true;
