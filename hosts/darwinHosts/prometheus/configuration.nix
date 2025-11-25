@@ -44,7 +44,6 @@
     # ghostty
     kitty
     vscode
-    lazygit
     # anki
     # blender
     # libreoffice
