@@ -1,6 +1,9 @@
 {
   programs.git = {
     enable = true;
+    package = pkgs.gitFull.override {
+      osxkeychainSupport = false;
+    };
     signing = {
       format = "openpgp";
     };
