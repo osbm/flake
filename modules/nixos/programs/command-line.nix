@@ -16,9 +16,11 @@
       nano
 
       # version control
-      git
-      lazygit
+      (pkgs.gitFull.override {
+        osxkeychainSupport = false;
+      })
       git-lfs
+      lazygit
       gh
 
       # nix tools
