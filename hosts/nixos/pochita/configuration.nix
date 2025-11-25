@@ -20,6 +20,7 @@
       wanikani-stats.enable = true;
     };
     desktopEnvironment.plasma.enable = true;
+    programs.graphical.enable = false;
   };
 
   zramSwap.enable = true;
