@@ -48,7 +48,7 @@
     lazygit
     # anki
     # blender
-    libreoffice
+    # libreoffice
     # ungoogled-chromium
     code-cursor
     claude-code
