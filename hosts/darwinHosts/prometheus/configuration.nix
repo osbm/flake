@@ -52,7 +52,7 @@
     # ungoogled-chromium
     code-cursor
     claude-code
-    ollama
+    # ollama
   ];
   system.stateVersion = 6;
   nixpkgs.hostPlatform = "x86_64-darwin";
