@@ -11,6 +11,7 @@
       wget
       curl
       dig
+      rclone
 
       # text editors
       nano
