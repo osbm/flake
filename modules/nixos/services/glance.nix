@@ -117,7 +117,7 @@
                         {
                           icon = "sh:immich";
                           title = "Immich Photo Server";
-                          url = "https://photos.osbm.dev";
+                          url = "https://immich.osbm.dev";
                         }
                         {
                           icon = "sh:actual-budget";
