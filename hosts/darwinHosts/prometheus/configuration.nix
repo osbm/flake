@@ -51,6 +51,7 @@
     libreoffice
     # ungoogled-chromium
     code-cursor
+    claude-code
     ollama
   ];
   system.stateVersion = 6;
