@@ -13,6 +13,8 @@
     EDITOR = lib.mkDefault "nvim";
   };
 
+  home.packages = [ pkgs.forgejo-cli ];
+
   home.shellAliases = {
     c = "code .";
     l = "eza --all --long --git --icons --group --sort size --header --group-directories-first";
