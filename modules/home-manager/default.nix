@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   # Import all home-manager modules
   imports = [
@@ -22,6 +22,7 @@
     du = "du -h";
     lg = "lazygit";
     onefetch = "onefetch -T prose -T programming -T data";
+    fj = "${lib.getExe pkgs.forgejo-cli} --host git.osbm.dev";
   };
 
   # Don't set stateVersion here - let it be set by the system configuration
