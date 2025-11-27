@@ -88,9 +88,7 @@
           modules = [ ./hosts/nixos/${configName}/configuration.nix ];
         };
       nixosConfigNames = builtins.attrNames (builtins.readDir ./hosts/nixos);
-      treefmtEval = forAllSystems (
-        system:  treefmt-nix.lib.evalModule (makePkgs system) ./treefmt.nix
-      );
+      treefmtEval = forAllSystems (system: treefmt-nix.lib.evalModule (makePkgs system) ./treefmt.nix);
     in
     {
       nixosConfigurations = nixpkgs.lib.genAttrs nixosConfigNames makeNixosConfig;
