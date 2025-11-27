@@ -32,7 +32,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     osbm-nvim.url = "github:osbm/osbm-nvim";
-    treefmt-nix.url = "github:numtide/treefmt-nix";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     raspberry-pi-nix = {
       url = "github:nix-community/raspberry-pi-nix";
     };
