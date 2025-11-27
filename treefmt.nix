@@ -10,4 +10,9 @@
     shellcheck.enable = true;
     deadnix.enable = true;
   };
+  settings = {
+    global.excludes = [
+      "*.lock"
+    ];
+  };
 }
