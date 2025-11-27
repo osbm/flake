@@ -25,7 +25,7 @@ collect_logs() {
     local source="$1"
     local output="$2"
     local max_lines="$3"
-    
+
     if [ -f "$source" ]; then
         # Get the last N lines to stay within size limit
         tail -n "$max_lines" "$source" > "$output" 2>/dev/null || true
@@ -40,7 +40,7 @@ get_journal_logs() {
     local output="$1"
     local filter="$2"
     local max_lines="$3"
-    
+
     journalctl --since "00:00:00" --until "23:59:59" \
         --no-pager --output=short \
         | grep -i "$filter" | tail -n "$max_lines" > "$output" 2>/dev/null || true
@@ -49,7 +49,6 @@ get_journal_logs() {
 
 # Calculate approximate lines per log type to stay under 1MB
 # Assuming average line is ~100 bytes, we aim for ~10,000 total lines
-TOTAL_LINES=10000
 SSH_LINES=2000
 KERNEL_LINES=2000
 LOGIN_LINES=1000
