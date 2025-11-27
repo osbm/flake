@@ -32,6 +32,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     osbm-nvim.url = "github:osbm/osbm-nvim";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
     raspberry-pi-nix = {
       url = "github:nix-community/raspberry-pi-nix";
     };
@@ -64,6 +65,7 @@
       nixpkgs,
       nix-on-droid,
       nix-darwin,
+      treefmt-nix,
       ...
     }@inputs:
     let
@@ -83,6 +85,9 @@
           modules = [ ./hosts/nixos/${configName}/configuration.nix ];
         };
       nixosConfigNames = builtins.attrNames (builtins.readDir ./hosts/nixos);
+      treefmtEval = forAllSystems (
+        system:  treefmt-nix.lib.evalModule (makePkgs system) ./treefmt.nix
+      );
     in
     {
       nixosConfigurations = nixpkgs.lib.genAttrs nixosConfigNames makeNixosConfig;
@@ -97,7 +102,10 @@
         specialArgs = { inherit inputs outputs; };
       };
       lib = import ./lib { inherit (nixpkgs) lib; };
-      formatter = forAllSystems (system: (makePkgs system).nixfmt-tree);
+      formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
+      checks = forAllSystems (system: {
+        formatting = treefmtEval.${system}.config.build.check self;
+      });
 
       nixosModules.default = ./modules/nixos;
       homeManagerModules.default = ./modules/home-manager;
