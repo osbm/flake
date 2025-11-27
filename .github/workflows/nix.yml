@@ -21,19 +21,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: cachix/install-nix-action@v31
-      # TODO: add a binary cache
-      # - uses: cachix/cachix-action@v10
-      #   with:
-      #     name: YOURCACHE
-      #     authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - run: nix flake check --accept-flake-config
-        # Pre-build the system configuration
       - run: nix build --accept-flake-config --dry-run .#nixosConfigurations.${{ matrix.target-system }}.config.system.build.toplevel
   check-formatting:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
       - uses: cachix/install-nix-action@v31
-      - run: nix run nixpkgs#nixfmt-tree -- --ci
-      - run: nix run nixpkgs#deadnix -- --fail
-      - run: nix run nixpkgs#statix -- check
+      - run: nix flake check --accept-flake-config
