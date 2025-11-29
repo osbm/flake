@@ -12,6 +12,7 @@
     ./starship.nix
     ./tlrc.nix
     ./tmux.nix
+    ./waybar.nix
     ./wezterm.nix
     ./zoxide.nix
   ];
