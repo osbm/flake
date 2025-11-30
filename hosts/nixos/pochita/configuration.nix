@@ -26,6 +26,8 @@
   zramSwap.enable = true;
 
   networking.hostName = "pochita";
+  networking.networkmanager.enable = true;
+
   # log of shame: osbm blamed nix when he wrote "hostname" instead of "hostName"
 
   environment.systemPackages = [
