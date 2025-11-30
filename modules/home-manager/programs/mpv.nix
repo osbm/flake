@@ -14,5 +14,10 @@
       };
     }
 
+    # Raspberry Pi 5 specific: Use OpenGL to avoid Vulkan memory issues
+    (lib.mkIf (nixosConfig != null && nixosConfig.networking.hostName == "pochita") {
+      programs.mpv.config.gpu-api = "opengl";
+    })
+
   ];
 }
