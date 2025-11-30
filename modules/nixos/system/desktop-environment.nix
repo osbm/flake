@@ -88,6 +88,10 @@ in
     (lib.mkIf cfg.desktopEnvironment.niri.enable {
       # is this it?
       programs.niri.enable = true;
+      environment.systemPackages = with pkgs; [
+        fuzzel
+        swww
+      ];
     })
 
     # Hyprland desktop environment
