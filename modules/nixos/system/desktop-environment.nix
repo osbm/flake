@@ -92,6 +92,24 @@ in
         fuzzel
         swww
       ];
+
+
+      # XWayland satellite service for X11 app support
+      systemd.user.services.xwayland-satellite = {
+        Unit = {
+          Description = "Xwayland outside Wayland";
+          BindsTo = "graphical-session.target";
+          After = "graphical-session.target";
+        };
+        Service = {
+          Type = "notify";
+          NotifyAccess = "all";
+          ExecStart = "${pkgs.xwayland-satellite}/bin/xwayland-satellite";
+          StandardOutput = "journal";
+          Restart = "on-failure";
+        };
+        Install.WantedBy = [ "graphical-session.target" ];
+      };
     })
 
     # Hyprland desktop environment
