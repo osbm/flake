@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 {
@@ -8,7 +9,7 @@
     (lib.mkIf config.osbmModules.services.ollama.enable {
       services.ollama = {
         enable = true;
-        acceleration = "cuda";
+        package = pkgs.ollama-cuda;
         # loadModels = [
         #   "deepseek-r1:7b"
         #   "deepseek-r1:14b"
