@@ -28,11 +28,15 @@
       inputMethod = {
         type = "fcitx5";
         enable = !config.osbmModules.desktopEnvironment.none;
-        fcitx5.addons = with pkgs; [
-          fcitx5-mozc
-          fcitx5-gtk
-          fcitx5-nord # a color theme
-        ];
+        fcitx5.addons =
+          with pkgs;
+          [
+            fcitx5-gtk
+            fcitx5-nord # a color theme
+          ]
+          ++ lib.optionals pkgs.stdenv.hostPlatform.isx86 [
+            fcitx5-mozc # Not available on aarch64-linux
+          ];
       };
     };
 
