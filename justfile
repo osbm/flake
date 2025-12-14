@@ -57,7 +57,7 @@ build-sd-image-pochita: check-git
   nom build -L .#nixosConfigurations.pochita-sd.config.system.build.sdImage
 
 build-iso: check-git
-  nom build -L .#nixosConfigurations.myISO.config.system.build.isoImage
+  nom build -L .#nixosConfigurations.iso.config.system.build.isoImage
 
 flash-sd-image-harmonica:
   # raise error because this command should be edited before running
