@@ -12,7 +12,7 @@
     programs.steam.enable = true;
   };
 
-  networking.hostName = "tartarus"; # Define your hostname.
+  networking.hostName = "tartarus";
 
   # Enable networking
   networking.networkmanager.enable = true;

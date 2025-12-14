@@ -30,14 +30,13 @@
   };
 
   networking = {
-    hostName = "ymir"; # Define your hostname.
+    hostName = "ymir";
 
     firewall.allowedTCPPorts = [
       8889
       8000
     ];
 
-    # Enable networking
     networkmanager.enable = true;
   };
 
