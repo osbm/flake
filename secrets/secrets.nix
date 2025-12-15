@@ -6,6 +6,7 @@ let
   wallfacer = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOr8pQvLsNCHQdsBKWpziYTPjBkEcQy272kZ5Gqoaatt";
   apollo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINsV8e8veX5/weeC8he+31aiNVZfQ82BpvSzARSM1uZF";
   artemis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINd4wF1LicIvwpGQyajJsiUjeLV84nu4fsyJzxhbS+xK";
+  ares = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAO6QaUz/k8azKpYe11HhCxW3agYAmv4axZyHNAsr/zF";
 
   osbm = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfnV+qqUCJf92npNW4Jy0hIiepCJFBDJHXBHnUlNX0k";
 
@@ -15,6 +16,8 @@ let
     pochita
     wallfacer
     apollo
+    artemis
+    ares
   ];
 in
 {
