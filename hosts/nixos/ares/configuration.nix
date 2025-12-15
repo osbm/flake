@@ -1,13 +1,15 @@
+{ inputs, ... }:
 {
   imports = [
-    # ./hardware-configuration.nix
+    ./hardware-configuration.nix
     ../../../modules/nixos
+    inputs.jovian-nixos.nixosModules.default
   ];
 
   osbmModules = {
-    desktopEnvironment = {
-      plasma.enable = true;
-    };
+    # desktopEnvironment = {
+    #   plasma.enable = true;
+    # };
     familyUser.enable = true;
     programs = {
       adbFastboot.enable = true;
@@ -20,6 +22,18 @@
     i18n.enable = true;
   };
 
+  jovian = {
+    devices.steamdeck = {
+      enable = true;
+      autoUpdate = true;
+    };
+    steam = {
+      enable = true;
+      autoStart = true;
+      user = "osbm";
+    };
+    decky-loader.enable = true;
+  };
   networking = {
     hostName = "ares";
 

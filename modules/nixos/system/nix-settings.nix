@@ -38,6 +38,10 @@
             "nvidia-settings"
             # blender with cuda is not foss?!?
             "blender"
+
+            # steam
+            "steamdeck-hw-theme"
+            "steam-jupiter-unwrapped"
           ];
         allowAliases = false;
       };
