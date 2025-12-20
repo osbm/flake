@@ -50,7 +50,5 @@
     networkmanager.enable = true;
   };
 
-  virtualisation.waydroid.enable = true;
-
   system.stateVersion = "26.05"; # changing this is a great taboo of the nixos world
 }
