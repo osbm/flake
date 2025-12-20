@@ -44,6 +44,9 @@
             hashedPasswordFile = config.age.secrets."noreply-mail".path;
           };
         };
+        # reference an existing ACME configuration
+        x509.useACMEHost = config.mailserver.fqdn;
+
       };
     })
 
