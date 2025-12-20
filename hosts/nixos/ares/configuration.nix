@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -7,9 +7,9 @@
   ];
 
   osbmModules = {
-    # desktopEnvironment = {
-    #   plasma.enable = true;
-    # };
+    desktopEnvironment = {
+      plasma.enable = true;
+    };
     familyUser.enable = true;
     programs = {
       adbFastboot.enable = true;
@@ -31,9 +31,14 @@
       enable = true;
       autoStart = true;
       user = "osbm";
+      desktopSession = "plasma";
     };
     decky-loader.enable = true;
   };
+
+  # Disable SDDM since Jovian manages its own display manager
+  services.displayManager.sddm.enable = lib.mkForce false;
+
   networking = {
     hostName = "ares";
 
