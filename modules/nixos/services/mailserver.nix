@@ -50,6 +50,18 @@
       };
     })
 
+    # Configure ACME certificate via nginx
+    (lib.mkIf
+      (config.osbmModules.services.nginx.enable && config.osbmModules.services.mailserver.enable)
+      {
+        services.nginx.virtualHosts."${config.mailserver.fqdn}" = {
+          forceSSL = true;
+          enableACME = true;
+          locations."/".return = "404"; # Just for ACME, no actual web content
+        };
+      }
+    )
+
     # mailserver and impermanence
     (lib.mkIf
       (
