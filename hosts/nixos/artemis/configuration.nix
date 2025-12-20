@@ -29,6 +29,15 @@
     };
     system = "aarch64-linux";
   };
+  # Kernel and filesystem configuration
+  boot = {
+    supportedFilesystems = [
+      "ext4"
+      "vfat"
+    ];
+    initrd.availableKernelModules = [ "ext4" ];
+  };
+
   # Minimal essential packages
   environment.systemPackages = with pkgs; [
     git
