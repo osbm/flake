@@ -53,6 +53,8 @@ in
         hashKnownHosts = true;
         compression = true;
       };
+      ares = sshBlock "192.168.0.6";
+      ares-ts = sshBlock "ares.curl-boga.ts.net";
       # artemis
     };
   };
