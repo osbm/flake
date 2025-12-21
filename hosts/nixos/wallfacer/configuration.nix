@@ -8,6 +8,18 @@
       hydra.enable = true;
       atticd.enable = true;
       cloudflared.enable = true;
+
+      # Backup client - pulls full backup from apollo
+      backup-client = {
+        enable = true;
+        backups = {
+          apollo-full = {
+            remoteHost = "apollo"; # Tailscale hostname
+            localPath = "/var/backups/apollo";
+            fullBackup = true;
+          };
+        };
+      };
     };
   };
 

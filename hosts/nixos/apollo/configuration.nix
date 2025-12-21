@@ -15,6 +15,20 @@
       immich.enable = true;
       actual.enable = true;
       # seafile.enable = true;
+
+      # Backup server - exposes data for pull-based backups
+      backup-server = {
+        enable = true;
+        zfsSnapshots = {
+          enable = true;
+          # Keep snapshots for point-in-time recovery
+          frequent = 4; # 4 x 15min = 1 hour of frequent snapshots
+          hourly = 24; # 24 hours
+          daily = 7; # 1 week
+          weekly = 4; # 1 month
+          monthly = 12; # 1 year
+        };
+      };
     };
 
     hardware = {

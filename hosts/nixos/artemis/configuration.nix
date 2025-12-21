@@ -14,6 +14,20 @@
     desktopEnvironment.gnome.enable = true;
     hardware.systemd-boot.enable = false; # Mobile devices use different bootloader
     programs.graphical.enable = false;
+
+    services = {
+      # Backup client - pulls vaultwarden backup from apollo
+      backup-client = {
+        enable = true;
+        backups = {
+          apollo-vaultwarden = {
+            remoteHost = "apollo";
+            localPath = "/var/backups/apollo-vaultwarden";
+            services = [ "vaultwarden" ];
+          };
+        };
+      };
+    };
   };
 
   # mobile-nixos needs aliases (uses nettools instead of net-tools)

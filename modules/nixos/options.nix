@@ -147,6 +147,100 @@
       wanikani-bypass-lessons.enable = lib.mkEnableOption "wanikani-bypass-lessons";
       wanikani-fetch-data.enable = lib.mkEnableOption "wanikani-fetch-data";
       wanikani-stats.enable = lib.mkEnableOption "wanikani-stats";
+
+      # Backup server - exposes data for pull-based backups
+      backup-server = {
+        enable = lib.mkEnableOption "backup server (exposes data for pull-based backups)";
+
+        zfsSnapshots = {
+          enable = lib.mkEnableOption "automatic ZFS snapshots of /persist";
+
+          frequent = lib.mkOption {
+            type = lib.types.int;
+            default = 4;
+            description = "Number of frequent (15-min) snapshots to keep";
+          };
+
+          hourly = lib.mkOption {
+            type = lib.types.int;
+            default = 24;
+            description = "Number of hourly snapshots to keep";
+          };
+
+          daily = lib.mkOption {
+            type = lib.types.int;
+            default = 7;
+            description = "Number of daily snapshots to keep";
+          };
+
+          weekly = lib.mkOption {
+            type = lib.types.int;
+            default = 4;
+            description = "Number of weekly snapshots to keep";
+          };
+
+          monthly = lib.mkOption {
+            type = lib.types.int;
+            default = 12;
+            description = "Number of monthly snapshots to keep";
+          };
+        };
+      };
+
+      # Backup client - pulls backups from remote servers
+      backup-client = {
+        enable = lib.mkEnableOption "backup client (pulls data from remote servers)";
+
+        backups = lib.mkOption {
+          type = lib.types.attrsOf (
+            lib.types.submodule {
+              options = {
+                remoteHost = lib.mkOption {
+                  type = lib.types.str;
+                  description = "Remote host to backup from (e.g., apollo.tail-scale.ts.net)";
+                };
+
+                remoteUser = lib.mkOption {
+                  type = lib.types.str;
+                  default = "root";
+                  description = "Remote user for SSH connection";
+                };
+
+                localPath = lib.mkOption {
+                  type = lib.types.str;
+                  description = "Local path where backups will be stored";
+                };
+
+                fullBackup = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Whether to backup the entire /persist directory";
+                };
+
+                services = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ ];
+                  description = "List of services to backup (e.g., ['vaultwarden', 'immich'])";
+                  example = [
+                    "vaultwarden"
+                    "immich"
+                    "forgejo"
+                  ];
+                };
+
+                schedule = lib.mkOption {
+                  type = lib.types.str;
+                  default = "daily";
+                  description = "Backup schedule (systemd timer format)";
+                  example = "daily";
+                };
+              };
+            }
+          );
+          default = { };
+          description = "Backup configurations";
+        };
+      };
     };
 
     # Hardware

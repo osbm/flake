@@ -18,6 +18,18 @@
       wanikani-bypass-lessons.enable = true;
       wanikani-fetch-data.enable = true;
       wanikani-stats.enable = true;
+
+      # Backup client - pulls full backup from apollo
+      backup-client = {
+        enable = true;
+        backups = {
+          apollo-full = {
+            remoteHost = "apollo"; # Tailscale hostname
+            localPath = "/var/backups/apollo";
+            fullBackup = true;
+          };
+        };
+      };
     };
     desktopEnvironment.plasma.enable = true;
     programs.graphical.enable = false;

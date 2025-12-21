@@ -25,6 +25,18 @@
     };
     services = {
       ollama.enable = true;
+
+      # Backup client - pulls vaultwarden backup from apollo
+      backup-client = {
+        enable = true;
+        backups = {
+          apollo-vaultwarden = {
+            remoteHost = "apollo";
+            localPath = "/var/backups/apollo-vaultwarden";
+            services = [ "vaultwarden" ];
+          };
+        };
+      };
     };
     i18n.enable = true;
   };
