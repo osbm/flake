@@ -37,6 +37,22 @@
         group = "users";
         mode = "644";
       };
+
+      # Deploy same SSH key to root for backups
+      root-ssh-key-private = {
+        file = ../../../secrets/ssh-key-private.age;
+        path = "/root/.ssh/id_ed25519";
+        owner = "root";
+        group = "root";
+        mode = "600";
+      };
+      root-ssh-key-public = {
+        file = ../../../secrets/ssh-key-public.age;
+        path = "/root/.ssh/id_ed25519.pub";
+        owner = "root";
+        group = "root";
+        mode = "644";
+      };
     };
 
   };
