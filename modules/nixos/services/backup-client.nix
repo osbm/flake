@@ -28,6 +28,7 @@ let
       rsyncCommands = map (source: ''
         echo "Backing up ${source} from ${backupCfg.remoteHost}..."
         ${pkgs.rsync}/bin/rsync -avz --delete \
+          --chown=root:root \
           -e "${pkgs.openssh}/bin/ssh -o StrictHostKeyChecking=accept-new" \
           ${backupCfg.remoteUser}@${backupCfg.remoteHost}:${source}/ \
           ${backupCfg.localPath}/${builtins.baseNameOf source}/
