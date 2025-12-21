@@ -12,8 +12,8 @@ let
     hashKnownHosts = true;
     compression = true;
   };
-  # sshBlockAtreus is the same as sshBlock but with 8090 as the port
-  sshBlockAtreus = hostname: {
+  # sshBlockDroid is the same as sshBlock but with 8090 as the port
+  sshBlockDroid = hostname: {
     inherit hostname;
     user = "osbm";
     identityFile = "~/.ssh/id_ed25519";
@@ -31,8 +31,8 @@ in
     matchBlocks = {
       ymir = sshBlock "192.168.0.2";
       ymir-ts = sshBlock "ymir.curl-boga.ts.net";
-      atreus = sshBlockAtreus "192.168.0.3";
-      atreus-ts = sshBlockAtreus "atreus.curl-boga.ts.net";
+      atreus = sshBlockDroid "192.168.0.3";
+      atreus-ts = sshBlockDroid "atreus.curl-boga.ts.net";
       tartarus = sshBlock "192.168.0.4";
       tartarus-ts = sshBlock "tartarus.curl-boga.ts.net";
       pochita = sshBlock "192.168.0.9";
@@ -55,8 +55,8 @@ in
       };
       ares = sshBlock "192.168.0.6";
       ares-ts = sshBlock "ares.curl-boga.ts.net";
-      luoji = sshBlock "192.168.0.7";
-      luoji-ts = sshBlock "luoji.curl-boga.ts.net";
+      luoji = sshBlockDroid "192.168.0.7";
+      luoji-ts = sshBlockDroid "luoji.curl-boga.ts.net";
       # artemis
     };
   };
