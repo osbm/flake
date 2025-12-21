@@ -22,6 +22,10 @@ in
         ;
     };
 
+    # Allow root SSH login for backup clients to pull data
+    # Note: Configure root's authorized keys via users.users.root.openssh.authorizedKeys.keys
+    services.openssh.settings.PermitRootLogin = lib.mkForce "prohibit-password";
+
     # Ensure SSH is enabled for backup access
     assertions = [
       {
