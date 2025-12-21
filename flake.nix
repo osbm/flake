@@ -92,15 +92,19 @@
           modules = [ ./hosts/nixos/${configName}/configuration.nix ];
         };
       nixosConfigNames = builtins.attrNames (builtins.readDir ./hosts/nixos);
+      makeNixOnDroidConfig =
+        configName:
+        nix-on-droid.lib.nixOnDroidConfiguration {
+          extraSpecialArgs = { inherit inputs outputs; };
+          pkgs = import nixpkgs { system = "aarch64-linux"; };
+          modules = [ ./hosts/nixOnDroidHosts/${configName}/configuration.nix ];
+        };
+      nixOnDroidConfigNames = builtins.attrNames (builtins.readDir ./hosts/nixOnDroidHosts);
       treefmtEval = forAllSystems (system: treefmt-nix.lib.evalModule (makePkgs system) ./treefmt.nix);
     in
     {
       nixosConfigurations = nixpkgs.lib.genAttrs nixosConfigNames makeNixosConfig;
-      nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
-        extraSpecialArgs = { inherit inputs outputs; };
-        pkgs = import nixpkgs { system = "aarch64-linux"; };
-        modules = [ ./hosts/nixOnDroidHosts/atreus/configuration.nix ];
-      };
+      nixOnDroidConfigurations = nixpkgs.lib.genAttrs nixOnDroidConfigNames makeNixOnDroidConfig;
       darwinConfigurations.prometheus = nix-darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         modules = [ ./hosts/darwinHosts/prometheus/configuration.nix ];

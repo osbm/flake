@@ -1,16 +1,28 @@
 {
   pkgs,
+  inputs,
   ...
 }:
 {
   user.userName = "osbm";
 
   # Read the changelog before changing this value
-  system.stateVersion = "25.11";
+  system.stateVersion = "24.05";
   # Set up nix for flakes
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
+
+  # Configure home-manager
+  home-manager = {
+    backupFileExtension = "hm-bak";
+    useGlobalPkgs = true;
+
+    config = {
+      home.stateVersion = "24.05";
+      # Add your home-manager config here
+    };
+  };
 
   build.activation.sshd = ''
     if [ ! -e /etc/ssh/ssh_host_ed25519_key ]; then
@@ -40,6 +52,9 @@
       openssh
       just
       nh
+      # agenix tools
+      inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.agenix
+      age
       (pkgs.writeShellScriptBin "lg-rerouting" ''
         ${pkgs.lazygit}/bin/lazygit --path /storage/emulated/0/Documents/rerouting
       '')
