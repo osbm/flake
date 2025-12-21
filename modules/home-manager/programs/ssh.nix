@@ -55,6 +55,8 @@ in
       };
       ares = sshBlock "192.168.0.6";
       ares-ts = sshBlock "ares.curl-boga.ts.net";
+      luoji = sshBlock "192.168.0.7";
+      luoji-ts = sshBlock "luoji.curl-boga.ts.net";
       # artemis
     };
   };
