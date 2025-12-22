@@ -43,16 +43,7 @@
     };
     system = "aarch64-linux";
   };
-  # Kernel and filesystem configuration for mobile-nixos
-  mobile.boot.stage-1.kernel = {
-    modules = [ "ext4" ]; # Modules to load in stage-1
-    modular = true; # Enable kernel modules
-  };
 
-  boot.supportedFilesystems = [
-    "ext4"
-    "vfat"
-  ];
 
   # Minimal essential packages
   environment.systemPackages = with pkgs; [
