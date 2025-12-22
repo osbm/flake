@@ -15,7 +15,7 @@
       steam.enable = true;
     };
     hardware = {
-      hibernation.enable = false;
+      # hibernation.enable = false;
       sound.enable = true;
     };
     i18n.enable = true;
