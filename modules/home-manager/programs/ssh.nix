@@ -22,6 +22,13 @@ let
     compression = true;
     # fish not found error ???
   };
+  sshBlockAlgorynth = hostname: {
+    inherit hostname;
+    user = "algorynth";
+    identityFile = "~/.ssh/id_ed25519";
+    hashKnownHosts = true;
+    compression = true;
+  };
 in
 {
   programs.ssh = {
@@ -59,8 +66,8 @@ in
       luoji-ts = sshBlockDroid "luoji.curl-boga.ts.net";
       # artemis
       # Algorynth infrastructure
-      huginn = sshBlock "159.195.69.95";
-      huginn-ts = sshBlock "huginn.curl-boga.ts.net";  # When you add to Tailscale
+      huginn = sshBlockAlgorynth "159.195.69.95";
+      huginn-ts = sshBlockAlgorynth "huginn.curl-boga.ts.net";
     };
   };
 }
