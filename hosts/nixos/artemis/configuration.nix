@@ -44,7 +44,6 @@
     system = "aarch64-linux";
   };
 
-
   # Minimal essential packages
   environment.systemPackages = with pkgs; [
     git
