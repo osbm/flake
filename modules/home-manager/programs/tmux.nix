@@ -33,6 +33,7 @@
       set -ga update-environment TERM
       set -ga update-environment TERM_PROGRAM
       set-option -g default-command "${lib.getExe pkgs.fish} -l"
+      set-window-option -g mode-keys vi
     '';
   };
 }
