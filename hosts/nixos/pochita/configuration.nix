@@ -31,7 +31,7 @@
         };
       };
     };
-    desktopEnvironment.plasma.enable = true;
+    # desktopEnvironment.plasma.enable = true;
     programs.graphical.enable = false;
   };
 
