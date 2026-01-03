@@ -122,6 +122,9 @@ in
         layout = lib.mkDefault "us";
         variant = lib.mkDefault "";
       };
+
+      # Enable SDDM for all desktop environments except GNOME (which uses GDM)
+      services.displayManager.sddm.enable = lib.mkIf (!cfg.desktopEnvironment.gnome.enable) true;
     })
   ];
 }
