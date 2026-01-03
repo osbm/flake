@@ -88,6 +88,10 @@ in
     (lib.mkIf cfg.desktopEnvironment.niri.enable {
       # is this it?
       programs.niri.enable = true;
+      services.displayManager.sddm = {
+        enable = true;
+        wayland.enable = true;
+      };
       environment.systemPackages = with pkgs; [
         fuzzel
         swww
@@ -112,6 +116,10 @@ in
     # Hyprland desktop environment
     (lib.mkIf cfg.desktopEnvironment.hyprland.enable {
       programs.hyprland.enable = true;
+      services.displayManager.sddm = {
+        enable = true;
+        wayland.enable = true;
+      };
       environment.sessionVariables.NIXOS_OZONE_WL = "1";
     })
 
@@ -122,9 +130,6 @@ in
         layout = lib.mkDefault "us";
         variant = lib.mkDefault "";
       };
-
-      # Enable SDDM for all desktop environments except GNOME (which uses GDM)
-      services.displayManager.sddm.enable = lib.mkIf (!cfg.desktopEnvironment.gnome.enable) true;
     })
   ];
 }
