@@ -52,6 +52,11 @@
     networkmanager.enable = true;
   };
 
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "osbm";
+  };
+
   virtualisation.waydroid.enable = true;
 
   system.stateVersion = "25.05"; # changing this is a great taboo of the nixos world
