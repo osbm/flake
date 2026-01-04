@@ -14,12 +14,7 @@ let
   };
 in
 {
-  options.services.wakeup-ymir.enable = lib.mkEnableOption {
-    description = "Enable Wake-up Ymir Timer";
-    default = config.osbmModules.services.wakeup-ymir.enable or false;
-  };
-
-  config = lib.mkIf config.services.wakeup-ymir.enable {
+  config = lib.mkIf config.osbmModules.services.wakeup-ymir.enable {
     systemd.timers.wakeup-ymir = {
       description = "Wake up Ymir at 6 AM";
       wantedBy = [ "timers.target" ];
