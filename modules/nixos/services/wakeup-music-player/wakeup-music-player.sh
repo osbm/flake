@@ -5,6 +5,15 @@ USER="$2"
 
 echo "Starting wakeup music player..."
 
+# Only run during actual boot, not during nixos-rebuild
+# If system has been up for more than 5 minutes, skip (means we're in a rebuild)
+UPTIME_SECONDS=$(awk '{print int($1)}' /proc/uptime)
+if [ "$UPTIME_SECONDS" -gt 300 ]; then
+  echo "System uptime is $UPTIME_SECONDS seconds (>5 minutes). This is not a fresh boot. Skipping music."
+  exit 0
+fi
+echo "System uptime is $UPTIME_SECONDS seconds. Proceeding with wakeup check..."
+
 # Only play music between 6:00 AM and 11:00 AM
 # CURRENT_HOUR=$(date +%H)
 
@@ -43,13 +52,10 @@ echo "Created marker file: $MARKER_FILE with date: $TODAY"
 
 echo "Playing wakeup music from $MUSIC_FILE..."
 
-# Play the music file using mpv via systemd-run to detach it completely
-# systemd-run creates a separate transient service that won't be killed when this script exits
-# --user: Run in user session
-# --scope: Run as a scope unit (lightweight, doesn't create a new service manager)
+# Play the music file using mpv
 # --no-video: Don't show video window
 # --loop=3: Play 3 times in case user is deep asleep
 # --volume=80: Set volume to 80%
-systemd-run --user --scope mpv --no-video --loop=3 --volume=80 "$MUSIC_FILE"
+mpv --no-video --loop=3 --volume=80 "$MUSIC_FILE"
 
-echo "Wakeup music started as separate systemd scope"
+echo "Wakeup music finished playing"
