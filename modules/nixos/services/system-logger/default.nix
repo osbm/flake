@@ -18,32 +18,7 @@ let
   };
 in
 {
-  options.services.system-logger = {
-    enable = lib.mkEnableOption {
-      description = "Enable System Logger Service";
-      default = false;
-    };
-
-    logDirectory = lib.mkOption {
-      type = lib.types.path;
-      default = "/var/lib/system-logger";
-      description = "Directory to store log archives";
-    };
-
-    maxSizeMB = lib.mkOption {
-      type = lib.types.int;
-      default = 1;
-      description = "Maximum size of daily log archive in megabytes";
-    };
-
-    retentionDays = lib.mkOption {
-      type = lib.types.int;
-      default = 30;
-      description = "Number of days to retain log archives";
-    };
-  };
-
-  config = lib.mkIf config.services.system-logger.enable {
+  config = lib.mkIf config.osbmModules.services.system-logger.enable {
     systemd.timers.system-logger = {
       description = "System Logger Timer";
       wantedBy = [ "timers.target" ];

@@ -165,6 +165,27 @@
 
       wakeup-ymir.enable = lib.mkEnableOption "wakeup-ymir";
       wakeup-music-player.enable = lib.mkEnableOption "wakeup-music-player";
+      system-logger = {
+        enable = lib.mkEnableOption "system-logger";
+
+        logDirectory = lib.mkOption {
+          type = lib.types.path;
+          default = "/var/lib/system-logger";
+          description = "Directory to store log archives";
+        };
+
+        maxSizeMB = lib.mkOption {
+          type = lib.types.int;
+          default = 1;
+          description = "Maximum size of daily log archive in megabytes";
+        };
+
+        retentionDays = lib.mkOption {
+          type = lib.types.int;
+          default = 30;
+          description = "Number of days to retain log archives";
+        };
+      };
 
       # Backup server - exposes data for pull-based backups
       backup-server = {
