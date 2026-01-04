@@ -14,6 +14,7 @@
           enable = true;
           type = "zip";
           interval = "01:01";
+          age = "1w";
         };
         settings = {
           DEFAULT = {
