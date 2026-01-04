@@ -37,16 +37,19 @@ if [ ! -f "$MUSIC_FILE" ]; then
   exit 1
 fi
 
-echo "Playing wakeup music from $MUSIC_FILE..."
-
-# Play the music file using mpv
-# --no-video: Don't show video window
-# --loop=3: Play 3 times in case user is deep asleep
-# --volume=80: Set volume to 80%
-mpv --no-video --loop=3 --volume=80 "$MUSIC_FILE"
-
-# Create marker file with today's date so we don't play again today
+# Create marker file BEFORE playing music so we don't play again even if interrupted
 echo "$TODAY" > "$MARKER_FILE"
 echo "Created marker file: $MARKER_FILE with date: $TODAY"
 
-echo "Wakeup music finished playing"
+echo "Playing wakeup music from $MUSIC_FILE..."
+
+# Play the music file using mpv in the background, detached from this script
+# --no-video: Don't show video window
+# --loop=3: Play 3 times in case user is deep asleep
+# --volume=80: Set volume to 80%
+# Run in background and disown so the script can exit immediately
+mpv --no-video --loop=3 --volume=80 "$MUSIC_FILE" &
+MPV_PID=$!
+disown
+
+echo "Wakeup music started in background (PID: $MPV_PID)"
