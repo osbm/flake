@@ -26,5 +26,6 @@
     ./wanikani-fetch-data
     ./wanikani-stats
     ./wakeup-ymir
+    ./wakeup-music-player
   ];
 }

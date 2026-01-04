@@ -148,6 +148,7 @@
       wanikani-fetch-data.enable = lib.mkEnableOption "wanikani-fetch-data";
       wanikani-stats.enable = lib.mkEnableOption "wanikani-stats";
       wakeup-ymir.enable = lib.mkEnableOption "wakeup-ymir";
+      wakeup-music-player.enable = lib.mkEnableOption "wakeup-music-player";
 
       # Backup server - exposes data for pull-based backups
       backup-server = {
