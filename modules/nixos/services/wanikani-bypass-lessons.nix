@@ -89,12 +89,7 @@ let
   };
 in
 {
-  options.services.wanikani-bypass-lessons.enable = lib.mkEnableOption {
-    description = "Enable WaniKani Bypass Lessons";
-    default = config.osbmModules.services.wanikani-bypass-lessons.enable or false;
-  };
-
-  config = lib.mkIf config.services.wanikani-bypass-lessons.enable {
+  config = lib.mkIf config.osbmModules.services.wanikani-bypass-lessons.enable {
     systemd.services.wanikani-bypass-lessons = {
       description = "WaniKani Bypass Lessons";
       wantedBy = [ "multi-user.target" ];
