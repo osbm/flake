@@ -16,12 +16,7 @@ let
   };
 in
 {
-  options.services.wanikani-fetch-data.enable = lib.mkEnableOption {
-    description = "Enable WaniKani Fetch Data";
-    default = config.osbmModules.services.wanikani-fetch-data.enable or false;
-  };
-
-  config = lib.mkIf config.services.wanikani-fetch-data.enable {
+  config = lib.mkIf config.osbmModules.services.wanikani-fetch-data.enable {
     systemd.timers.wanikani-fetch-data = {
       description = "WaniKani Fetch Data";
       wantedBy = [ "timers.target" ];
