@@ -146,7 +146,23 @@
       vscode-server.enable = lib.mkEnableOption "vscode-server";
       wanikani-bypass-lessons.enable = lib.mkEnableOption "wanikani-bypass-lessons";
       wanikani-fetch-data.enable = lib.mkEnableOption "wanikani-fetch-data";
-      wanikani-stats.enable = lib.mkEnableOption "wanikani-stats";
+
+      wanikani-stats = {
+        enable = lib.mkEnableOption "wanikani-stats";
+
+        logDirectory = lib.mkOption {
+          type = lib.types.path;
+          default = "/var/lib/wanikani-logs";
+          description = "Directory to get the log archives";
+        };
+
+        port = lib.mkOption {
+          type = lib.types.port;
+          default = 8501;
+          description = "Port for the WaniKani Stats service";
+        };
+      };
+
       wakeup-ymir.enable = lib.mkEnableOption "wakeup-ymir";
       wakeup-music-player.enable = lib.mkEnableOption "wakeup-music-player";
 
