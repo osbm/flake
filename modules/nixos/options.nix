@@ -147,6 +147,7 @@
       wanikani-bypass-lessons.enable = lib.mkEnableOption "wanikani-bypass-lessons";
       wanikani-fetch-data.enable = lib.mkEnableOption "wanikani-fetch-data";
       wanikani-stats.enable = lib.mkEnableOption "wanikani-stats";
+      wakeup-ymir.enable = lib.mkEnableOption "wakeup-ymir";
 
       # Backup server - exposes data for pull-based backups
       backup-server = {
