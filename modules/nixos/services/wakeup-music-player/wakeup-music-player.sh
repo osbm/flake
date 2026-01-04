@@ -6,12 +6,12 @@ USER="$2"
 echo "Starting wakeup music player..."
 
 # Only play music between 6:00 AM and 11:00 AM
-CURRENT_HOUR=$(date +%H)
+# CURRENT_HOUR=$(date +%H)
 
-if [ "$CURRENT_HOUR" -lt 6 ] || [ "$CURRENT_HOUR" -ge 11 ]; then
-  echo "Not within wakeup window (6:00-11:00 AM). Current time: $(date +%H:%M). Skipping music."
-  exit 0
-fi
+# if [ "$CURRENT_HOUR" -lt 6 ] || [ "$CURRENT_HOUR" -ge 11 ]; then
+#   echo "Not within wakeup window (6:00-11:00 AM). Current time: $(date +%H:%M). Skipping music."
+#   exit 0
+# fi
 
 # Check if we've already played the alarm today
 TODAY=$(date +%Y-%m-%d)
