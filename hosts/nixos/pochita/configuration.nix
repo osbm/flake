@@ -18,6 +18,7 @@
       wanikani-bypass-lessons.enable = true;
       wanikani-fetch-data.enable = true;
       wanikani-stats.enable = true;
+      wakeup-ymir.enable = true;
 
       # Backup client - pulls full backup from apollo
       backup-client = {
