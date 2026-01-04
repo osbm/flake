@@ -5,7 +5,7 @@
   ];
   osbmModules = {
     services = {
-      hydra.enable = true;
+      # hydra.enable = true;
       atticd.enable = true;
       cloudflared.enable = true;
 
