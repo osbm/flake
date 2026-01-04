@@ -15,11 +15,15 @@ echo "Starting wakeup music player..."
 
 # Check if we've already played the alarm today
 TODAY=$(date +%Y-%m-%d)
-MARKER_FILE="/var/tmp/wakeup-alarm-played-$TODAY"
+MARKER_FILE="${STATE_DIRECTORY:-/var/lib/wakeup-music-player}/last-played"
 
 if [ -f "$MARKER_FILE" ]; then
-  echo "Alarm already played today ($TODAY). Marker file exists: $MARKER_FILE"
-  exit 0
+  LAST_PLAYED=$(cat "$MARKER_FILE")
+  if [ "$LAST_PLAYED" = "$TODAY" ]; then
+    echo "Alarm already played today ($TODAY). Marker file: $MARKER_FILE"
+    exit 0
+  fi
+  echo "Marker file exists but is from a previous day ($LAST_PLAYED). Proceeding to play music..."
 fi
 
 echo "First boot today within wakeup window. Proceeding to play music..."
@@ -41,8 +45,8 @@ echo "Playing wakeup music from $MUSIC_FILE..."
 # --volume=80: Set volume to 80%
 mpv --no-video --loop=3 --volume=80 "$MUSIC_FILE"
 
-# Create marker file so we don't play again today
-touch "$MARKER_FILE"
-echo "Created marker file: $MARKER_FILE"
+# Create marker file with today's date so we don't play again today
+echo "$TODAY" > "$MARKER_FILE"
+echo "Created marker file: $MARKER_FILE with date: $TODAY"
 
 echo "Wakeup music finished playing"

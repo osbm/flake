@@ -33,6 +33,8 @@ in
         ];
         # Don't restart - just play once on boot
         RemainAfterExit = false;
+        # Persistent state directory for tracking when alarm was last played
+        StateDirectory = "wakeup-music-player";
       };
     };
   };
