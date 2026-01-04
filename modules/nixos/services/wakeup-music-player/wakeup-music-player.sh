@@ -43,13 +43,13 @@ echo "Created marker file: $MARKER_FILE with date: $TODAY"
 
 echo "Playing wakeup music from $MUSIC_FILE..."
 
-# Play the music file using mpv in the background, detached from this script
+# Play the music file using mpv via systemd-run to detach it completely
+# systemd-run creates a separate transient service that won't be killed when this script exits
+# --user: Run in user session
+# --scope: Run as a scope unit (lightweight, doesn't create a new service manager)
 # --no-video: Don't show video window
 # --loop=3: Play 3 times in case user is deep asleep
 # --volume=80: Set volume to 80%
-# Run in background and disown so the script can exit immediately
-mpv --no-video --loop=3 --volume=80 "$MUSIC_FILE" &
-MPV_PID=$!
-disown
+systemd-run --user --scope mpv --no-video --loop=3 --volume=80 "$MUSIC_FILE"
 
-echo "Wakeup music started in background (PID: $MPV_PID)"
+echo "Wakeup music started as separate systemd scope"

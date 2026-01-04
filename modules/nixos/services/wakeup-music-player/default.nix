@@ -10,6 +10,7 @@ let
     runtimeInputs = with pkgs; [
       mpv
       coreutils
+      systemd
     ];
     text = builtins.readFile ./wakeup-music-player.sh;
   };
