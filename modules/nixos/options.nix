@@ -101,14 +101,6 @@
           description = "Enable Arduino IDE and development tools";
         };
       };
-
-      adbFastboot = {
-        enable = lib.mkOption {
-          type = lib.types.bool;
-          default = false;
-          description = "Enable ADB and Fastboot for Android development";
-        };
-      };
     };
 
     # Services

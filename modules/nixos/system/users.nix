@@ -12,8 +12,7 @@
             "wheel"
             "networkmanager"
           ]
-          ++ lib.optional config.osbmModules.virtualisation.docker.enable "docker"
-          ++ lib.optional config.osbmModules.programs.adbFastboot.enable "adbusers";
+          ++ lib.optional config.osbmModules.virtualisation.docker.enable "docker";
           openssh.authorizedKeys.keys = lib.mkDefault [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfnV+qqUCJf92npNW4Jy0hIiepCJFBDJHXBHnUlNX0k"
           ];
@@ -29,8 +28,7 @@
           extraGroups = [
             "networkmanager"
           ]
-          ++ lib.optional config.osbmModules.virtualisation.docker.enable "docker"
-          ++ lib.optional config.osbmModules.programs.adbFastboot.enable "adbusers";
+          ++ lib.optional config.osbmModules.virtualisation.docker.enable "docker";
         };
       })
 

@@ -12,7 +12,6 @@
     };
     familyUser.enable = true;
     programs = {
-      adbFastboot.enable = true;
       steam.enable = true;
     };
     emulation.aarch64.enable = true;
