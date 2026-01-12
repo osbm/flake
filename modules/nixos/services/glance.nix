@@ -16,7 +16,7 @@
           };
           branding = {
             # stolen from notohh/snowflake but i love it so much
-            custom-footer = ''<b><p>ᓚᘏᗢ</p></b>'';
+            custom-footer = "<b><p>ᓚᘏᗢ</p></b>";
           };
           pages = [
             {
