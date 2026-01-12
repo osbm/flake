@@ -45,10 +45,6 @@
             home.stateVersion = lib.mkDefault systemConfig.system.stateVersion;
             imports = [
               ../../home-manager
-            ]
-            ++ lib.optionals systemConfig.osbmModules.hardware.disko.zfs.root.impermanenceRoot [
-              # Import impermanence home-manager module when impermanence is enabled
-              inputs.impermanence.homeManagerModules.impermanence
             ];
           });
       };
