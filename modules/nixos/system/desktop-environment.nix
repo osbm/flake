@@ -95,6 +95,7 @@ in
       environment.systemPackages = with pkgs; [
         fuzzel
         swww
+        xorg.xhost # needed for running X11 GUI apps with sudo via xwayland-satellite
       ];
 
       # XWayland satellite service for X11 app support
