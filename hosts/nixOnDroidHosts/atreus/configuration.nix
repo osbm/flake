@@ -13,17 +13,6 @@
     experimental-features = nix-command flakes
   '';
 
-  # Configure home-manager
-  home-manager = {
-    backupFileExtension = "hm-bak";
-    useGlobalPkgs = true;
-
-    config = {
-      home.stateVersion = "24.05";
-      # Add your home-manager config here
-    };
-  };
-
   build.activation.sshd = ''
     if [ ! -e /etc/ssh/ssh_host_ed25519_key ]; then
       $VERBOSE_ECHO "Generating host keys..."
