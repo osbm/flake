@@ -25,6 +25,7 @@
     services = {
       ollama.enable = true;
       wakeup-music-player.enable = true;
+      syncthing.enable = true;
 
       # Backup client - pulls vaultwarden backup from apollo
       backup-client = {
