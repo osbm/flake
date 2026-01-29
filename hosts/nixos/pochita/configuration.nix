@@ -19,7 +19,7 @@
       wanikani-fetch-data.enable = true;
       wanikani-stats.enable = true;
       wakeup-ymir.enable = true;
-
+      syncthing.enable = true;
       # Backup client - pulls full backup from apollo
       backup-client = {
         enable = true;
