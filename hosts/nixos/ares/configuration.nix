@@ -14,6 +14,7 @@
     programs = {
       steam.enable = true;
     };
+    services.syncthing.enable = true;
     hardware = {
       # hibernation.enable = false;
       sound.enable = true;
