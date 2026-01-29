@@ -9,7 +9,6 @@
       services.syncthing = {
         enable = true;
         openDefaultPorts = true;
-        user = "osbm";
         # port is 8384
         settings = {
           folders = {
