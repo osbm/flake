@@ -14,6 +14,9 @@
         guiAddress = "0.0.0.0:8384";
         # port is 8384
         settings = {
+          gui = {
+            theme = "black";
+          };
           folders = {
             "music" = {
               path = "/home/osbm/Music";
