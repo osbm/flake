@@ -20,6 +20,8 @@
                 "ymir"
                 "tartarus"
                 "luoji"
+                "ares"
+                "artemis"
               ];
             };
           };
@@ -38,6 +40,15 @@
             };
             tartarus = {
               id = "TARTARUS-DEVICE-ID"; # Replace with actual ID from tartarus
+            };
+            ares = {
+              id = "ARES-DEVICE-ID"; # Replace with actual ID from ares
+            };
+            artemis = {
+              id = "ARTEMIS-DEVICE-ID"; # Replace with actual ID from artemis
+            };
+            atreus = {
+              id = "ATREUS-DEVICE-ID"; # Replace with actual ID from atreus
             };
           };
         };
