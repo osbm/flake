@@ -22,6 +22,8 @@
                 "luoji"
                 "ares"
                 "artemis"
+                "puck"
+                "atreus"
               ];
             };
           };
@@ -49,6 +51,9 @@
             };
             atreus = {
               id = "ATREUS-DEVICE-ID"; # Replace with actual ID from atreus
+            };
+            puck = {
+              id = "PUCK-DEVICE-ID"; # Replace with actual ID from puck
             };
           };
         };
