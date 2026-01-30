@@ -20,12 +20,12 @@
                 "wallfacer"
                 "pochita"
                 "ymir"
-                "tartarus"
+                # "tartarus"
                 "luoji"
-                "ares"
-                "artemis"
-                "puck"
-                "atreus"
+                # "ares"
+                # "artemis"
+                # "puck"
+                # "atreus"
               ];
             };
           };
@@ -42,21 +42,21 @@
             ymir = {
               id = "UOSJBAN-6NIGBJT-WBISUVW-BIGDPDM-OFZPMDQ-WDXUQPM-QB33OPH-3KG7MQV";
             };
-            tartarus = {
-              id = "TARTARUS-DEVICE-ID"; # Replace with actual ID from tartarus
-            };
-            ares = {
-              id = "ARES-DEVICE-ID"; # Replace with actual ID from ares
-            };
-            artemis = {
-              id = "ARTEMIS-DEVICE-ID"; # Replace with actual ID from artemis
-            };
-            atreus = {
-              id = "ATREUS-DEVICE-ID"; # Replace with actual ID from atreus
-            };
-            puck = {
-              id = "PUCK-DEVICE-ID"; # Replace with actual ID from puck
-            };
+            # tartarus = {
+            #   id = "TARTARUS-DEVICE-ID"; # Replace with actual ID from tartarus
+            # };
+            # ares = {
+            #   id = "ARES-DEVICE-ID"; # Replace with actual ID from ares
+            # };
+            # artemis = {
+            #   id = "ARTEMIS-DEVICE-ID"; # Replace with actual ID from artemis
+            # };
+            # atreus = {
+            #   id = "ATREUS-DEVICE-ID"; # Replace with actual ID from atreus
+            # };
+            # puck = {
+            #   id = "PUCK-DEVICE-ID"; # Replace with actual ID from puck
+            # };
           };
         };
       };
