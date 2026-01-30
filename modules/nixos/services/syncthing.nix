@@ -19,6 +19,7 @@
                 "pochita"
                 "ymir"
                 "tartarus"
+                "luoji"
               ];
             };
           };
@@ -28,6 +29,9 @@
             };
             pochita = {
               id = "POCHITA-DEVICE-ID"; # Replace with actual ID from pochita
+            };
+            luoji = {
+              id = "54O4Q42-GXACXO6-BK7TF4Q-NVBW6OF-ODPPVWO-WLW43CV-ZZEZXQD-JUAF7AY";
             };
             ymir = {
               id = "YMIR-DEVICE-ID"; # Replace with actual ID from ymir
