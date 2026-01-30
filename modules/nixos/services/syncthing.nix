@@ -10,7 +10,8 @@
         enable = true;
         user = "osbm";
         dataDir = "/home/osbm";
-        openDefaultPorts = true;
+        openDefaultPorts = false;
+        guiAddress = "0.0.0.0:8384";
         # port is 8384
         settings = {
           folders = {
@@ -60,6 +61,10 @@
           };
         };
       };
+
+      # Open Syncthing ports only on Tailscale interface
+      networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 8384 22000 ];
+      networking.firewall.interfaces.tailscale0.allowedUDPPorts = [ 22000 21027 ];
     })
   ];
 }
