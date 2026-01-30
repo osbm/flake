@@ -31,16 +31,16 @@
           };
           devices = {
             wallfacer = {
-              id = "LNPYIG4-LG2TCG5-IFCUQ7B-BVPGGR3-2C7TRI5-PN2DNYJ-EIXGINX-LUAUPQE";
+              id = "L7LZQ4A-SXV6NAQ-EZII4HQ-DEUHHJG-HE57CJA-S3OZ7FI-5MACY26-M5LQFQH";
             };
             pochita = {
-              id = "5YCBKWJ-A33M6MH-XY6E6HO-QNDQE7N-PEVRL5I-6SQPQMX-563J5JN-C5FAPAU";
+              id = "KHRI624-S7YHFJJ-KX7IATC-QFSS6X6-U2OUDN3-HWREAVI-7ABRS4P-SUSK6A6";
             };
             luoji = {
               id = "54O4Q42-GXACXO6-BK7TF4Q-NVBW6OF-ODPPVWO-WLW43CV-ZZEZXQD-JUAF7AY";
             };
             ymir = {
-              id = "UOSJBAN-6NIGBJT-WBISUVW-BIGDPDM-OFZPMDQ-WDXUQPM-QB33OPH-3KG7MQV";
+              id = "BDBLJP4-ANZ46I6-4YVIU7K-GXPYGGG-JIVKGZ6-BUNH2YD-HBYBYC3-NNC5FAU";
             };
             # tartarus = {
             #   id = "TARTARUS-DEVICE-ID"; # Replace with actual ID from tartarus
