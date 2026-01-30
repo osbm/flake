@@ -34,7 +34,7 @@
               id = "54O4Q42-GXACXO6-BK7TF4Q-NVBW6OF-ODPPVWO-WLW43CV-ZZEZXQD-JUAF7AY";
             };
             ymir = {
-              id = "YMIR-DEVICE-ID"; # Replace with actual ID from ymir
+              id = "UOSJBAN-6NIGBJT-WBISUVW-BIGDPDM-OFZPMDQ-WDXUQPM-QB33OPH-3KG7MQV";
             };
             tartarus = {
               id = "TARTARUS-DEVICE-ID"; # Replace with actual ID from tartarus
