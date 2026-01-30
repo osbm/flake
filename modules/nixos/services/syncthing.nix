@@ -8,6 +8,8 @@
     (lib.mkIf config.osbmModules.services.syncthing.enable {
       services.syncthing = {
         enable = true;
+        user = "osbm";
+        dataDir = "/home/osbm";
         openDefaultPorts = true;
         # port is 8384
         settings = {
