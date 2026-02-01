@@ -13,7 +13,11 @@
         appendHttpConfig = ''
           server {
             listen 80;
+            listen 443 ssl;
             server_name ~^(?<device>.+)\.sync\.osbm\.dev$;
+
+            ssl_certificate /var/lib/acme/sync.osbm.dev/fullchain.pem;
+            ssl_certificate_key /var/lib/acme/sync.osbm.dev/key.pem;
 
             location / {
               proxy_pass http://$device.curl-boga.ts.net:8384;
@@ -37,6 +41,15 @@
       security.acme = {
         acceptTerms = true;
         defaults.email = "osbm@osbm.dev";
+        certs."sync.osbm.dev" = {
+          domain = "*.sync.osbm.dev";
+          dnsProvider = "cloudflare";
+          dnsPropagationCheck = true;
+          credentialFiles = {
+            "CF_DNS_API_TOKEN_FILE" = config.age.secrets.cloudflare-apollo-zone-dns-edit.path;
+          };
+          group = "nginx";
+        };
       };
     })
 
