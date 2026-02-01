@@ -66,8 +66,14 @@
       };
 
       # Open Syncthing ports only on Tailscale interface
-      networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 8384 22000 ];
-      networking.firewall.interfaces.tailscale0.allowedUDPPorts = [ 22000 21027 ];
+      networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
+        8384
+        22000
+      ];
+      networking.firewall.interfaces.tailscale0.allowedUDPPorts = [
+        22000
+        21027
+      ];
     })
   ];
 }
