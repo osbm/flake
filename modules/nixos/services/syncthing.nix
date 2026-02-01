@@ -16,6 +16,8 @@
         settings = {
           gui = {
             theme = "black";
+            user = "osbm";
+            password = "$6$Zl1oNw5D8zux3UbQ$v5RuZNRrNtBIVm9W6eNUNE3AhI0ardv.3iDMDnFTjoeTejM6wJzUrKgoKsp2uCgPOBqMkIn7OjiHhU7V2zC5z.";
           };
           folders = {
             "music" = {
