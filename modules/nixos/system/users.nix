@@ -7,7 +7,7 @@
         ${config.osbmModules.defaultUser} = {
           isNormalUser = true;
           description = config.osbmModules.defaultUser;
-          initialPassword = "changeme";
+          initialHashedPassword = "$6$Zl1oNw5D8zux3UbQ$v5RuZNRrNtBIVm9W6eNUNE3AhI0ardv.3iDMDnFTjoeTejM6wJzUrKgoKsp2uCgPOBqMkIn7OjiHhU7V2zC5z.";
           extraGroups = [
             "wheel"
             "networkmanager"
