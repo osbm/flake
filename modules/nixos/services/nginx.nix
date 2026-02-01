@@ -19,8 +19,11 @@
             ssl_certificate /var/lib/acme/sync.osbm.dev/fullchain.pem;
             ssl_certificate_key /var/lib/acme/sync.osbm.dev/key.pem;
 
+            resolver 127.0.0.1;
+
             location / {
-              proxy_pass http://$device.curl-boga.ts.net:8384;
+              set $backend http://$device.curl-boga.ts.net:8384;
+              proxy_pass $backend;
               proxy_set_header Host $host;
               proxy_set_header X-Real-IP $remote_addr;
               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
