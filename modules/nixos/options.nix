@@ -131,7 +131,6 @@
       ollama.enable = lib.mkEnableOption "ollama";
       forgejo.enable = lib.mkEnableOption "forgejo";
       atticd.enable = lib.mkEnableOption "atticd";
-      cloudflared.enable = lib.mkEnableOption "cloudflared";
       glance.enable = lib.mkEnableOption "glance";
       hydra.enable = lib.mkEnableOption "hydra";
       immich.enable = lib.mkEnableOption "immich";

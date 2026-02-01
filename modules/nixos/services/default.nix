@@ -5,7 +5,6 @@
     ./atticd.nix
     ./backup-client.nix
     ./backup-server.nix
-    ./cloudflared.nix
     ./ollama.nix
     ./openssh.nix
     ./forgejo.nix

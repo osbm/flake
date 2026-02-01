@@ -7,7 +7,6 @@
     services = {
       # hydra.enable = true;
       atticd.enable = true;
-      cloudflared.enable = true;
       syncthing.enable = true;
 
       # Backup client - pulls full backup from apollo
