@@ -11,6 +11,12 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.osbmModules.services.mailserver.enable {
+      # kresd (enabled by mailserver's localDnsResolver) doesn't know about
+      # tailscale MagicDNS names. Forward .ts.net queries to tailscale's resolver.
+      services.kresd.extraConfig = ''
+        policy.add(policy.suffix(policy.FORWARD('100.100.100.100'), policy.todnames({'ts.net.'})))
+      '';
+
       mailserver = {
         enable = true;
         stateVersion = 3;
