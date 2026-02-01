@@ -23,6 +23,7 @@
       forgejo-mail.file = ../../../secrets/forgejo-mail.age;
       vaultwarden-mail.file = ../../../secrets/vaultwarden-mail.age;
       noreply-mail.file = ../../../secrets/noreply-mail.age;
+      cloudflare-apollo-zone-dns-edit.file = ../../../secrets/cloudflare-apollo-zone-dns-edit.age;
       ssh-key-private = {
         file = ../../../secrets/ssh-key-private.age;
         path = "/home/osbm/.ssh/id_ed25519";
