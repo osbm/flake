@@ -19,7 +19,7 @@
             ssl_certificate /var/lib/acme/sync.osbm.dev/fullchain.pem;
             ssl_certificate_key /var/lib/acme/sync.osbm.dev/key.pem;
 
-            resolver 127.0.0.1;
+            resolver 100.100.100.100;
 
             location / {
               set $backend http://$device.curl-boga.ts.net:8384;
