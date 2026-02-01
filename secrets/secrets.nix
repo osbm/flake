@@ -30,5 +30,8 @@ in
   "forgejo-mail.age".publicKeys = machines ++ [ osbm ];
   "vaultwarden-mail.age".publicKeys = machines ++ [ osbm ];
   "noreply-mail.age".publicKeys = machines ++ [ osbm ];
-  "cloudflare-apollo-zone-dns-edit.age".publicKeys = [ apollo osbm ];
+  "cloudflare-apollo-zone-dns-edit.age".publicKeys = [
+    apollo
+    osbm
+  ];
 }
