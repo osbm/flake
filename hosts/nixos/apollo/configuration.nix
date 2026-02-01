@@ -69,6 +69,8 @@
     };
   };
 
+  age.secrets.cloudflare-apollo-zone-dns-edit.file = ../../../secrets/cloudflare-apollo-zone-dns-edit.age;
+
   system.stateVersion = "25.11";
   networking.hostName = "apollo";
 
