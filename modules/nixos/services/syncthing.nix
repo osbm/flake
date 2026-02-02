@@ -19,6 +19,10 @@
             user = "osbm";
             password = "$2b$05$tpqRn4OcpQoyewzIUPtTIOqA6LPntB5ItID.wF1OBmX9d5IUDVJX6";
           };
+          options = {
+            urAccepted = -1; # Disable usage reporting
+            crashReportingEnabled = false;
+          };
           folders = {
             "music" = {
               path = "/home/osbm/Music";
