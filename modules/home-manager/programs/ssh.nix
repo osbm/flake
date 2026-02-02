@@ -68,6 +68,7 @@ in
       # Algorynth infrastructure
       huginn = sshBlockAlgorynth "159.195.69.95";
       huginn-ts = sshBlockAlgorynth "huginn.curl-boga.ts.net";
+      puck = sshBlock "puck.curl-boga.ts.net";
     };
   };
 }
