@@ -7,6 +7,7 @@ let
   apollo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINsV8e8veX5/weeC8he+31aiNVZfQ82BpvSzARSM1uZF";
   artemis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINd4wF1LicIvwpGQyajJsiUjeLV84nu4fsyJzxhbS+xK";
   ares = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAO6QaUz/k8azKpYe11HhCxW3agYAmv4axZyHNAsr/zF";
+  harmonica = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK/JPg7q+BzTUy2aWNH6NFCe6k1QB9oxvHYuh6WdxHSW";
 
   osbm = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfnV+qqUCJf92npNW4Jy0hIiepCJFBDJHXBHnUlNX0k";
 
@@ -18,6 +19,7 @@ let
     apollo
     artemis
     ares
+    harmonica
   ];
 in
 {
