@@ -34,4 +34,7 @@ in
     apollo
     osbm
   ];
+  "harmonica-host-key-private.age".publicKeys = [
+    osbm
+  ];
 }
