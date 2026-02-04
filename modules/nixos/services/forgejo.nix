@@ -52,8 +52,18 @@
       services.nginx.virtualHosts."${config.services.forgejo.settings.server.DOMAIN}" = {
         forceSSL = true;
         enableACME = true;
-        locations."/".proxyPass = "http://localhost:3000";
-        locations."/".proxyWebsockets = true;
+        locations."/" = {
+          proxyWebsockets = true;
+          extraConfig = ''
+            resolver 100.100.100.100;
+            set $backend http://apollo.curl-boga.ts.net:3000;
+            proxy_pass $backend;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+          '';
+        };
       };
     })
 
