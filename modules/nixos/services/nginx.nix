@@ -53,6 +53,15 @@
           };
           group = "nginx";
         };
+        certs."osbm.dev" = {
+          domain = "*.osbm.dev";
+          dnsProvider = "cloudflare";
+          dnsPropagationCheck = true;
+          credentialFiles = {
+            "CF_DNS_API_TOKEN_FILE" = config.age.secrets.cloudflare-apollo-zone-dns-edit.path;
+          };
+          group = "nginx";
+        };
       };
     })
 
