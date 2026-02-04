@@ -17,7 +17,7 @@
     (lib.mkIf (config.osbmModules.services.nginx.enable && config.osbmModules.services.actual.enable) {
       services.nginx.virtualHosts."actual.osbm.dev" = {
         forceSSL = true;
-        enableACME = true;
+        useACMEHost = "osbm.dev";
         locations."/" = {
           proxyPass = "http://localhost:${toString config.services.actual.settings.port}";
           proxyWebsockets = true;

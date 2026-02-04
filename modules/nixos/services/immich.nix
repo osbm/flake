@@ -12,7 +12,7 @@
     (lib.mkIf (config.osbmModules.services.nginx.enable && config.osbmModules.services.immich.enable) {
       services.nginx.virtualHosts."immich.osbm.dev" = {
         forceSSL = true;
-        enableACME = true;
+        useACMEHost = "osbm.dev";
         locations."/" = {
           proxyPass = "http://localhost:${toString config.services.immich.port}";
           proxyWebsockets = true;
