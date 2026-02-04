@@ -9,6 +9,13 @@
       services.nginx = {
         enable = true;
 
+        # Catch-all default server: return 404 for unknown subdomains
+        virtualHosts."_" = {
+          default = true;
+          rejectSSL = true;
+          locations."/".return = "404";
+        };
+
         # Route [name].sync.osbm.dev -> [name].curl-boga.ts.net:8384
         appendHttpConfig = ''
           server {
