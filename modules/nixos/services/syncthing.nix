@@ -32,7 +32,7 @@
                 "ymir"
                 # "tartarus"
                 "luoji"
-                # "ares"
+                "ares"
                 # "artemis"
                 # "puck"
                 # "atreus"
@@ -55,9 +55,9 @@
             # tartarus = {
             #   id = "TARTARUS-DEVICE-ID"; # Replace with actual ID from tartarus
             # };
-            # ares = {
-            #   id = "ARES-DEVICE-ID"; # Replace with actual ID from ares
-            # };
+            ares = {
+              id = "U6AVFUV-NBSJHAK-NX2IAH5-KMSK5NY-D3NEYV4-O7PG2FZ-F3DMWLH-BD732QS";
+            };
             # artemis = {
             #   id = "ARTEMIS-DEVICE-ID"; # Replace with actual ID from artemis
             # };
