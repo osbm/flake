@@ -183,11 +183,6 @@
                           url = "https://wallfacer.sync.osbm.dev";
                           icon = "si:syncthing";
                         }
-                        {
-                          title = "Nix";
-                          url = "https://nix.sync.osbm.dev";
-                          icon = "si:syncthing";
-                        }
                       ];
                     }
                   ];
