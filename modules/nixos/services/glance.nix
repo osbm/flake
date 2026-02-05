@@ -154,33 +154,48 @@
                       type = "monitor";
                       sites = [
                         {
-                          title = "Pochita";
+                          title = "pochita";
                           url = "https://pochita.sync.osbm.dev";
                           icon = "si:syncthing";
                         }
                         {
-                          title = "Ymir";
+                          title = "ymir";
                           url = "https://ymir.sync.osbm.dev";
                           icon = "si:syncthing";
                         }
                         {
-                          title = "Artemis";
+                          title = "artemis";
                           url = "https://artemis.sync.osbm.dev";
                           icon = "si:syncthing";
                         }
                         {
-                          title = "Tartarus";
+                          title = "tartarus";
                           url = "https://tartarus.sync.osbm.dev";
                           icon = "si:syncthing";
                         }
                         {
-                          title = "Ares";
+                          title = "ares";
                           url = "https://ares.sync.osbm.dev";
                           icon = "si:syncthing";
                         }
                         {
-                          title = "Wallfacer";
+                          title = "wallfacer";
                           url = "https://wallfacer.sync.osbm.dev";
+                          icon = "si:syncthing";
+                        }
+                        {
+                          title = "prometheus";
+                          url = "https://prometheus.sync.osbm.dev";
+                          icon = "si:syncthing";
+                        }
+                        {
+                          title = "apollo";
+                          url = "https://apollo.sync.osbm.dev";
+                          icon = "si:syncthing";
+                        }
+                        {
+                          title = "puck";
+                          url = "https://puck.sync.osbm.dev";
                           icon = "si:syncthing";
                         }
                       ];
