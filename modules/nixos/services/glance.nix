@@ -148,6 +148,48 @@
                       title = "Services";
                       type = "monitor";
                     }
+                    {
+                      cache = "1m";
+                      title = "Syncthing";
+                      type = "monitor";
+                      sites = [
+                        {
+                          title = "Pochita";
+                          url = "https://pochita.sync.osbm.dev";
+                          icon = "si:syncthing";
+                        }
+                        {
+                          title = "Ymir";
+                          url = "https://ymir.sync.osbm.dev";
+                          icon = "si:syncthing";
+                        }
+                        {
+                          title = "Artemis";
+                          url = "https://artemis.sync.osbm.dev";
+                          icon = "si:syncthing";
+                        }
+                        {
+                          title = "Tartarus";
+                          url = "https://tartarus.sync.osbm.dev";
+                          icon = "si:syncthing";
+                        }
+                        {
+                          title = "Ares";
+                          url = "https://ares.sync.osbm.dev";
+                          icon = "si:syncthing";
+                        }
+                        {
+                          title = "Wallfacer";
+                          url = "https://wallfacer.sync.osbm.dev";
+                          icon = "si:syncthing";
+                        }
+                        {
+                          title = "Nix";
+                          url = "https://nix.sync.osbm.dev";
+                          icon = "si:syncthing";
+                        }
+                      ];
+                    }
                   ];
                 }
               ];
