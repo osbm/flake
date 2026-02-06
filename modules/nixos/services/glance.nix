@@ -106,7 +106,7 @@
                       sites = [
                         {
                           icon = "sh:forgejo";
-                          title = "Forgejo git server";
+                          title = "Forgejo";
                           url = "https://git.osbm.dev";
                         }
                         {
@@ -116,7 +116,7 @@
                         }
                         {
                           icon = "sh:immich";
-                          title = "Immich Photo Server";
+                          title = "Immich";
                           url = "https://immich.osbm.dev";
                         }
                         {
