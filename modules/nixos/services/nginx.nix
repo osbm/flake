@@ -12,7 +12,9 @@
         # Catch-all default server: return 404 for unknown subdomains
         virtualHosts."_" = {
           default = true;
-          rejectSSL = true;
+          rejectSSL = false;
+          sslCertificate = "/var/lib/acme/sync.osbm.dev/fullchain.pem";
+          sslCertificateKey = "/var/lib/acme/sync.osbm.dev/key.pem";
           locations."/".return = "404";
         };
 
