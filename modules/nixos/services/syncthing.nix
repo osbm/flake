@@ -30,7 +30,7 @@
                 "wallfacer"
                 "pochita"
                 "ymir"
-                # "tartarus"
+                "tartarus"
                 "luoji"
                 "ares"
                 # "artemis"
@@ -52,9 +52,9 @@
             ymir = {
               id = "BDBLJP4-ANZ46I6-4YVIU7K-GXPYGGG-JIVKGZ6-BUNH2YD-HBYBYC3-NNC5FAU";
             };
-            # tartarus = {
-            #   id = "TARTARUS-DEVICE-ID"; # Replace with actual ID from tartarus
-            # };
+            tartarus = {
+              id = "SBBZZOL-IJ7PTAK-4LB6SPE-QKQZ2I2-62HVQSV-MN3C7JL-WHUTA2K-SVDGPA6";
+            };
             ares = {
               id = "U6AVFUV-NBSJHAK-NX2IAH5-KMSK5NY-D3NEYV4-O7PG2FZ-F3DMWLH-BD732QS";
             };
