@@ -12,7 +12,10 @@
 
   osbmModules = {
     desktopEnvironment.gnome.enable = true;
-    hardware.systemd-boot.enable = false; # Mobile devices use different bootloader
+    hardware = {
+      systemd-boot.enable = false; # Mobile devices use different bootloader
+      sound.enable = true;
+    };
     programs.graphical.enable = false;
 
     services = {
