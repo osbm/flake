@@ -62,5 +62,7 @@
     kitty
   ];
 
+  mobile.quirks.qualcomm.sdm845-modem.enable = lib.mkForce false;
+
   system.stateVersion = "25.11";
 }
