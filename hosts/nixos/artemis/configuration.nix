@@ -15,6 +15,7 @@
     hardware = {
       systemd-boot.enable = false; # Mobile devices use different bootloader
       sound.enable = false; # Using PulseAudio instead, see below
+      hibernation.enable = false;
     };
     programs.graphical.enable = false;
 
