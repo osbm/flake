@@ -62,7 +62,7 @@
     kitty
   ];
 
-  mobile.quirks.qualcomm.sdm845-modem.enable = lib.mkForce false;
+  # mobile.quirks.qualcomm.sdm845-modem.enable = lib.mkForce false;
 
   # Audio: PipeWire is too quiet on this device, use PulseAudio instead
   # Make sure to select "Speakers Output" in settings
