@@ -33,7 +33,7 @@
                 "tartarus"
                 "luoji"
                 "ares"
-                # "artemis"
+                "artemis"
                 # "puck"
                 # "atreus"
               ];
@@ -58,9 +58,9 @@
             ares = {
               id = "U6AVFUV-NBSJHAK-NX2IAH5-KMSK5NY-D3NEYV4-O7PG2FZ-F3DMWLH-BD732QS";
             };
-            # artemis = {
-            #   id = "ARTEMIS-DEVICE-ID"; # Replace with actual ID from artemis
-            # };
+            artemis = {
+              id = "SGXJ4VY-R3S5LLZ-I3WQ5CE-XJYRKSF-PAL5H5O-CICMUGQ-QTX74MY-X4P2NAK";
+            };
             # atreus = {
             #   id = "ATREUS-DEVICE-ID"; # Replace with actual ID from atreus
             # };
