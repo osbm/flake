@@ -14,7 +14,7 @@
     desktopEnvironment.gnome.enable = true;
     hardware = {
       systemd-boot.enable = false; # Mobile devices use different bootloader
-      sound.enable = true;
+      sound.enable = false; # Using PulseAudio instead, see below
     };
     programs.graphical.enable = false;
 
@@ -63,6 +63,11 @@
   ];
 
   mobile.quirks.qualcomm.sdm845-modem.enable = lib.mkForce false;
+
+  # Audio: PipeWire is too quiet on this device, use PulseAudio instead
+  # Make sure to select "Speakers Output" in settings
+  services.pipewire.enable = lib.mkForce false;
+  services.pulseaudio.enable = true;
 
   system.stateVersion = "25.11";
 }
