@@ -30,6 +30,8 @@
     };
   };
 
+  networking.hostName = "artemis";
+
   # mobile-nixos needs aliases (uses nettools instead of net-tools)
   nixpkgs = {
     config = {
