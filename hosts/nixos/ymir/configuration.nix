@@ -58,7 +58,7 @@
     user = "osbm";
   };
 
-  virtualisation.waydroid.enable = true;
+  # virtualisation.waydroid.enable = true;
 
   system.stateVersion = "25.05"; # changing this is a great taboo of the nixos world
 }
