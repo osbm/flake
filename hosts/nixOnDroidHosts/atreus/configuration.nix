@@ -44,6 +44,7 @@
       # agenix tools
       inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.agenix
       age
+      lazygit
       (pkgs.writeShellScriptBin "lg-rerouting" ''
         ${pkgs.lazygit}/bin/lazygit --path /storage/emulated/0/Documents/rerouting
       '')
