@@ -35,6 +35,10 @@
     };
   };
 
+  services.logind.settings.Login = {
+    HandlePowerKey = "lock";
+  };
+
   networking.hostName = "artemis";
 
   # mobile-nixos needs aliases (uses nettools instead of net-tools)
