@@ -28,7 +28,6 @@ in
         systemPackages = with pkgs; [
           alacritty
           ghostty
-          obsidian
           mpv
           kitty
           qbittorrent

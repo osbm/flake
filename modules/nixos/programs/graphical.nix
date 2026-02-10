@@ -19,6 +19,7 @@
       chromium
       thunderbird
       claude-code
+      obsidian
     ];
   };
 }
