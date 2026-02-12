@@ -129,6 +129,7 @@
       vaultwarden.enable = lib.mkEnableOption "vaultwarden";
       nginx.enable = lib.mkEnableOption "nginx";
       ntfy.enable = lib.mkEnableOption "ntfy";
+      radicale.enable = lib.mkEnableOption "radicale";
       ollama.enable = lib.mkEnableOption "ollama";
       forgejo.enable = lib.mkEnableOption "forgejo";
       atticd.enable = lib.mkEnableOption "atticd";

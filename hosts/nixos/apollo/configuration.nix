@@ -15,6 +15,7 @@
       immich.enable = true;
       actual.enable = true;
       ntfy.enable = true;
+      radicale.enable = true;
       # seafile.enable = true;
 
       # Backup server - exposes data for pull-based backups

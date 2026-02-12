@@ -15,6 +15,7 @@
     ./mailserver.nix
     ./nginx.nix
     ./ntfy.nix
+    ./radicale.nix
     ./syncthing.nix
     ./tailscale.nix
     ./vaultwarden.nix
