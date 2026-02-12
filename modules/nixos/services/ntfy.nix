@@ -41,10 +41,8 @@
         environment.persistence."/persist" = {
           directories = [
             {
-              directory = "/var/lib/ntfy-sh";
-              user = "ntfy-sh";
-              group = "ntfy-sh";
-              mode = "0750";
+              directory = "/var/lib/private/ntfy-sh";
+              mode = "0700";
             }
           ];
         };
