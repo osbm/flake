@@ -12,10 +12,9 @@
         # Catch-all default server: return 404 for unknown subdomains
         virtualHosts."_" = {
           default = true;
-          rejectSSL = false;
-          sslCertificate = "/var/lib/acme/sync.osbm.dev/fullchain.pem";
-          sslCertificateKey = "/var/lib/acme/sync.osbm.dev/key.pem";
-          locations."/".return = "404";
+          useACMEHost = "osbm.dev";
+          forceSSL = true;
+          locations."/".return = "444";
         };
 
         # Route [name].sync.osbm.dev -> [name].curl-boga.ts.net:8384
