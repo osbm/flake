@@ -128,6 +128,7 @@
       mailserver.enable = lib.mkEnableOption "mailserver";
       vaultwarden.enable = lib.mkEnableOption "vaultwarden";
       nginx.enable = lib.mkEnableOption "nginx";
+      ntfy.enable = lib.mkEnableOption "ntfy";
       ollama.enable = lib.mkEnableOption "ollama";
       forgejo.enable = lib.mkEnableOption "forgejo";
       atticd.enable = lib.mkEnableOption "atticd";

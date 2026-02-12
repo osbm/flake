@@ -14,6 +14,7 @@
       vaultwarden.enable = true;
       immich.enable = true;
       actual.enable = true;
+      ntfy.enable = true;
       # seafile.enable = true;
 
       # Backup server - exposes data for pull-based backups
