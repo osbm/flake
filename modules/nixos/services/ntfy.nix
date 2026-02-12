@@ -31,22 +31,22 @@
       }
     )
 
-    # impermanence with ntfy
-    (lib.mkIf
-      (
-        config.osbmModules.services.ntfy.enable
-        && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot
-      )
-      {
-        environment.persistence."/persist" = {
-          directories = [
-            {
-              directory = "/var/lib/private/ntfy-sh";
-              mode = "0700";
-            }
-          ];
-        };
-      }
-    )
+    # # impermanence with ntfy
+    # (lib.mkIf
+    #   (
+    #     config.osbmModules.services.ntfy.enable
+    #     && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot
+    #   )
+    #   {
+    #     environment.persistence."/persist" = {
+    #       directories = [
+    #         {
+    #           directory = "/var/lib/private/ntfy-sh";
+    #           mode = "0700";
+    #         }
+    #       ];
+    #     };
+    #   }
+    # )
   ];
 }
