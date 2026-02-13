@@ -31,8 +31,6 @@
         config.osbmModules.services.actual.enable
         && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot
       )
-  ];
-}
       {
         environment.persistence."/persist" = {
           directories = [
@@ -44,3 +42,5 @@
         };
       }
     )
+  ];
+}
