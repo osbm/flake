@@ -25,30 +25,7 @@
       };
     })
 
-    # # impermanence and immich
+    # # impermanence and actual
     # (lib.mkIf
     #   (
-    #     config.osbmModules.services.immich.enable
-    #     && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot
-    #   )
-    #   {
-    #     environment.persistence."/persist" = {
-    #       directories = [
-    #         {
-    #           directory = "/var/lib/immich";
-    #           user = config.services.immich.user;
-    #           group = config.services.immich.group;
-    #           mode = "0750";
-    #         }
-    #         {
-    #           directory = "/var/lib/postgresql";
-    #           user = "postgres";
-    #           group = "postgres";
-    #           mode = "0750";
-    #         }
-    #       ];
-    #     };
-    #   }
-    # )
-  ];
-}
+    #     config.osbmModules.services.
