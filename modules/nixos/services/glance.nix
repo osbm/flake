@@ -140,6 +140,16 @@
                           url = "http://wallfacer.curl-boga.ts.net:4444/";
                         }
                         {
+                          icon = "sh:ntfy";
+                          title = "Ntfy";
+                          url = "https://ntfy.osbm.dev";
+                        }
+                        {
+                          icon = "sh:radicale";
+                          title = "Radicale";
+                          url = "https://cal.osbm.dev";
+                        }
+                        {
                           icon = "si:json";
                           title = "Wanikani Stats";
                           url = "http://pochita:8501";
