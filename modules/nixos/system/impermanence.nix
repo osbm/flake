@@ -51,6 +51,12 @@ in
           # systemd coredumps to debug crashes
           "/var/lib/systemd/coredump"
 
+          # DynamicUser services store state here, must be 0700 for systemd
+          {
+            directory = "/var/lib/private";
+            mode = "0700";
+          }
+
           # NetworkManager connection profiles and WiFi passwords
           "/etc/NetworkManager/system-connections"
 
