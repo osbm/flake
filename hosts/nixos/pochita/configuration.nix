@@ -20,6 +20,13 @@
       wanikani-stats.enable = true;
       wakeup-ymir.enable = true;
       syncthing.enable = true;
+
+      # Monitoring stack
+      ntfy = {
+        enable = true;
+        baseUrl = "http://pochita.curl-boga.ts.net:2586";
+        behindProxy = false;
+      };
       prometheus.enable = true;
       loki.enable = true;
       grafana.enable = true;

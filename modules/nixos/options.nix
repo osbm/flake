@@ -128,7 +128,19 @@
       mailserver.enable = lib.mkEnableOption "mailserver";
       vaultwarden.enable = lib.mkEnableOption "vaultwarden";
       nginx.enable = lib.mkEnableOption "nginx";
-      ntfy.enable = lib.mkEnableOption "ntfy";
+      ntfy = {
+        enable = lib.mkEnableOption "ntfy";
+        baseUrl = lib.mkOption {
+          type = lib.types.str;
+          default = "https://ntfy.osbm.dev";
+          description = "Base URL for ntfy";
+        };
+        behindProxy = lib.mkOption {
+          type = lib.types.bool;
+          default = config.osbmModules.services.nginx.enable;
+          description = "Whether ntfy is behind a reverse proxy";
+        };
+      };
       radicale.enable = lib.mkEnableOption "radicale";
       prometheus.enable = lib.mkEnableOption "prometheus server";
       loki.enable = lib.mkEnableOption "loki log aggregation";
