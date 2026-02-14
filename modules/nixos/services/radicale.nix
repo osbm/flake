@@ -25,8 +25,7 @@
     })
 
     # radicale reverse proxy via nginx
-    (lib.mkIf
-      (config.osbmModules.services.nginx.enable && config.osbmModules.services.radicale.enable)
+    (lib.mkIf (config.osbmModules.services.nginx.enable && config.osbmModules.services.radicale.enable)
       {
         services.nginx.virtualHosts."cal.osbm.dev" = {
           forceSSL = true;
