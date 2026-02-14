@@ -20,6 +20,9 @@
       wanikani-stats.enable = true;
       wakeup-ymir.enable = true;
       syncthing.enable = true;
+      prometheus.enable = true;
+      loki.enable = true;
+      grafana.enable = true;
       # Backup client - pulls full backup from apollo
       backup-client = {
         enable = true;
