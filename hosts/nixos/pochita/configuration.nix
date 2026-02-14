@@ -29,7 +29,7 @@
       };
       prometheus.enable = true;
       loki.enable = true;
-      # grafana.enable = true;
+      grafana.enable = true;
       # Backup client - pulls full backup from apollo
       backup-client = {
         enable = true;
