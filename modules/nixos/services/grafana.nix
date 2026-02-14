@@ -8,7 +8,7 @@ let
   # Node Exporter Full dashboard - https://grafana.com/grafana/dashboards/1860
   nodeExporterDashboard = pkgs.fetchurl {
     url = "https://grafana.com/api/dashboards/1860/revisions/37/download";
-    sha256 = "sha256-1DE1aaanRHHeCOMWDGdOS1YBSaGMNMFPmCPRaQPqd9o=";
+    sha256 = "sha256-1DE1aaanRHHeCOMWDGdOS1wBXxOF84UXAjJzT5Ek6mM=";
     name = "node-exporter-full.json";
   };
 
