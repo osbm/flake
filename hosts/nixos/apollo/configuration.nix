@@ -16,6 +16,7 @@
       actual.enable = true;
       ntfy.enable = true;
       radicale.enable = true;
+      healthcheck.enable = true;
       # seafile.enable = true;
 
       # Backup server - exposes data for pull-based backups

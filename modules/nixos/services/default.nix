@@ -20,6 +20,7 @@
     ./loki.nix
     ./grafana.nix
     ./promtail.nix
+    ./healthcheck.nix
     ./radicale.nix
     ./syncthing.nix
     ./tailscale.nix

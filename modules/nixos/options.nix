@@ -164,6 +164,19 @@
           description = "Enable Prometheus node exporter";
         };
       };
+      healthcheck = {
+        enable = lib.mkEnableOption "healthcheck timer";
+        target = lib.mkOption {
+          type = lib.types.str;
+          default = "http://pochita.curl-boga.ts.net:9100/metrics";
+          description = "URL to health check";
+        };
+        ntfyUrl = lib.mkOption {
+          type = lib.types.str;
+          default = "http://localhost:2586";
+          description = "ntfy URL for sending alerts";
+        };
+      };
       ollama.enable = lib.mkEnableOption "ollama";
       forgejo.enable = lib.mkEnableOption "forgejo";
       atticd.enable = lib.mkEnableOption "atticd";
