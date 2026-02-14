@@ -16,6 +16,7 @@
     ./nginx.nix
     ./ntfy.nix
     ./prometheus.nix
+    ./loki.nix
     ./grafana.nix
     ./radicale.nix
     ./syncthing.nix

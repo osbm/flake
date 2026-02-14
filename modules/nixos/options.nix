@@ -131,6 +131,7 @@
       ntfy.enable = lib.mkEnableOption "ntfy";
       radicale.enable = lib.mkEnableOption "radicale";
       prometheus.enable = lib.mkEnableOption "prometheus server";
+      loki.enable = lib.mkEnableOption "loki log aggregation";
       grafana.enable = lib.mkEnableOption "grafana dashboard";
       ollama.enable = lib.mkEnableOption "ollama";
       forgejo.enable = lib.mkEnableOption "forgejo";
