@@ -140,6 +140,11 @@
                           url = "http://pochita:8501";
                         }
                         {
+                          icon = "sh:grafana";
+                          title = "Grafana";
+                          url = "http://pochita.curl-boga.ts.net:3000";
+                        }
+                        {
                           icon = "sh:visual-studio-code";
                           title = "Ymir Remote VSCode";
                           url = "http://ymir.curl-boga.ts.net:4444/";
