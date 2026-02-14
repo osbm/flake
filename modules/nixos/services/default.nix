@@ -15,6 +15,7 @@
     ./mailserver.nix
     ./nginx.nix
     ./ntfy.nix
+    ./node-exporter.nix
     ./prometheus.nix
     ./loki.nix
     ./grafana.nix

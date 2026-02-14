@@ -157,6 +157,13 @@
           description = "URL of the Loki server";
         };
       };
+      node-exporter = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Enable Prometheus node exporter";
+        };
+      };
       ollama.enable = lib.mkEnableOption "ollama";
       forgejo.enable = lib.mkEnableOption "forgejo";
       atticd.enable = lib.mkEnableOption "atticd";
