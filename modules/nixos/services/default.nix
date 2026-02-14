@@ -15,6 +15,7 @@
     ./mailserver.nix
     ./nginx.nix
     ./ntfy.nix
+    ./prometheus.nix
     ./grafana.nix
     ./radicale.nix
     ./syncthing.nix

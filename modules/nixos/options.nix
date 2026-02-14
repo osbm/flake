@@ -130,6 +130,7 @@
       nginx.enable = lib.mkEnableOption "nginx";
       ntfy.enable = lib.mkEnableOption "ntfy";
       radicale.enable = lib.mkEnableOption "radicale";
+      prometheus.enable = lib.mkEnableOption "prometheus server";
       grafana.enable = lib.mkEnableOption "grafana dashboard";
       ollama.enable = lib.mkEnableOption "ollama";
       forgejo.enable = lib.mkEnableOption "forgejo";
