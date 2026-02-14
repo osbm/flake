@@ -133,6 +133,18 @@
       prometheus.enable = lib.mkEnableOption "prometheus server";
       loki.enable = lib.mkEnableOption "loki log aggregation";
       grafana.enable = lib.mkEnableOption "grafana dashboard";
+      promtail = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Enable promtail log shipping";
+        };
+        lokiUrl = lib.mkOption {
+          type = lib.types.str;
+          default = "http://pochita.curl-boga.ts.net:3100";
+          description = "URL of the Loki server";
+        };
+      };
       ollama.enable = lib.mkEnableOption "ollama";
       forgejo.enable = lib.mkEnableOption "forgejo";
       atticd.enable = lib.mkEnableOption "atticd";

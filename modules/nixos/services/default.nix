@@ -18,6 +18,7 @@
     ./prometheus.nix
     ./loki.nix
     ./grafana.nix
+    ./promtail.nix
     ./radicale.nix
     ./syncthing.nix
     ./tailscale.nix
