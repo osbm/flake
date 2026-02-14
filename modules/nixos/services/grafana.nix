@@ -15,7 +15,7 @@ let
   # Loki & Promtail dashboard - https://grafana.com/grafana/dashboards/10880
   lokiDashboard = pkgs.fetchurl {
     url = "https://grafana.com/api/dashboards/10880/revisions/1/download";
-    sha256 = "sha256-TDBpCJVaBOPcR51VvOFKkFcSg0rnTp5y30dEHwkEsPA=";
+    sha256 = "sha256-RgSkOwYvKLetsY+c2LjcJAO9eg+XuFXmMzlJ0JXAdmY=";
     name = "loki-promtail.json";
   };
 in
