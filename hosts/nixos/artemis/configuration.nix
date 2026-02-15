@@ -17,7 +17,7 @@
       sound.enable = false; # Using PulseAudio instead, see below
       hibernation.enable = false;
     };
-    programs.graphical.enable = false;
+    # programs.graphical.enable = false;
 
     services = {
       # Backup client - pulls vaultwarden backup from apollo
