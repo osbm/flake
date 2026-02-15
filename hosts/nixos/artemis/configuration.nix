@@ -39,6 +39,15 @@
     HandlePowerKey = "lock";
   };
 
+  # GNOME overrides logind's HandlePowerKey, so disable its handler
+  programs.dconf.profiles.user.databases = [
+    {
+      settings."org/gnome/settings-daemon/plugins/power" = {
+        power-button-action = "nothing";
+      };
+    }
+  ];
+
   networking.hostName = "artemis";
 
   # mobile-nixos needs aliases (uses nettools instead of net-tools)
