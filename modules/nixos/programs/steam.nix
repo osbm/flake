@@ -1,6 +1,13 @@
 { lib, config, ... }:
 {
   config = lib.mkIf config.osbmModules.programs.steam.enable {
+    osbmModules.nixSettings.allowedUnfreePackages = [
+      "steam"
+      "steam-unwrapped"
+      "steamdeck-hw-theme"
+      "steam-jupiter-unwrapped"
+    ];
+
     programs.steam = {
       enable = true;
       # Open ports in the firewall for Steam Remote Play

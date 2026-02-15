@@ -8,8 +8,6 @@
   config = lib.mkIf config.osbmModules.nixSettings.enable {
     # Allow unfree packages
     osbmModules.nixSettings.allowedUnfreePackages = [
-      "steam"
-      "steam-unwrapped"
       "vscode-extension-github-copilot"
       "spotify"
       "cursor"
@@ -29,9 +27,6 @@
       "nvidia-settings"
       # blender with cuda is not foss?!?
       "blender"
-      # steam
-      "steamdeck-hw-theme"
-      "steam-jupiter-unwrapped"
     ];
 
     nixpkgs = {
