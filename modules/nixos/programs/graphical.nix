@@ -7,7 +7,7 @@
 {
   config = lib.mkIf config.osbmModules.programs.graphical.enable {
     osbmModules.nixSettings.allowedUnfreePackages = [
-      "discord"
+      # "discord"
       "vscode"
       "obsidian"
       "claude-code"
@@ -18,7 +18,7 @@
       gimp
       inkscape
       libreoffice
-      discord
+      # discord
       telegram-desktop
       obs-studio
       blender
