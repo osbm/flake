@@ -6,18 +6,24 @@
 }:
 let
   # Node Exporter Full dashboard - https://grafana.com/grafana/dashboards/1860
-  nodeExporterDashboard = pkgs.fetchurl {
+  nodeExporterDashboardRaw = pkgs.fetchurl {
     url = "https://grafana.com/api/dashboards/1860/revisions/37/download";
     sha256 = "sha256-1DE1aaanRHHeCOMWDGdOS1wBXxOF84UXAjJzT5Ek6mM=";
     name = "node-exporter-full.json";
   };
+  nodeExporterDashboard = pkgs.runCommand "node-exporter-full.json" { } ''
+    ${pkgs.gnused}/bin/sed 's/''${DS_PROMETHEUS}/prometheus/g' ${nodeExporterDashboardRaw} > $out
+  '';
 
   # Loki & Promtail dashboard - https://grafana.com/grafana/dashboards/10880
-  lokiDashboard = pkgs.fetchurl {
+  lokiDashboardRaw = pkgs.fetchurl {
     url = "https://grafana.com/api/dashboards/10880/revisions/1/download";
     sha256 = "sha256-RgSkOwYvKLetsY+c2LjcJAO9eg+XuFXmMzlJ0JXAdmY=";
     name = "loki-promtail.json";
   };
+  lokiDashboard = pkgs.runCommand "loki-promtail.json" { } ''
+    ${pkgs.gnused}/bin/sed 's/''${DS_LOKI}/loki/g' ${lokiDashboardRaw} > $out
+  '';
 in
 {
   config = lib.mkIf config.osbmModules.services.grafana.enable {
@@ -38,6 +44,7 @@ in
             type = "prometheus";
             access = "proxy";
             url = "http://localhost:9090";
+            uid = "prometheus";
             isDefault = true;
           }
           {
@@ -45,6 +52,7 @@ in
             type = "loki";
             access = "proxy";
             url = "http://localhost:3100";
+            uid = "loki";
           }
         ];
         dashboards.settings.providers = [
