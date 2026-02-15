@@ -9,8 +9,6 @@
     # Allow unfree packages
     osbmModules.nixSettings.allowedUnfreePackages = [
       "vscode-extension-github-copilot"
-      # blender with cuda is not foss?!?
-      "blender"
     ];
 
     nixpkgs = {

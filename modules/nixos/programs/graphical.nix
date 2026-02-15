@@ -9,6 +9,8 @@
     osbmModules.nixSettings.allowedUnfreePackages = [
       # "discord"
       "vscode"
+      # blender with cuda is not foss?!?
+      "blender"
       "obsidian"
       "claude-code"
     ];
