@@ -6,11 +6,6 @@
 }:
 {
   config = lib.mkIf config.osbmModules.nixSettings.enable {
-    # Allow unfree packages
-    osbmModules.nixSettings.allowedUnfreePackages = [
-      "vscode-extension-github-copilot"
-    ];
-
     nixpkgs = {
       config = {
         allowUnfreePredicate =
