@@ -11,20 +11,6 @@
       "vscode-extension-github-copilot"
       "spotify"
       "cursor"
-      # NVIDIA related
-      "libcurand"
-      "nvidia-x11"
-      "cuda_cudart"
-      "cuda_nvcc"
-      "cuda_cccl"
-      "libcublas"
-      "libcusparse"
-      "libnvjitlink"
-      "libcufft"
-      "cudnn"
-      "cuda_nvrtc"
-      "libnpp"
-      "nvidia-settings"
       # blender with cuda is not foss?!?
       "blender"
     ];

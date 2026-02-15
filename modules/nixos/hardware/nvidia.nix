@@ -6,6 +6,22 @@
 }:
 {
   config = lib.mkIf config.osbmModules.hardware.nvidia.enable {
+    osbmModules.nixSettings.allowedUnfreePackages = [
+      "libcurand"
+      "nvidia-x11"
+      "cuda_cudart"
+      "cuda_nvcc"
+      "cuda_cccl"
+      "libcublas"
+      "libcusparse"
+      "libnvjitlink"
+      "libcufft"
+      "cudnn"
+      "cuda_nvrtc"
+      "libnpp"
+      "nvidia-settings"
+    ];
+
     # Enable OpenGL
     hardware.graphics = {
       enable = true;
