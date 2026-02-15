@@ -7,42 +7,43 @@
 {
   config = lib.mkIf config.osbmModules.nixSettings.enable {
     # Allow unfree packages
+    osbmModules.nixSettings.allowedUnfreePackages = [
+      "vscode"
+      "discord"
+      "obsidian"
+      "steam"
+      "steam-unwrapped"
+      "open-webui"
+      "vscode-extension-github-copilot"
+      "spotify"
+      "cursor"
+      "claude-code"
+      # NVIDIA related
+      "libcurand"
+      "nvidia-x11"
+      "cuda_cudart"
+      "cuda_nvcc"
+      "cuda_cccl"
+      "libcublas"
+      "libcusparse"
+      "libnvjitlink"
+      "libcufft"
+      "cudnn"
+      "cuda_nvrtc"
+      "libnpp"
+      "nvidia-settings"
+      # blender with cuda is not foss?!?
+      "blender"
+      # steam
+      "steamdeck-hw-theme"
+      "steam-jupiter-unwrapped"
+    ];
+
     nixpkgs = {
       config = {
         allowUnfreePredicate =
           pkg:
-          builtins.elem (lib.getName pkg) [
-            "vscode"
-            "discord"
-            "obsidian"
-            "steam"
-            "steam-unwrapped"
-            "open-webui"
-            "vscode-extension-github-copilot"
-            "spotify"
-            "cursor"
-            "claude-code"
-            # NVIDIA related
-            "libcurand"
-            "nvidia-x11"
-            "cuda_cudart"
-            "cuda_nvcc"
-            "cuda_cccl"
-            "libcublas"
-            "libcusparse"
-            "libnvjitlink"
-            "libcufft"
-            "cudnn"
-            "cuda_nvrtc"
-            "libnpp"
-            "nvidia-settings"
-            # blender with cuda is not foss?!?
-            "blender"
-
-            # steam
-            "steamdeck-hw-theme"
-            "steam-jupiter-unwrapped"
-          ];
+          builtins.elem (lib.getName pkg) config.osbmModules.nixSettings.allowedUnfreePackages;
         allowAliases = false;
       };
     };

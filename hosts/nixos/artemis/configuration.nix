@@ -19,6 +19,11 @@
     };
     # programs.graphical.enable = false;
 
+    nixSettings.allowedUnfreePackages = [
+      "oneplus-sdm845-firmware-zstd"
+      "oneplus-sdm845-firmware"
+    ];
+
     services = {
       # Backup client - pulls vaultwarden backup from apollo
       syncthing.enable = true;
@@ -52,15 +57,7 @@
 
   # mobile-nixos needs aliases (uses nettools instead of net-tools)
   nixpkgs = {
-    config = {
-      allowAliases = true;
-      allowUnfreePredicate =
-        pkg:
-        builtins.elem (lib.getName pkg) [
-          "oneplus-sdm845-firmware-zstd"
-          "oneplus-sdm845-firmware"
-        ];
-    };
+    config.allowAliases = true;
     system = "aarch64-linux";
     # Compat shim: nixpkgs moved pkgs.xorg.* to the top level,
     # but mobile-nixos still references pkgs.xorg.*

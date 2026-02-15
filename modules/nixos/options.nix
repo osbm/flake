@@ -58,6 +58,12 @@
         default = true;
         description = "Enable custom nix settings";
       };
+
+      allowedUnfreePackages = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = "List of unfree package names to allow. Merged across all configs.";
+      };
     };
 
     # Programs
