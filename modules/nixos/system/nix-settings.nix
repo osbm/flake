@@ -27,6 +27,11 @@
         ];
       };
 
+      gc = {
+        automatic = true;
+        options = "--delete-older-than 7d";
+      };
+
       optimise.automatic = true;
 
       channel.enable = false;
