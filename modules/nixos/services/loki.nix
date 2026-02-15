@@ -15,16 +15,18 @@
           http_listen_address = "0.0.0.0";
         };
 
-        ingester = {
-          lifecycler = {
-            address = "127.0.0.1";
-            ring = {
-              kvstore = {
-                store = "inmemory";
-              };
-              replication_factor = 1;
+        common = {
+          instance_addr = "127.0.0.1";
+          path_prefix = "/var/lib/loki";
+          replication_factor = 1;
+          ring = {
+            kvstore = {
+              store = "inmemory";
             };
           };
+        };
+
+        ingester = {
           chunk_idle_period = "1h";
           max_chunk_age = "1h";
           chunk_target_size = 1048576;
