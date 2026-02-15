@@ -6,6 +6,13 @@
 }:
 {
   config = lib.mkIf config.osbmModules.programs.graphical.enable {
+    osbmModules.nixSettings.allowedUnfreePackages = [
+      "discord"
+      "vscode"
+      "obsidian"
+      "claude-code"
+    ];
+
     environment.systemPackages = with pkgs; [
       mpv
       gimp

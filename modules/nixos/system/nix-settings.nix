@@ -8,16 +8,12 @@
   config = lib.mkIf config.osbmModules.nixSettings.enable {
     # Allow unfree packages
     osbmModules.nixSettings.allowedUnfreePackages = [
-      "vscode"
-      "discord"
-      "obsidian"
       "steam"
       "steam-unwrapped"
       "open-webui"
       "vscode-extension-github-copilot"
       "spotify"
       "cursor"
-      "claude-code"
       # NVIDIA related
       "libcurand"
       "nvidia-x11"
