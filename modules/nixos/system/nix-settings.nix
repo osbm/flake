@@ -10,7 +10,6 @@
     osbmModules.nixSettings.allowedUnfreePackages = [
       "steam"
       "steam-unwrapped"
-      "open-webui"
       "vscode-extension-github-copilot"
       "spotify"
       "cursor"

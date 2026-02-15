@@ -7,6 +7,10 @@
 {
   config = lib.mkMerge [
     (lib.mkIf config.osbmModules.services.ollama.enable {
+      osbmModules.nixSettings.allowedUnfreePackages = [
+        "open-webui"
+      ];
+
       services.ollama = {
         enable = true;
         package = pkgs.ollama-cuda;
