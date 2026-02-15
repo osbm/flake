@@ -9,7 +9,6 @@
     # Allow unfree packages
     osbmModules.nixSettings.allowedUnfreePackages = [
       "vscode-extension-github-copilot"
-      "spotify"
       "cursor"
       # blender with cuda is not foss?!?
       "blender"
