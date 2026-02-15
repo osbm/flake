@@ -14,6 +14,9 @@
 
   osbmModules = {
     programs.neovim.enable = true;
+    nixSettings.allowedUnfreePackages = [
+      "cursor"
+    ];
   };
 
   home-manager = {
