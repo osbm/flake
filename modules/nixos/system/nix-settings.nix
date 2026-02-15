@@ -18,8 +18,7 @@
     nixpkgs = {
       config = {
         allowUnfreePredicate =
-          pkg:
-          builtins.elem (lib.getName pkg) config.osbmModules.nixSettings.allowedUnfreePackages;
+          pkg: builtins.elem (lib.getName pkg) config.osbmModules.nixSettings.allowedUnfreePackages;
         allowAliases = false;
       };
     };
