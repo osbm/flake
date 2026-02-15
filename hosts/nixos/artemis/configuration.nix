@@ -48,7 +48,7 @@
   programs.dconf.profiles.user.databases = [
     {
       settings."org/gnome/settings-daemon/plugins/power" = {
-        power-button-action = "nothing";
+        power-button-action = "lock-screen";
       };
     }
   ];
