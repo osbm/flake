@@ -17,6 +17,7 @@
     nixSettings.allowedUnfreePackages = [
       "cursor"
       "vscode"
+      "claude-code"
     ];
   };
 
