@@ -12,9 +12,6 @@
         port = 51513;
       };
 
-      # Use Tailscale's MagicDNS for .ts.net resolution
-      networking.nameservers = lib.mkBefore [ "100.100.100.100" ];
-
       networking.firewall.allowedUDPPorts = [ config.services.tailscale.port ];
       environment.systemPackages = [ pkgs.tailscale ];
     })
