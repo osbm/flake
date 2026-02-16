@@ -114,9 +114,10 @@
       interface = "eth0";
     };
     nameservers = [
+      "100.100.100.100" # Tailscale MagicDNS
       "1.1.1.1"
       "8.8.8.8"
-    ]; # Cloudflare and Google DNS
+    ];
   };
 
   # Override initrd kernel params for static IP
