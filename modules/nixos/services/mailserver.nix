@@ -14,6 +14,7 @@
       # kresd (enabled by mailserver's localDnsResolver) doesn't know about
       # tailscale MagicDNS names. Forward .ts.net queries to tailscale's resolver.
       services.kresd.extraConfig = ''
+        policy.add(policy.suffix(policy.FLAGS({'NO_DNSSEC'}), policy.todnames({'ts.net.'})))
         policy.add(policy.suffix(policy.FORWARD('100.100.100.100'), policy.todnames({'ts.net.'})))
       '';
 
