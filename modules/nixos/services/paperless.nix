@@ -6,6 +6,7 @@
       services.paperless = {
         enable = true;
         port = 28981;
+        settings.PAPERLESS_URL = "https://paperless.osbm.dev";
       };
     })
 
