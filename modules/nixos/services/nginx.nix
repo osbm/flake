@@ -21,9 +21,11 @@
           useACMEHost = "osbm.dev";
           forceSSL = true;
           locations."/" = {
-            proxyPass = "http://pochita.curl-boga.ts.net:3000";
             proxyWebsockets = true;
             extraConfig = ''
+              resolver 100.100.100.100;
+              set $grafana http://pochita.curl-boga.ts.net:3000;
+              proxy_pass $grafana;
               proxy_set_header Host $host;
               proxy_set_header X-Real-IP $remote_addr;
               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
