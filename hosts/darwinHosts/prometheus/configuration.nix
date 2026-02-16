@@ -16,6 +16,7 @@
     programs.neovim.enable = true;
     nixSettings.allowedUnfreePackages = [
       "cursor"
+      "vscode"
     ];
   };
 
