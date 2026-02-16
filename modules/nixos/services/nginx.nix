@@ -17,6 +17,21 @@
           locations."/".return = "444";
         };
 
+        virtualHosts."grafana.osbm.dev" = {
+          useACMEHost = "osbm.dev";
+          forceSSL = true;
+          locations."/" = {
+            proxyPass = "http://pochita.curl-boga.ts.net:3000";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+            '';
+          };
+        };
+
         # Route [name].sync.osbm.dev -> [name].curl-boga.ts.net:8384
         appendHttpConfig = ''
           server {
