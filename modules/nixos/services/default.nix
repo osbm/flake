@@ -14,6 +14,7 @@
     ./jellyfin.nix
     ./mailserver.nix
     ./nginx.nix
+    ./paperless.nix
     ./ntfy.nix
     ./node-exporter.nix
     ./prometheus.nix
