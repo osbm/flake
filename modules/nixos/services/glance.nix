@@ -135,6 +135,11 @@
                           url = "https://cal.osbm.dev";
                         }
                         {
+                          icon = "sh:paperless-ngx";
+                          title = "Paperless";
+                          url = "https://paperless.osbm.dev";
+                        }
+                        {
                           icon = "si:json";
                           title = "Wanikani Stats";
                           url = "http://pochita:8501";
