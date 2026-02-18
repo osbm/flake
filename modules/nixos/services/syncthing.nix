@@ -45,6 +45,7 @@
                 "ymir"
                 "tartarus"
                 "luoji"
+                "apollo"
               ];
             };
           };
@@ -69,6 +70,9 @@
             };
             artemis = {
               id = "SGXJ4VY-R3S5LLZ-I3WQ5CE-XJYRKSF-PAL5H5O-CICMUGQ-QTX74MY-X4P2NAK";
+            };
+            apollo = {
+              id = "3PADNDM-IC43RZA-B2CWAYW-QDYED23-VMEHSK7-CZYTAYD-BVP5I3K-MNDABAU";
             };
             # atreus = {
             #   id = "ATREUS-DEVICE-ID"; # Replace with actual ID from atreus
