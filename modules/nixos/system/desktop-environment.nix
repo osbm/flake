@@ -14,7 +14,7 @@ in
       services = {
         xserver.enable = true;
         displayManager.sddm.enable = true;
-        displayManager.sddm.wayland.enable = true;
+        displayManager.sddm.wayland.enable = lib.mkForce false;
         desktopManager.plasma6.enable = true;
         printing.enable = true;
       };
