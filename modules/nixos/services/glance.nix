@@ -179,6 +179,11 @@
                       type = "monitor";
                       sites = [
                         {
+                          title = "apollo";
+                          url = "https://apollo.sync.osbm.dev";
+                          icon = "si:syncthing";
+                        }
+                        {
                           title = "pochita";
                           url = "https://pochita.sync.osbm.dev";
                           icon = "si:syncthing";
