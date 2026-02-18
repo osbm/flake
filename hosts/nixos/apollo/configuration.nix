@@ -19,6 +19,7 @@
       paperless.enable = true;
       healthcheck.enable = true;
       # seafile.enable = true;
+      syncthing.enable = true;
 
       # Backup server - exposes data for pull-based backups
       backup-server = {
