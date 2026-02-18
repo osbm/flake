@@ -38,6 +38,15 @@
                 # "atreus"
               ];
             };
+            "rerouting" = {
+              path = "/home/osbm/rerouting";
+              devices = [
+                "pochita"
+                "ymir"
+                "tartarus"
+                "luoji"
+              ];
+            };
           };
           devices = {
             wallfacer = {
