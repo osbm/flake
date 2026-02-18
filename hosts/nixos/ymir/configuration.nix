@@ -6,7 +6,7 @@
 
   osbmModules = {
     desktopEnvironment = {
-      # plasma.enable = true;
+      plasma.enable = true;
       niri.enable = true;
       # hyprland.enable = true; # im insane so i enable every DE
     };
@@ -53,10 +53,10 @@
     networkmanager.enable = true;
   };
 
-  services.displayManager.autoLogin = {
-    enable = true;
-    user = "osbm";
-  };
+  # services.displayManager.autoLogin = {
+  #   enable = true;
+  #   user = "osbm";
+  # };
 
   # virtualisation.waydroid.enable = true;
 
