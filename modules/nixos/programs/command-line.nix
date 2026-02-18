@@ -28,7 +28,6 @@
       nix-output-monitor
       nixd
       nix-inspect
-      comma
       nh
 
       # information and vanity
