@@ -39,7 +39,7 @@
               ];
             };
             "rerouting" = {
-              path = "/home/osbm/rerouting";
+              path = "/home/osbm/Documents/rerouting";
               devices = [
                 "pochita"
                 "ymir"
