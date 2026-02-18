@@ -98,15 +98,13 @@ in
         xhost # needed for running X11 GUI apps with sudo via xwayland-satellite
       ];
 
-      # Set DISPLAY for xwayland-satellite
-      environment.sessionVariables.DISPLAY = ":0";
-
       # XWayland satellite service for X11 app support
       systemd.user.services.xwayland-satellite = {
         description = "Xwayland outside Wayland";
         bindsTo = [ "graphical-session.target" ];
         after = [ "graphical-session.target" ];
         wantedBy = [ "graphical-session.target" ];
+        environment.DISPLAY = ":0";
         serviceConfig = {
           Type = "notify";
           NotifyAccess = "all";
