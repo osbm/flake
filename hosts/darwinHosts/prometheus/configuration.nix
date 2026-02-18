@@ -9,12 +9,11 @@
     ../../../modules/nixos/programs/command-line.nix
     ../../../modules/nixos/programs/neovim.nix
     ../../../modules/nixos/system/nix-settings.nix
-    ../../../modules/nixos/system/nix-index.nix
+    inputs.nix-index-database.darwinModules.nix-index
     inputs.home-manager.darwinModules.home-manager
   ];
 
   osbmModules = {
-    nixIndex.enable = true;
     programs.neovim.enable = true;
     nixSettings.allowedUnfreePackages = [
       "cursor"
@@ -38,6 +37,7 @@
     enable = true;
   };
 
+  programs.nix-index-database.comma.enable = true;
   programs.fish.enable = true;
 
   # osbmModules.setUsers = false;
