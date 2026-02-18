@@ -11,16 +11,18 @@
     })
 
     # paperless and nginx
-    (lib.mkIf (config.osbmModules.services.nginx.enable && config.osbmModules.services.paperless.enable) {
-      services.nginx.virtualHosts."paperless.osbm.dev" = {
-        forceSSL = true;
-        useACMEHost = "osbm.dev";
-        locations."/" = {
-          proxyPass = "http://localhost:${toString config.services.paperless.port}";
-          proxyWebsockets = true;
+    (lib.mkIf (config.osbmModules.services.nginx.enable && config.osbmModules.services.paperless.enable)
+      {
+        services.nginx.virtualHosts."paperless.osbm.dev" = {
+          forceSSL = true;
+          useACMEHost = "osbm.dev";
+          locations."/" = {
+            proxyPass = "http://localhost:${toString config.services.paperless.port}";
+            proxyWebsockets = true;
+          };
         };
-      };
-    })
+      }
+    )
 
     # impermanence with paperless
     (lib.mkIf
