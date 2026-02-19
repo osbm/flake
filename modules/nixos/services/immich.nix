@@ -16,6 +16,9 @@
         locations."/" = {
           proxyPass = "http://localhost:${toString config.services.immich.port}";
           proxyWebsockets = true;
+          extraConfig = ''
+            client_max_body_size 0;
+          '';
         };
       };
     })
