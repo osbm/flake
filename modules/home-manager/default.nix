@@ -11,6 +11,7 @@
   # Basic home-manager configuration
   home.sessionVariables = {
     EDITOR = lib.mkDefault "nvim";
+    BROWSER = lib.mkDefault "firefox";
   };
 
   home.packages = [ pkgs.forgejo-cli ];
