@@ -251,6 +251,14 @@
                               title = "Jisho";
                               url = "https://jisho.org";
                             }
+                            {
+                              title = "AnkiWeb";
+                              url = "https://ankiweb.net";
+                            }
+                            {
+                              title = "Tae Kim's Guide to Japanese";
+                              url = "https://guidetojapanese.org/learn/";
+                            }
                           ];
                         }
                       ];
