@@ -231,6 +231,34 @@
               name = "Home";
               content = "Welcome to osbm's home page!";
             }
+            {
+              name = "Bookmarks";
+              columns = [
+                {
+                  size = "full";
+                  widgets = [
+                    {
+                      type = "bookmarks";
+                      groups = [
+                        {
+                          title = "Japanese Study";
+                          links = [
+                            {
+                              title = "WaniKani";
+                              url = "https://www.wanikani.com";
+                            }
+                            {
+                              title = "Jisho";
+                              url = "https://jisho.org";
+                            }
+                          ];
+                        }
+                      ];
+                    }
+                  ];
+                }
+              ];
+            }
           ];
         };
       };
