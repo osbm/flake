@@ -130,6 +130,11 @@
                           url = "https://ntfy.osbm.dev";
                         }
                         {
+                          icon = "sh:ntfy";
+                          title = "Ntfy (Pochita)";
+                          url = "http://pochita.curl-boga.ts.net:2586";
+                        }
+                        {
                           icon = "sh:radicale";
                           title = "Radicale";
                           url = "https://cal.osbm.dev";
