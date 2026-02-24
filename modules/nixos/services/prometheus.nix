@@ -87,7 +87,7 @@ in
             name = "ntfy";
             webhook_configs = [
               {
-                url = "http://localhost:2586/alerts";
+                url = "http://localhost:2586/alerts?template=alertmanager";
                 send_resolved = true;
               }
             ];
