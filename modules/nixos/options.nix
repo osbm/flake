@@ -210,8 +210,6 @@
         };
       };
 
-      wakeup-ymir.enable = lib.mkEnableOption "wakeup-ymir";
-
       wakeup-music-player = {
         enable = lib.mkEnableOption "wakeup-music-player";
 
