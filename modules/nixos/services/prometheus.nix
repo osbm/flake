@@ -54,10 +54,8 @@ let
         def log_message(self, format, *args):
             print(format % args)
 
-    import socket
-    server = HTTPServer(("127.0.0.1", 9095), Handler)
-    server.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.serve_forever()
+    HTTPServer.allow_reuse_address = True
+    HTTPServer(("127.0.0.1", 9095), Handler).serve_forever()
   '';
 in
 {
