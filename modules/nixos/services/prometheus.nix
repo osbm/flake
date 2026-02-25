@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -16,6 +17,45 @@ let
     "ymir"
   ];
   targets = map (m: "${m}.curl-boga.ts.net:9100") machines;
+
+  # Tiny webhook relay that reformats Alertmanager JSON into casual ntfy messages
+  ntfyRelay = pkgs.writeScript "ntfy-relay" ''
+    #!${pkgs.python3}/bin/python3
+    from http.server import HTTPServer, BaseHTTPRequestHandler
+    import json, urllib.request
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_POST(self):
+            data = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+            for alert in data.get("alerts", []):
+                instance = alert.get("labels", {}).get("instance", "unknown")
+                name = instance.split(".")[0]
+                status = alert.get("status", "unknown")
+                if status == "firing":
+                    msg = f"{name} just went dark"
+                    priority = "urgent"
+                    tags = "skull"
+                else:
+                    msg = f"{name} is back up"
+                    priority = "default"
+                    tags = "white_check_mark"
+                req = urllib.request.Request(
+                    "http://localhost:2586/alerts",
+                    data=msg.encode(),
+                    headers={"Title": msg, "Priority": priority, "Tags": tags},
+                )
+                try:
+                    urllib.request.urlopen(req)
+                except Exception as e:
+                    print(f"Failed to send to ntfy: {e}")
+            self.send_response(200)
+            self.end_headers()
+
+        def log_message(self, format, *args):
+            print(format % args)
+
+    HTTPServer(("127.0.0.1", 9095), Handler).serve_forever()
+  '';
 in
 {
   config = lib.mkIf cfg.enable {
@@ -71,6 +111,18 @@ in
       ];
     };
 
+    # Webhook relay: Alertmanager -> casual message -> ntfy
+    systemd.services.ntfy-relay = {
+      description = "Alertmanager to ntfy relay";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        ExecStart = ntfyRelay;
+        Restart = "always";
+        DynamicUser = true;
+      };
+    };
+
     services.prometheus.alertmanager = {
       enable = true;
       port = 9093;
@@ -87,7 +139,7 @@ in
             name = "ntfy";
             webhook_configs = [
               {
-                url = "http://localhost:2586/alerts?template=alertmanager";
+                url = "http://localhost:9095";
                 send_resolved = true;
               }
             ];
