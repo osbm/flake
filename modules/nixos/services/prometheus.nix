@@ -96,7 +96,7 @@ in
                 {
                   alert = "MachineDown";
                   expr = "up == 0";
-                  "for" = "5m";
+                  "for" = "1m";
                   labels = {
                     severity = "critical";
                   };
@@ -131,6 +131,7 @@ in
       configuration = {
         route = {
           receiver = "ntfy";
+          group_by = [ "instance" ];
           group_wait = "30s";
           group_interval = "5m";
           repeat_interval = "4h";
