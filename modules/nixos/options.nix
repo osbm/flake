@@ -210,22 +210,6 @@
         };
       };
 
-      wakeup-music-player = {
-        enable = lib.mkEnableOption "wakeup-music-player";
-
-        musicFile = lib.mkOption {
-          type = lib.types.path;
-          default = "/home/osbm/Music/wakeup.mp3";
-          description = "Path to the music file to play on wakeup";
-        };
-
-        user = lib.mkOption {
-          type = lib.types.str;
-          default = "osbm";
-          description = "User to run the music player as";
-        };
-      };
-
       system-logger = {
         enable = lib.mkEnableOption "system-logger";
 
