@@ -55,7 +55,7 @@ let
             print(format % args)
 
     HTTPServer.allow_reuse_address = True
-    HTTPServer(("127.0.0.1", 9095), Handler).serve_forever()
+    HTTPServer(("127.0.0.1", 9096), Handler).serve_forever()
   '';
 in
 {
@@ -140,7 +140,7 @@ in
             name = "ntfy";
             webhook_configs = [
               {
-                url = "http://localhost:9095";
+                url = "http://localhost:9096";
                 send_resolved = true;
               }
             ];
