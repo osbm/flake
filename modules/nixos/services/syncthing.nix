@@ -47,6 +47,11 @@
                 "luoji"
                 "apollo"
               ];
+              ignorePatterns = [
+                ".git"
+                ".obsidian/workspace.json"
+                ".obsidian/workspace-mobile.json"
+              ];
             };
           };
           devices = {
