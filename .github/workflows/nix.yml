@@ -19,13 +19,13 @@ jobs:
           - harmonica
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: cachix/install-nix-action@v31
       - run: nix flake check --accept-flake-config
       - run: nix build --accept-flake-config --dry-run .#nixosConfigurations.${{ matrix.target-system }}.config.system.build.toplevel
   check-formatting:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: cachix/install-nix-action@v31
       - run: nix flake check --accept-flake-config
