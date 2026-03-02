@@ -38,6 +38,17 @@
                 # "atreus"
               ];
             };
+            "terraria" = {
+              path = "/home/osbm/.local/share/Terraria";
+              devices = [
+                "ymir"
+                "ares"
+                "apollo"
+              ];
+              ignorePatterns = [
+                "*.json"
+              ];
+            };
             "rerouting" = {
               path = "/home/osbm/Documents/rerouting";
               devices = [
