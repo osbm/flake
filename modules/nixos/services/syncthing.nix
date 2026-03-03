@@ -3,6 +3,55 @@
   lib,
   ...
 }:
+let
+  hostname = config.networking.hostName;
+
+  allFolders = {
+    "music" = {
+      path = "/home/osbm/Music";
+      devices = [
+        "wallfacer"
+        "pochita"
+        "ymir"
+        "tartarus"
+        "luoji"
+        "ares"
+        "artemis"
+        # "puck"
+        # "atreus"
+      ];
+    };
+    "terraria" = {
+      path = "/home/osbm/.local/share/Terraria";
+      devices = [
+        "ymir"
+        "ares"
+        "apollo"
+      ];
+      ignorePatterns = [
+        "*.json"
+      ];
+    };
+    "rerouting" = {
+      path = "/home/osbm/Documents/rerouting";
+      devices = [
+        "pochita"
+        "ymir"
+        "tartarus"
+        "luoji"
+        "apollo"
+      ];
+      ignorePatterns = [
+        ".git"
+        ".obsidian/workspace.json"
+        ".obsidian/workspace-mobile.json"
+      ];
+    };
+  };
+
+  # Only include folders where this host is in the device list
+  myFolders = lib.filterAttrs (_: v: builtins.elem hostname v.devices) allFolders;
+in
 {
   config = lib.mkMerge [
     (lib.mkIf config.osbmModules.services.syncthing.enable {
@@ -23,48 +72,7 @@
             urAccepted = -1; # Disable usage reporting
             crashReportingEnabled = false;
           };
-          folders = {
-            "music" = {
-              path = "/home/osbm/Music";
-              devices = [
-                "wallfacer"
-                "pochita"
-                "ymir"
-                "tartarus"
-                "luoji"
-                "ares"
-                "artemis"
-                # "puck"
-                # "atreus"
-              ];
-            };
-            "terraria" = {
-              path = "/home/osbm/.local/share/Terraria";
-              devices = [
-                "ymir"
-                "ares"
-                "apollo"
-              ];
-              ignorePatterns = [
-                "*.json"
-              ];
-            };
-            "rerouting" = {
-              path = "/home/osbm/Documents/rerouting";
-              devices = [
-                "pochita"
-                "ymir"
-                "tartarus"
-                "luoji"
-                "apollo"
-              ];
-              ignorePatterns = [
-                ".git"
-                ".obsidian/workspace.json"
-                ".obsidian/workspace-mobile.json"
-              ];
-            };
-          };
+          folders = myFolders;
           devices = {
             wallfacer = {
               id = "L7LZQ4A-SXV6NAQ-EZII4HQ-DEUHHJG-HE57CJA-S3OZ7FI-5MACY26-M5LQFQH";
