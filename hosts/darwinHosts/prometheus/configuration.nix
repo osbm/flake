@@ -37,10 +37,6 @@
     enable = true;
   };
 
-  services.syncthing = {
-    enable = true;
-  };
-
   programs.nix-index-database.comma.enable = true;
   programs.fish.enable = true;
 
