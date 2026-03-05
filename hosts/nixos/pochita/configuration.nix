@@ -26,7 +26,10 @@
         baseUrl = "http://pochita.curl-boga.ts.net:2586";
         behindProxy = false;
       };
-      prometheus.enable = true;
+      healthcheck = {
+        enable = true;
+        target = "http://apollo.curl-boga.ts.net:9100/metrics";
+      };
       loki.enable = true;
       grafana.enable = true;
       # Backup client - pulls full backup from apollo

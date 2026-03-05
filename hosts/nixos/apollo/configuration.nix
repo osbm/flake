@@ -17,9 +17,11 @@
       ntfy.enable = true;
       radicale.enable = true;
       paperless.enable = true;
-      healthcheck.enable = true;
+      # healthcheck not needed — prometheus already monitors all machines
+      # healthcheck.enable = true;
       # seafile.enable = true;
       syncthing.enable = true;
+      prometheus.enable = true;
 
       # Backup server - exposes data for pull-based backups
       backup-server = {

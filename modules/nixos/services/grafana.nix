@@ -22,7 +22,7 @@
             name = "Prometheus";
             type = "prometheus";
             access = "proxy";
-            url = "http://localhost:9090";
+            url = "http://apollo.curl-boga.ts.net:9090";
             isDefault = true;
           }
           {

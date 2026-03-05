@@ -46,11 +46,11 @@ in
     };
 
     systemd.timers.healthcheck = {
-      description = "Run health check every 2 minutes";
+      description = "Run health check every minute";
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnBootSec = "2min";
-        OnUnitActiveSec = "2min";
+        OnBootSec = "1min";
+        OnUnitActiveSec = "1min";
         Unit = "healthcheck.service";
       };
     };
