@@ -134,7 +134,7 @@ in
           group_by = [ "instance" ];
           group_wait = "30s";
           group_interval = "5m";
-          repeat_interval = "4h";
+          repeat_interval = "7d";
         };
         receivers = [
           {
