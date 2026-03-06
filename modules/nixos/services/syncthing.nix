@@ -71,6 +71,7 @@ in
           options = {
             urAccepted = -1; # Disable usage reporting
             crashReportingEnabled = false;
+            globalAnnounceEnabled = false;
           };
           folders = myFolders;
           devices = {
