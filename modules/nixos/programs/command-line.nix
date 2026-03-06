@@ -31,7 +31,6 @@
       nh
 
       # information and vanity
-      neofetch
       onefetch
       pfetch
       htop
