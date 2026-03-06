@@ -228,6 +228,11 @@
                           url = "https://puck.sync.osbm.dev";
                           icon = "si:syncthing";
                         }
+                        {
+                          title = "luoji";
+                          url = "https://luoji.sync.osbm.dev";
+                          icon = "si:syncthing";
+                        }
                       ];
                     }
                   ];
