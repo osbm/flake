@@ -46,6 +46,13 @@ let
         ".obsidian/workspace.json"
         ".obsidian/workspace-mobile.json"
       ];
+      versioning = {
+        type = "staggered";
+        params = {
+          cleanInterval = "3600";
+          maxAge = "604800"; # Keep versions for up to 1 week (in seconds)
+        };
+      };
     };
   };
 
