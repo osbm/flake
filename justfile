@@ -76,3 +76,17 @@ setup-apollo-nixos:
 
 sweep *args:
    nix run github:jzbor/nix-sweep -- {{args}}
+
+# Deploy to a specific machine natively using nh
+deploy HOST:
+  nh os switch --hostname {{HOST}} --target-host osbm@{{HOST}} --use-remote-sudo
+
+# Deploy to ALL machines natively via nh
+deploy-all:
+  @echo "Deploying to all machines..."
+  just deploy ymir
+  just deploy tartarus
+  just deploy luoji
+  just deploy apollo
+  just deploy ares
+  just deploy wallfacer
