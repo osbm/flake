@@ -4,11 +4,6 @@ let
     inherit hostname;
     user = "osbm";
     identityFile = "~/.ssh/id_ed25519";
-    extraOptions = {
-      # [ERROR] - (starship::print): Under a 'dumb' terminal (TERM=dumb).
-      "RemoteCommand" = "fish";
-      "RequestTTY" = "force";
-    };
     hashKnownHosts = true;
     compression = true;
   };
