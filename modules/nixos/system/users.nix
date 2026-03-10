@@ -1,11 +1,14 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 {
   config = {
+    programs.fish.enable = true;
+
     users.users = lib.mkMerge [
       # Default user
       {
         ${config.osbmModules.defaultUser} = {
           isNormalUser = true;
+          shell = pkgs.fish;
           description = config.osbmModules.defaultUser;
           initialHashedPassword = "$6$Zl1oNw5D8zux3UbQ$v5RuZNRrNtBIVm9W6eNUNE3AhI0ardv.3iDMDnFTjoeTejM6wJzUrKgoKsp2uCgPOBqMkIn7OjiHhU7V2zC5z.";
           extraGroups = [
