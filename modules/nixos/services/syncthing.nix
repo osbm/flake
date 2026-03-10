@@ -74,37 +74,20 @@ in
             globalAnnounceEnabled = false;
           };
           folders = myFolders;
-          devices = {
-            wallfacer = {
-              id = "L7LZQ4A-SXV6NAQ-EZII4HQ-DEUHHJG-HE57CJA-S3OZ7FI-5MACY26-M5LQFQH";
-            };
-            pochita = {
-              id = "KHRI624-S7YHFJJ-KX7IATC-QFSS6X6-U2OUDN3-HWREAVI-7ABRS4P-SUSK6A6";
-            };
-            luoji = {
-              id = "54O4Q42-GXACXO6-BK7TF4Q-NVBW6OF-ODPPVWO-WLW43CV-ZZEZXQD-JUAF7AY";
-            };
-            ymir = {
-              id = "BDBLJP4-ANZ46I6-4YVIU7K-GXPYGGG-JIVKGZ6-BUNH2YD-HBYBYC3-NNC5FAU";
-            };
-            tartarus = {
-              id = "SBBZZOL-IJ7PTAK-4LB6SPE-QKQZ2I2-62HVQSV-MN3C7JL-WHUTA2K-SVDGPA6";
-            };
-            ares = {
-              id = "U6AVFUV-NBSJHAK-NX2IAH5-KMSK5NY-D3NEYV4-O7PG2FZ-F3DMWLH-BD732QS";
-            };
-            artemis = {
-              id = "SGXJ4VY-R3S5LLZ-I3WQ5CE-XJYRKSF-PAL5H5O-CICMUGQ-QTX74MY-X4P2NAK";
-            };
-            apollo = {
-              id = "3PADNDM-IC43RZA-B2CWAYW-QDYED23-VMEHSK7-CZYTAYD-BVP5I3K-MNDABAU";
-            };
-            # atreus = {
-            #   id = "ATREUS-DEVICE-ID"; # Replace with actual ID from atreus
-            # };
-            # puck = {
-            #   id = "PUCK-DEVICE-ID"; # Replace with actual ID from puck
-            # };
+          devices = builtins.mapAttrs (name: id: {
+            inherit id;
+            addresses = [ "tcp://${name}:22000" ];
+          }) {
+            wallfacer = "L7LZQ4A-SXV6NAQ-EZII4HQ-DEUHHJG-HE57CJA-S3OZ7FI-5MACY26-M5LQFQH";
+            pochita = "KHRI624-S7YHFJJ-KX7IATC-QFSS6X6-U2OUDN3-HWREAVI-7ABRS4P-SUSK6A6";
+            luoji = "54O4Q42-GXACXO6-BK7TF4Q-NVBW6OF-ODPPVWO-WLW43CV-ZZEZXQD-JUAF7AY";
+            ymir = "BDBLJP4-ANZ46I6-4YVIU7K-GXPYGGG-JIVKGZ6-BUNH2YD-HBYBYC3-NNC5FAU";
+            tartarus = "SBBZZOL-IJ7PTAK-4LB6SPE-QKQZ2I2-62HVQSV-MN3C7JL-WHUTA2K-SVDGPA6";
+            ares = "U6AVFUV-NBSJHAK-NX2IAH5-KMSK5NY-D3NEYV4-O7PG2FZ-F3DMWLH-BD732QS";
+            artemis = "SGXJ4VY-R3S5LLZ-I3WQ5CE-XJYRKSF-PAL5H5O-CICMUGQ-QTX74MY-X4P2NAK";
+            apollo = "3PADNDM-IC43RZA-B2CWAYW-QDYED23-VMEHSK7-CZYTAYD-BVP5I3K-MNDABAU";
+            # atreus = "ATREUS-DEVICE-ID";
+            # puck = "PUCK-DEVICE-ID";
           };
         };
       };
