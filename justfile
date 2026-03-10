@@ -79,7 +79,7 @@ sweep *args:
 
 # Deploy to a specific machine natively using nh
 deploy HOST:
-  nh os switch . --hostname {{HOST}} --target-host osbm@{{HOST}} -- --use-remote-sudo
+  nh os switch . --hostname {{HOST}} --target-host osbm@{{HOST}}
 
 # Deploy to ALL machines natively via nh
 deploy-all:
