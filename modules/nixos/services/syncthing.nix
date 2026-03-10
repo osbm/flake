@@ -11,7 +11,6 @@ let
       path = "/home/osbm/Music";
       devices = [
         "wallfacer"
-        "pochita"
         "ymir"
         "tartarus"
         "luoji"
@@ -35,7 +34,6 @@ let
     "rerouting" = {
       path = "/home/osbm/Documents/rerouting";
       devices = [
-        "pochita"
         "ymir"
         "tartarus"
         "luoji"
