@@ -38,6 +38,7 @@ let
         "tartarus"
         "luoji"
         "apollo"
+        "prometheus"
       ];
       ignorePatterns = [
         ".git"
