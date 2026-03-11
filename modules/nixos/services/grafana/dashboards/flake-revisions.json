@@ -117,13 +117,13 @@
       "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
       "targets": [
         {
-          "expr": "node_nixos_configuration_timestamp",
+          "expr": "node_nixos_configuration_timestamp * 1000",
           "format": "table",
           "instant": true,
           "refId": "A"
         },
         {
-          "expr": "max(nixos_flake_latest_commit_timestamp)",
+          "expr": "max(nixos_flake_latest_commit_timestamp) * 1000",
           "format": "table",
           "instant": true,
           "refId": "B"
