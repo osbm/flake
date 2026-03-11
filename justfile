@@ -79,13 +79,13 @@ sweep *args:
 
 # Deploy to a specific machine natively using nh
 deploy HOST:
-  nh os switch . --hostname {{HOST}} --target-host osbm@{{HOST}}
+  nh os switch . --hostname {{HOST}} --target-host osbm@{{HOST}}-ts
 
 # Deploy to ALL machines natively via nh
 deploy-all:
   @echo "Deploying to all machines..."
-  just deploy ymir-ts
-  just deploy tartarus-ts
-  just deploy apollo-ts
-  just deploy ares-ts
-  just deploy wallfacer-ts
+  just deploy ymir
+  just deploy tartarus
+  just deploy apollo
+  just deploy ares
+  just deploy wallfacer
