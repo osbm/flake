@@ -84,9 +84,8 @@ deploy HOST:
 # Deploy to ALL machines natively via nh
 deploy-all:
   @echo "Deploying to all machines..."
-  just deploy ymir
-  just deploy tartarus
-  just deploy luoji
-  just deploy apollo
-  just deploy ares
-  just deploy wallfacer
+  just deploy ymir-ts
+  just deploy tartarus-ts
+  just deploy apollo-ts
+  just deploy ares-ts
+  just deploy wallfacer-ts
