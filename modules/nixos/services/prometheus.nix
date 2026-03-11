@@ -102,7 +102,7 @@ in
                   };
                   annotations = {
                     summary = "{{ $labels.instance }} is down";
-                    description = "{{ $labels.instance }} has been unreachable for more than 5 minutes.";
+                    description = "{{ $labels.instance }} has been unreachable for more than 1 minute.";
                   };
                 }
               ];
