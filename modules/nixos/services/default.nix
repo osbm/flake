@@ -19,7 +19,7 @@
     ./node-exporter.nix
     ./prometheus.nix
     ./loki.nix
-    ./grafana.nix
+    ./grafana
     ./promtail.nix
     ./healthcheck.nix
     ./radicale.nix

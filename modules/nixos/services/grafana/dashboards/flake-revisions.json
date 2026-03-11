@@ -1,0 +1,213 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "links": [],
+  "panels": [
+    {
+      "title": "Configuration Lag",
+      "description": "How far behind each machine is from the latest flake commit",
+      "type": "bargauge",
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 86400 },
+              { "color": "orange", "value": 259200 },
+              { "color": "red", "value": 604800 }
+            ]
+          },
+          "min": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "valueMode": "color",
+        "sizing": "auto",
+        "minVizWidth": 8,
+        "minVizHeight": 16,
+        "namePlacement": "auto"
+      },
+      "targets": [
+        {
+          "expr": "max(nixos_flake_latest_commit_timestamp) - on() group_right node_nixos_configuration_timestamp",
+          "legendFormat": "{{ instance }}",
+          "refId": "A"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^([^.]+)\\..*",
+            "renamePattern": "$1"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Staleness Over Time",
+      "description": "Configuration age per machine over time",
+      "type": "timeseries",
+      "gridPos": { "h": 10, "w": 12, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "gradientMode": "scheme",
+            "showPoints": "never",
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 86400 },
+              { "color": "orange", "value": 259200 },
+              { "color": "red", "value": 604800 }
+            ]
+          },
+          "color": { "mode": "continuous-GrYlRd" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["lastNotNull"] }
+      },
+      "targets": [
+        {
+          "expr": "time() - node_nixos_configuration_timestamp",
+          "legendFormat": "{{ instance }}",
+          "refId": "A"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^([^.]+)\\..*",
+            "renamePattern": "$1"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Machine Details",
+      "description": "Detailed revision info per machine",
+      "type": "table",
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 10 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "node_nixos_configuration_timestamp",
+          "format": "table",
+          "instant": true,
+          "refId": "A"
+        },
+        {
+          "expr": "max(nixos_flake_latest_commit_timestamp)",
+          "format": "table",
+          "instant": true,
+          "refId": "B"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "pattern": "instance|revision|Value #A|Value #B"
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "instance": "Machine",
+              "revision": "Revision",
+              "Value #A": "Deploy Timestamp",
+              "Value #B": "Latest Commit Timestamp"
+            }
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Machine" },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "regex",
+                "regex": "^([^.]+)\\..*",
+                "replace": "$1"
+              }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Revision" },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Deploy Timestamp" },
+            "properties": [
+              { "id": "unit", "value": "dateTimeFromNow" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Latest Commit Timestamp" },
+            "properties": [
+              { "id": "unit", "value": "dateTimeFromNow" }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["nixos", "flake"],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "hide": 0,
+        "includeAll": false,
+        "name": "DS_PROMETHEUS",
+        "query": "prometheus",
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": { "from": "now-7d", "to": "now" },
+  "title": "NixOS Flake Revisions",
+  "uid": "nixos-flake-revisions"
+}

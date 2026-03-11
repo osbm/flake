@@ -32,6 +32,13 @@
             url = "http://localhost:3100";
           }
         ];
+        dashboards.settings.providers = [
+          {
+            name = "NixOS";
+            options.path = ./dashboards;
+            options.foldersFromFilesStructure = false;
+          }
+        ];
       };
     };
 
