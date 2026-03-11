@@ -131,10 +131,14 @@
       ],
       "transformations": [
         {
+          "id": "merge",
+          "options": {}
+        },
+        {
           "id": "filterFieldsByName",
           "options": {
             "include": {
-              "pattern": "instance|revision|Value #A|Value #B"
+              "names": ["instance", "revision", "Value #A", "Value #B"]
             }
           }
         },
@@ -144,49 +148,50 @@
             "renameByName": {
               "instance": "Machine",
               "revision": "Revision",
-              "Value #A": "Deploy Timestamp",
-              "Value #B": "Latest Commit Timestamp"
+              "Value #A": "Deployed",
+              "Value #B": "Latest Commit"
+            },
+            "indexByName": {
+              "instance": 0,
+              "revision": 1,
+              "Value #A": 2,
+              "Value #B": 3
             }
           }
         }
       ],
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {
+            "filterable": false,
+            "inspect": false
+          }
+        },
         "overrides": [
           {
             "matcher": { "id": "byName", "options": "Machine" },
             "properties": [
-              {
-                "id": "custom.transform",
-                "value": "regex",
-                "regex": "^([^.]+)\\..*",
-                "replace": "$1"
-              }
+              { "id": "custom.width", "value": 120 }
             ]
           },
           {
             "matcher": { "id": "byName", "options": "Revision" },
             "properties": [
-              {
-                "id": "custom.width",
-                "value": 100
-              },
-              {
-                "id": "custom.displayMode",
-                "value": "color-text"
-              }
+              { "id": "custom.width", "value": 100 }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Deploy Timestamp" },
+            "matcher": { "id": "byName", "options": "Deployed" },
             "properties": [
-              { "id": "unit", "value": "dateTimeFromNow" }
+              { "id": "unit", "value": "dateTimeFromNow" },
+              { "id": "custom.width", "value": 150 }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Latest Commit Timestamp" },
+            "matcher": { "id": "byName", "options": "Latest Commit" },
             "properties": [
-              { "id": "unit", "value": "dateTimeFromNow" }
+              { "id": "unit", "value": "dateTimeFromNow" },
+              { "id": "custom.width", "value": 150 }
             ]
           }
         ]
