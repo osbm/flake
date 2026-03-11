@@ -18,6 +18,21 @@ let
   ];
   targets = map (m: "${m}.curl-boga.ts.net:9100") machines;
 
+  # Fetches the latest commit from the flake repo and writes it as a textfile metric
+  forgejoScraper = pkgs.writeShellScript "forgejo-scraper" ''
+    RESULT=$(${pkgs.curl}/bin/curl -sf "https://git.osbm.dev/api/v1/repos/osbm/flake/commits?limit=1&sha=main")
+    if [ $? -eq 0 ]; then
+      SHA=$(echo "$RESULT" | ${pkgs.jq}/bin/jq -r '.[0].sha')
+      DATE=$(echo "$RESULT" | ${pkgs.jq}/bin/jq -r '.[0].created')
+      TIMESTAMP=$(${pkgs.coreutils}/bin/date -d "$DATE" +%s)
+      cat > /var/lib/node-exporter/flake-latest.prom.tmp <<PROM
+nixos_flake_latest_commit_revision{revision="$SHA"} 1
+nixos_flake_latest_commit_timestamp{revision="$SHA"} $TIMESTAMP
+PROM
+      mv /var/lib/node-exporter/flake-latest.prom.tmp /var/lib/node-exporter/flake-latest.prom
+    fi
+  '';
+
   # Tiny webhook relay that reformats Alertmanager JSON into casual ntfy messages
   ntfyRelay = pkgs.writeScript "ntfy-relay" ''
     #!${pkgs.python3}/bin/python3
@@ -110,6 +125,27 @@ in
           ];
         })
       ];
+    };
+
+    # Periodically fetch the latest flake commit from Forgejo
+    systemd.services.forgejo-flake-scraper = {
+      description = "Fetch latest flake commit from Forgejo";
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = forgejoScraper;
+        ReadWritePaths = [ "/var/lib/node-exporter" ];
+      };
+    };
+
+    systemd.timers.forgejo-flake-scraper = {
+      description = "Timer for Forgejo flake commit scraper";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnBootSec = "1min";
+        OnUnitActiveSec = "5min";
+      };
     };
 
     # Webhook relay: Alertmanager -> casual message -> ntfy

@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  inputs,
   ...
 }:
 {
@@ -17,12 +18,16 @@
       ];
     };
 
-    # Automatically write the flake revision to the textfile metrics directory
-    # whenever the system boots or `nixos-rebuild switch` is run.
+    # Automatically write the flake revision and commit timestamp to the
+    # textfile metrics directory on boot / nixos-rebuild switch.
     system.activationScripts.exportNixosRevision = ''
       mkdir -p /var/lib/node-exporter
       REV="${config.system.configurationRevision or "unknown"}"
-      echo "node_nixos_configuration_revision{revision=\"$REV\"} 1" > /var/lib/node-exporter/revision.prom.tmp
+      TIMESTAMP="${toString (inputs.self.lastModified or 0)}"
+      cat > /var/lib/node-exporter/revision.prom.tmp <<PROM
+node_nixos_configuration_revision{revision="$REV"} 1
+node_nixos_configuration_timestamp{revision="$REV"} $TIMESTAMP
+PROM
       mv /var/lib/node-exporter/revision.prom.tmp /var/lib/node-exporter/revision.prom
     '';
 
