@@ -117,13 +117,13 @@
       "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
       "targets": [
         {
-          "expr": "max by (instance) (node_nixos_configuration_timestamp) * 1000",
+          "expr": "label_replace(label_replace(label_replace((node_nixos_configuration_timestamp == on(instance) group_left max by(instance) (node_nixos_configuration_timestamp)) * 1000, \"deployed_commit\", \"$1\", \"revision\", \"(.{7}).*\"), \"revision\", \"\", \"revision\", \".*\"), \"instance\", \"$1\", \"instance\", \"([^.]+).*\")",
           "format": "table",
           "instant": true,
           "refId": "A"
         },
         {
-          "expr": "max(nixos_flake_latest_commit_timestamp) * 1000",
+          "expr": "label_replace(label_replace(label_replace((max by(instance) (node_nixos_configuration_timestamp) * 0 + on() group_left(revision) nixos_flake_latest_commit_timestamp) * 1000, \"latest_commit\", \"$1\", \"revision\", \"(.{7}).*\"), \"revision\", \"\", \"revision\", \".*\"), \"instance\", \"$1\", \"instance\", \"([^.]+).*\")",
           "format": "table",
           "instant": true,
           "refId": "B"
@@ -138,7 +138,7 @@
           "id": "filterFieldsByName",
           "options": {
             "include": {
-              "names": ["instance", "revision", "Value #A", "Value #B"]
+              "names": ["instance", "deployed_commit", "Value #A", "latest_commit", "Value #B"]
             }
           }
         },
@@ -147,15 +147,17 @@
           "options": {
             "renameByName": {
               "instance": "Machine",
-              "revision": "Revision",
               "Value #A": "Deployed",
-              "Value #B": "Latest Commit"
+              "deployed_commit": "Deployed Commit",
+              "latest_commit": "Latest Commit",
+              "Value #B": "Latest Commit Time"
             },
             "indexByName": {
               "instance": 0,
-              "revision": 1,
-              "Value #A": 2,
-              "Value #B": 3
+              "Value #A": 1,
+              "deployed_commit": 2,
+              "latest_commit": 3,
+              "Value #B": 4
             }
           }
         }
@@ -175,12 +177,6 @@
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Revision" },
-            "properties": [
-              { "id": "custom.width", "value": 100 }
-            ]
-          },
-          {
             "matcher": { "id": "byName", "options": "Deployed" },
             "properties": [
               { "id": "unit", "value": "dateTimeFromNow" },
@@ -188,7 +184,19 @@
             ]
           },
           {
+            "matcher": { "id": "byName", "options": "Deployed Commit" },
+            "properties": [
+              { "id": "custom.width", "value": 120 }
+            ]
+          },
+          {
             "matcher": { "id": "byName", "options": "Latest Commit" },
+            "properties": [
+              { "id": "custom.width", "value": 120 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Latest Commit Time" },
             "properties": [
               { "id": "unit", "value": "dateTimeFromNow" },
               { "id": "custom.width", "value": 150 }
