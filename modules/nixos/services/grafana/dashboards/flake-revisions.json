@@ -44,7 +44,7 @@
       },
       "targets": [
         {
-          "expr": "max(nixos_flake_latest_commit_timestamp) - on() group_right node_nixos_configuration_timestamp",
+          "expr": "max(nixos_flake_latest_commit_timestamp) - on() group_right max by (instance) (node_nixos_configuration_timestamp)",
           "legendFormat": "{{ instance }}",
           "refId": "A"
         }
@@ -94,7 +94,7 @@
       },
       "targets": [
         {
-          "expr": "time() - node_nixos_configuration_timestamp",
+          "expr": "time() - max by (instance) (node_nixos_configuration_timestamp)",
           "legendFormat": "{{ instance }}",
           "refId": "A"
         }
@@ -117,7 +117,7 @@
       "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
       "targets": [
         {
-          "expr": "node_nixos_configuration_timestamp * 1000",
+          "expr": "max by (instance) (node_nixos_configuration_timestamp) * 1000",
           "format": "table",
           "instant": true,
           "refId": "A"
