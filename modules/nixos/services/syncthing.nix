@@ -1,10 +1,12 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
   hostname = config.networking.hostName;
+  cfg = config.osbmModules.services.syncthing;
 
   allFolders = {
     "music" = {
@@ -57,10 +59,31 @@ let
 
   # Only include folders where this host is in the device list
   myFolders = lib.filterAttrs (_: v: builtins.elem hostname v.devices) allFolders;
+  folderPaths = lib.mapAttrsToList (_: v: v.path) myFolders;
+
+  conflictWatcherScript = pkgs.writeShellScript "syncthing-conflict-watcher" ''
+    CONFLICTS=""
+    for folder in ${lib.concatStringsSep " " (map (p: ''"${p}"'') folderPaths)}; do
+      if [ -d "$folder" ]; then
+        count=$(${pkgs.findutils}/bin/find "$folder" -name "*.sync-conflict-*" -type f | wc -l)
+        if [ "$count" -gt 0 ]; then
+          CONFLICTS+="$folder: $count conflict(s) found.\n"
+        fi
+      fi
+    done
+
+    if [ -n "$CONFLICTS" ]; then
+      ${pkgs.curl}/bin/curl -sf \
+        -H "Title: Syncthing Conflict Detected on $(hostname)" \
+        -H "Tags: warning,syncthing" \
+        -d "$CONFLICTS" \
+        "https://ntfy.osbm.dev/syncthing-conflicts" || true
+    fi
+  '';
 in
 {
   config = lib.mkMerge [
-    (lib.mkIf config.osbmModules.services.syncthing.enable {
+    (lib.mkIf cfg.enable {
       services.syncthing = {
         enable = true;
         user = "osbm";
@@ -111,6 +134,26 @@ in
         22000
         21027
       ];
+    })
+
+    (lib.mkIf (cfg.enable && cfg.conflictAlerts.enable) {
+      systemd.services.syncthing-conflict-watcher = {
+        description = "Syncthing Conflict Watcher";
+        serviceConfig = {
+          Type = "oneshot";
+          User = "osbm";
+          ExecStart = conflictWatcherScript;
+        };
+      };
+
+      systemd.timers.syncthing-conflict-watcher = {
+        description = "Check for Syncthing conflicts hourly";
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = "hourly";
+          Persistent = true;
+        };
+      };
     })
   ];
 }

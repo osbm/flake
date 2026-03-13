@@ -129,7 +129,12 @@
 
       actual.enable = lib.mkEnableOption "actual";
       anubis.enable = lib.mkEnableOption "anubis";
-      syncthing.enable = lib.mkEnableOption "syncthing";
+      syncthing = {
+        enable = lib.mkEnableOption "syncthing";
+        conflictAlerts = {
+          enable = lib.mkEnableOption "syncthing conflict alerts";
+        };
+      };
       jellyfin.enable = lib.mkEnableOption "jellyfin";
       mailserver.enable = lib.mkEnableOption "mailserver";
       vaultwarden.enable = lib.mkEnableOption "vaultwarden";
