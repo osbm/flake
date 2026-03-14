@@ -36,9 +36,6 @@
     decky-loader.enable = true;
   };
 
-  # Disable SDDM since Jovian manages its own display manager
-  services.displayManager.sddm.enable = lib.mkForce false;
-
   networking = {
     hostName = "ares";
 
