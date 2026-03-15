@@ -117,19 +117,19 @@
       "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
       "targets": [
         {
-          "expr": "label_replace(label_replace(label_replace((node_nixos_configuration_timestamp == on(instance) group_left max by(instance) (node_nixos_configuration_timestamp)) * 1000, \"deployed_commit\", \"$1\", \"revision\", \"(.{7}).*\"), \"revision\", \"\", \"revision\", \".*\"), \"instance\", \"$1\", \"instance\", \"([^.]+).*\")",
+          "expr": "label_replace(label_replace(label_replace((last_over_time(node_nixos_configuration_timestamp[1y]) == on(instance) group_left max by(instance) (last_over_time(node_nixos_configuration_timestamp[1y]))) * 1000, \"deployed_commit\", \"$1\", \"revision\", \"(.{7}).*\"), \"revision\", \"\", \"revision\", \".*\"), \"instance\", \"$1\", \"instance\", \"([^.]+).*\")",
           "format": "table",
           "instant": true,
           "refId": "A"
         },
         {
-          "expr": "label_replace(label_replace(label_replace((max by(instance) (node_nixos_configuration_timestamp) * 0 + on() group_left(revision) nixos_flake_latest_commit_timestamp) * 1000, \"latest_commit\", \"$1\", \"revision\", \"(.{7}).*\"), \"revision\", \"\", \"revision\", \".*\"), \"instance\", \"$1\", \"instance\", \"([^.]+).*\")",
+          "expr": "label_replace(label_replace(label_replace((max by(instance) (last_over_time(node_nixos_configuration_timestamp[1y])) * 0 + on() group_left(revision) last_over_time(nixos_flake_latest_commit_timestamp[1y])) * 1000, \"latest_commit\", \"$1\", \"revision\", \"(.{7}).*\"), \"revision\", \"\", \"revision\", \".*\"), \"instance\", \"$1\", \"instance\", \"([^.]+).*\")",
           "format": "table",
           "instant": true,
           "refId": "B"
         },
         {
-          "expr": "label_replace(nixos_flake_latest_commit_count - on() group_right max by(instance) (node_nixos_configuration_revcount), \"instance\", \"$1\", \"instance\", \"([^.]+).*\")",
+          "expr": "label_replace(last_over_time(nixos_flake_latest_commit_count[1y]) - on() group_right max by(instance) (last_over_time(node_nixos_configuration_revcount[1y])), \"instance\", \"$1\", \"instance\", \"([^.]+).*\")",
           "format": "table",
           "instant": true,
           "refId": "C"
