@@ -26,7 +26,7 @@ let
           SHA=$(echo "$RESULT" | ${pkgs.jq}/bin/jq -r '.[0].sha')
           DATE=$(echo "$RESULT" | ${pkgs.jq}/bin/jq -r '.[0].created')
           TIMESTAMP=$(${pkgs.coreutils}/bin/date -d "$DATE" +%s)
-          TOTAL=$(${pkgs.gnugrep}/bin/grep -i 'x-total-count' "$TMPHEADERS" | ${pkgs.gawk}/bin/awk -F': ' '{print $2}' | ${pkgs.coreutils}/bin/tr -d '\r\n')
+          TOTAL=$(${pkgs.gnugrep}/bin/grep -i '^x-total-count:' "$TMPHEADERS" | ${pkgs.gawk}/bin/awk -F': ' '{print $2}' | ${pkgs.coreutils}/bin/tr -d '\r\n')
           cat > /var/lib/node-exporter/flake-latest.prom.tmp <<PROM
     nixos_flake_latest_commit_revision{revision="$SHA"} 1
     nixos_flake_latest_commit_timestamp{revision="$SHA"} $TIMESTAMP
