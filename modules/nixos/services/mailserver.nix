@@ -114,7 +114,7 @@
             }
             # DKIM is used to sign outgoing emails to verify they are from the claimed domain.
             {
-              directory = config.mailserver.dkimKeyDirectory; # /var/dkim by default
+              directory = config.mailserver.dkim.keyDirectory; # /var/dkim by default
               user = "rspamd";
               group = "rspamd";
               mode = "0755";
