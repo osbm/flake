@@ -94,7 +94,7 @@
       },
       "targets": [
         {
-          "expr": "time() - max by (instance) (node_nixos_configuration_timestamp)",
+          "expr": "max(nixos_flake_latest_commit_timestamp) - on() group_right max by (instance) (node_nixos_configuration_timestamp)",
           "legendFormat": "{{ instance }}",
           "refId": "A"
         }
