@@ -10,7 +10,7 @@
       # "discord"
       "vscode"
       # blender with cuda is not foss?!?
-      "blender"
+      # "blender"
       "obsidian"
       "claude-code"
     ];
@@ -23,7 +23,7 @@
       # discord
       telegram-desktop
       obs-studio
-      blender
+      # blender
       vscode
       chromium
       thunderbird
