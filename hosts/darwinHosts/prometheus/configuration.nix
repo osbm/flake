@@ -52,7 +52,6 @@
     kitty
     vscode
     # anki
-    # blender
     # libreoffice
     # ungoogled-chromium
     code-cursor
