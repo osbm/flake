@@ -8,7 +8,7 @@
     {
       programs.mpv = {
         config = {
-          hwdec = "auto";
+          hwdec = "no";
           vo = "gpu";
         };
       };
