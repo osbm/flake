@@ -1,9 +1,9 @@
 { pkgs, lib, ... }:
 {
   config = lib.mkIf pkgs.stdenv.isLinux {
-    home.packages = [ pkgs.swww ];
+    home.packages = [ pkgs.awww ];
 
-    systemd.user.services.swww = {
+    systemd.user.services.awww = {
       Unit = {
         Description = "Wayland wallpaper daemon";
         PartOf = [ "graphical-session.target" ];
@@ -11,7 +11,7 @@
       };
 
       Service = {
-        ExecStart = "${pkgs.swww}/bin/swww-daemon";
+        ExecStart = "${pkgs.awww}/bin/awww-daemon";
         Restart = "on-failure";
       };
 

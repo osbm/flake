@@ -10,7 +10,7 @@
     ./mpv.nix
     ./ssh.nix
     ./starship.nix
-    ./swww.nix
+    ./awww.nix
     ./tlrc.nix
     ./tmux.nix
     ./waybar.nix

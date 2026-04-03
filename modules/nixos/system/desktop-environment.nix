@@ -93,8 +93,8 @@ in
         wayland.enable = true;
       };
       environment.systemPackages = with pkgs; [
+        awww
         fuzzel
-        swww
         xhost # needed for running X11 GUI apps with sudo via xwayland-satellite
       ];
 
