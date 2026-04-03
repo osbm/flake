@@ -522,16 +522,16 @@
         "type": "github"
       }
     },
-    "nixpkgs-patch-pr-379731": {
+    "nixpkgs-patch-pr-505911": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-kp7ZB5SxFICpU4OO7C3Meh2p97TnpJHFXjOKX88teqk=",
+        "narHash": "sha256-ErcQ0obvAjBQJ7kqnqRp5e85Ps+doGBJ+ck/nXwpQYI=",
         "type": "file",
-        "url": "https://github.com/NixOS/nixpkgs/pull/379731.diff"
+        "url": "https://github.com/NixOS/nixpkgs/pull/505911.diff"
       },
       "original": {
         "type": "file",
-        "url": "https://github.com/NixOS/nixpkgs/pull/379731.diff"
+        "url": "https://github.com/NixOS/nixpkgs/pull/505911.diff"
       }
     },
     "nixpkgs-patcher": {
@@ -763,7 +763,7 @@
         "nix-on-droid": "nix-on-droid",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-patch-pr-379731": "nixpkgs-patch-pr-379731",
+        "nixpkgs-patch-pr-505911": "nixpkgs-patch-pr-505911",
         "nixpkgs-patcher": "nixpkgs-patcher",
         "osbm-nvim": "osbm-nvim",
         "raspberry-pi-nix": "raspberry-pi-nix",
