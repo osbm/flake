@@ -109,7 +109,7 @@
             {
               directory = config.mailserver.storage.path; # /var/vmail by default
               user = config.mailserver.storage.owner;
-              group = config.mailserver.storage.group;
+              inherit (config.mailserver.storage) group;
               mode = "0700";
             }
             # DKIM is used to sign outgoing emails to verify they are from the claimed domain.
