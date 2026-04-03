@@ -522,33 +522,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-patch-pr-379731": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-kp7ZB5SxFICpU4OO7C3Meh2p97TnpJHFXjOKX88teqk=",
-        "type": "file",
-        "url": "https://github.com/NixOS/nixpkgs/pull/379731.diff"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://github.com/NixOS/nixpkgs/pull/379731.diff"
-      }
-    },
-    "nixpkgs-patcher": {
-      "locked": {
-        "lastModified": 1772817589,
-        "narHash": "sha256-ipjFR3UQ6bFMtZQoWodBFE3pR9yx5gtGpzKN9T2ESZM=",
-        "owner": "gepbird",
-        "repo": "nixpkgs-patcher",
-        "rev": "f2908367abf8ed4b0fee691bb481bde0f8015fc4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gepbird",
-        "repo": "nixpkgs-patcher",
-        "type": "github"
-      }
-    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1775036866,
@@ -763,8 +736,6 @@
         "nix-on-droid": "nix-on-droid",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-patch-pr-379731": "nixpkgs-patch-pr-379731",
-        "nixpkgs-patcher": "nixpkgs-patcher",
         "osbm-nvim": "osbm-nvim",
         "raspberry-pi-nix": "raspberry-pi-nix",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
