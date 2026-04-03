@@ -64,6 +64,11 @@
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixpkgs-patcher.url = "github:gepbird/nixpkgs-patcher";
+    nixpkgs-patch-pr-379731 = {
+      url = "https://github.com/NixOS/nixpkgs/pull/379731.diff";
+      flake = false;
+    };
   };
 
   outputs =
@@ -87,7 +92,8 @@
       makePkgs = system: import nixpkgs { inherit system; };
       makeNixosConfig =
         configName:
-        nixpkgs.lib.nixosSystem {
+        inputs.nixpkgs-patcher.lib.nixosSystem {
+          nixpkgsPatcher.nixpkgs = inputs.nixpkgs;
           specialArgs = { inherit inputs outputs; };
           modules = [ ./hosts/nixos/${configName}/configuration.nix ];
         };
