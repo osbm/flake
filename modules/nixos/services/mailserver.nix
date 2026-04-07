@@ -29,7 +29,7 @@
 
         # A list of all login accounts. To create the password hashes, use
         # nix-shell -p mkpasswd --run 'mkpasswd -sm bcrypt'
-        loginAccounts = {
+        accounts = {
           "osbm@osbm.dev" = {
             hashedPasswordFile = config.age.secrets."osbm-mail".path;
             aliases = [
