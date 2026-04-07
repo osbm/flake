@@ -20,7 +20,7 @@
     ./prometheus.nix
     ./loki.nix
     ./grafana
-    ./promtail.nix
+    ./alloy.nix
     ./healthcheck.nix
     ./radicale.nix
     ./syncthing.nix

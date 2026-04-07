@@ -156,11 +156,11 @@
       prometheus.enable = lib.mkEnableOption "prometheus server";
       loki.enable = lib.mkEnableOption "loki log aggregation";
       grafana.enable = lib.mkEnableOption "grafana dashboard";
-      promtail = {
+      alloy = {
         enable = lib.mkOption {
           type = lib.types.bool;
           default = true;
-          description = "Enable promtail log shipping";
+          description = "Enable alloy log shipping";
         };
         lokiUrl = lib.mkOption {
           type = lib.types.str;
