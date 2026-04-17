@@ -36,7 +36,6 @@ in
           network.ssh = {
             enable = true;
             port = 2222; # different port to avoid conflicts
-            shell = "/bin/cryptsetup-askpass";
             inherit authorizedKeys;
             hostKeys = [ "/etc/ssh/initrd" ];
           };
@@ -333,9 +332,18 @@ in
 
     # Impermanence: wipe root on boot
     (lib.mkIf (cfg.enable && cfg.zfs.enable && cfg.zfs.root.impermanenceRoot) {
-      boot.initrd.postResumeCommands = lib.mkAfter ''
-        zfs rollback -r zroot/root@empty
-      '';
+      boot.initrd.systemd.services.rollback-root = {
+        description = "Rollback ZFS root to pristine state";
+        wantedBy = [ "initrd.target" ];
+        after = [ "zfs-import-zroot.service" ];
+        before = [ "sysroot.mount" ];
+        path = [ config.boot.zfs.package ];
+        unitConfig.DefaultDependencies = "no";
+        serviceConfig.Type = "oneshot";
+        script = ''
+          zfs rollback -r zroot/root@empty
+        '';
+      };
     })
   ];
 }
