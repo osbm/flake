@@ -12,6 +12,8 @@
     initrd = {
       availableKernelModules = [ ];
       kernelModules = [ ];
+      # RPi kernel doesn't have tpm-crb module
+      systemd.tpm2.enable = false;
     };
     kernelModules = [ ];
     extraModulePackages = [ ];
