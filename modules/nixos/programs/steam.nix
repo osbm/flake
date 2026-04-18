@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ pkgs, lib, config, ... }:
 {
   config = lib.mkIf config.osbmModules.programs.steam.enable {
     osbmModules.nixSettings.allowedUnfreePackages = [
@@ -6,6 +6,10 @@
       "steam-unwrapped"
       "steamdeck-hw-theme"
       "steam-jupiter-unwrapped"
+    ];
+
+    environment.systemPackages = with pkgs; [
+      prismlauncher
     ];
 
     programs.steam = {
