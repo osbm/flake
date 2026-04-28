@@ -23,6 +23,26 @@ switch *args: check-git remove-hm-backup-files
 switch *args: check-git
   nh darwin switch . -- --accept-flake-config {{args}}
 
+# Migrate Firefox profile from legacy ~/.mozilla/firefox to XDG ~/.config/mozilla/firefox.
+# Run once per host before switching to the new firefox.configPath.
+migrate-firefox-profile:
+  #!/usr/bin/env sh
+  set -eu
+  src="$HOME/.mozilla/firefox"
+  dst="$HOME/.config/mozilla/firefox"
+  if [ ! -e "$src" ]; then
+    echo "no legacy profile at $src — nothing to do"
+    exit 0
+  fi
+  if [ -e "$dst" ]; then
+    echo "destination $dst already exists — refusing to overwrite"
+    exit 1
+  fi
+  mkdir -p "$(dirname "$dst")"
+  mv "$src" "$dst"
+  echo "moved $src -> $dst"
+  echo "note: native messaging hosts were not moved; reinstall if you use any"
+
 remove-hm-backup-files:
   #!/usr/bin/env sh
 
