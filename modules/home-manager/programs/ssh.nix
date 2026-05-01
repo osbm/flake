@@ -54,6 +54,10 @@ in
         identityFile = "~/.ssh/id_ed25519";
         hashKnownHosts = true;
         compression = true;
+        extraOptions = {
+          RequestTTY = "yes";
+          RemoteCommand = "systemd-tty-ask-password-agent --query";
+        };
       };
       ares = sshBlock "192.168.0.6";
       ares-ts = sshBlock "ares.curl-boga.ts.net";
