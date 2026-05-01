@@ -28,19 +28,31 @@ in
   config = lib.mkMerge [
     # Initrd SSH for remote unlocking
     (lib.mkIf (cfg.enable && cfg.initrd-ssh.enable) {
-      boot = {
-        kernelParams = [ "ip=152.53.152.129::152.53.152.1:255.255.252.0::eth0:none" ];
-        initrd = {
-          network.enable = true;
-          availableKernelModules = cfg.initrd-ssh.ethernetDrivers;
-          network.ssh = {
+      boot.initrd = {
+        availableKernelModules = cfg.initrd-ssh.ethernetDrivers;
+        network = {
+          enable = true;
+          ssh = {
             enable = true;
             port = 2222; # different port to avoid conflicts
             inherit authorizedKeys;
             hostKeys = [ "/etc/ssh/initrd" ];
           };
-          secrets = {
-            "/etc/ssh/initrd" = "/etc/ssh/initrd";
+        };
+        secrets."/etc/ssh/initrd" = "/etc/ssh/initrd";
+        systemd.network = {
+          enable = true;
+          networks."10-${cfg.initrd-ssh.interface}" = {
+            matchConfig.Name = cfg.initrd-ssh.interface;
+            inherit (cfg.initrd-ssh) address;
+            routes =
+              lib.optional (cfg.initrd-ssh.gateway != "") {
+                Gateway = cfg.initrd-ssh.gateway;
+              }
+              ++ lib.optional (cfg.initrd-ssh.gateway6 != "") {
+                Gateway = cfg.initrd-ssh.gateway6;
+                GatewayOnLink = true;
+              };
           };
         };
       };

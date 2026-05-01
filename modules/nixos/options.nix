@@ -421,6 +421,30 @@
             default = [ ];
             description = "Ethernet drivers to load in initrd";
           };
+
+          interface = lib.mkOption {
+            type = lib.types.str;
+            default = "eth0";
+            description = "Network interface to bring up in initrd";
+          };
+
+          address = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [ ];
+            description = "CIDR addresses to assign to the initrd interface (e.g. [\"1.2.3.4/24\"])";
+          };
+
+          gateway = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = "IPv4 default gateway for initrd networking";
+          };
+
+          gateway6 = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = "IPv6 default gateway for initrd networking";
+          };
         };
 
         zfs = {
