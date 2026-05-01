@@ -24,24 +24,50 @@ switch *args: check-git
   nh darwin switch . -- --accept-flake-config {{args}}
 
 # Migrate Firefox profile from legacy ~/.mozilla/firefox to XDG ~/.config/mozilla/firefox.
-# Run once per host before switching to the new firefox.configPath.
+# Run once per host AFTER the rebuild that switches firefox.configPath, with Firefox closed.
 migrate-firefox-profile:
   #!/usr/bin/env sh
   set -eu
   src="$HOME/.mozilla/firefox"
   dst="$HOME/.config/mozilla/firefox"
+
+  if pgrep -x firefox > /dev/null; then
+    echo "ERROR: Firefox is running — close it before migrating, or it will create a fresh profile and clobber profiles.ini"
+    exit 1
+  fi
   if [ ! -e "$src" ]; then
     echo "no legacy profile at $src — nothing to do"
     exit 0
   fi
   if [ -e "$dst" ]; then
-    echo "destination $dst already exists — refusing to overwrite"
+    echo "ERROR: destination $dst already exists — refusing to overwrite"
+    echo "if you intended to merge, do it manually"
     exit 1
   fi
+
   mkdir -p "$(dirname "$dst")"
   mv "$src" "$dst"
   echo "moved $src -> $dst"
+
+  # Sanity check: profiles.ini must reference an existing profile dir,
+  # otherwise Firefox will create a fresh one on next launch and lose your data.
+  ini="$dst/profiles.ini"
+  if [ ! -f "$ini" ]; then
+    echo "WARNING: no profiles.ini found at $ini — Firefox will start fresh"
+    exit 0
+  fi
+  profile_path=$(awk -F= '/^Path=/ {print $2; exit}' "$ini" | tr -d '\r')
+  if [ -z "$profile_path" ]; then
+    echo "WARNING: profiles.ini has no Path= entry"
+  elif [ ! -d "$dst/$profile_path" ]; then
+    echo "WARNING: profiles.ini references '$profile_path' but $dst/$profile_path does not exist"
+    echo "fix: edit $ini and set Path= to one of: $(ls -d "$dst"/*/ 2>/dev/null | xargs -n1 basename | tr '\n' ' ')"
+    exit 1
+  else
+    echo "verified: active profile -> $profile_path"
+  fi
   echo "note: native messaging hosts were not moved; reinstall if you use any"
+  echo "you can now launch Firefox"
 
 remove-hm-backup-files:
   #!/usr/bin/env sh
