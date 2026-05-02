@@ -77,6 +77,7 @@ in
         zfs = {
           devNodes = "/dev/disk/by-id/";
           forceImportAll = true;
+          forceImportRoot = true;
           requestEncryptionCredentials = cfg.zfs.root.encrypt;
         };
       };
