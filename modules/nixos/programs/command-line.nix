@@ -42,6 +42,7 @@
 
       # basic quality of life
       eza
+      file
       dysk
       trash-cli
       zoxide
