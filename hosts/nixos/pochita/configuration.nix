@@ -8,7 +8,6 @@
     ./hardware-configuration.nix
     ../../../modules/nixos
     inputs.raspberry-pi-nix.nixosModules.raspberry-pi
-    inputs.nixos-hardware.nixosModules.raspberry-pi-5
   ];
 
   osbmModules = {
