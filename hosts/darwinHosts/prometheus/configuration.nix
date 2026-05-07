@@ -51,7 +51,6 @@
     # ghostty
     kitty
     vscode
-    anki
     # libreoffice
     # ungoogled-chromium
     code-cursor
