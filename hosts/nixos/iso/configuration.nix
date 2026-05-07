@@ -36,4 +36,6 @@
   ];
 
   services.openssh.enable = true;
+
+  boot.zfs.forceImportRoot = true;
 }

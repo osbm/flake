@@ -44,4 +44,6 @@
     wheelNeedsPassword = false;
   };
   services.getty.autologinUser = "osbm";
+
+  boot.zfs.forceImportRoot = true;
 }
