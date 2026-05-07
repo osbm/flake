@@ -136,6 +136,25 @@ in
       ];
     })
 
+    (lib.mkIf (cfg.enable && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot) {
+      environment.persistence."/persist" = {
+        directories = [
+          {
+            directory = "/home/osbm/.config/syncthing";
+            user = "osbm";
+            group = "users";
+            mode = "0700";
+          }
+          {
+            directory = "/home/osbm/.local/state/syncthing";
+            user = "osbm";
+            group = "users";
+            mode = "0700";
+          }
+        ];
+      };
+    })
+
     (lib.mkIf (cfg.enable && cfg.conflictAlerts.enable) {
       systemd.services.syncthing-conflict-watcher = {
         description = "Syncthing Conflict Watcher";
