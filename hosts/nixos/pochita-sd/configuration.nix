@@ -13,6 +13,10 @@
   # See the docs at:
   # https://www.raspberrypi.com/documentation/computers/linux_kernel.html#native-build-configuration
   raspberry-pi-nix.board = "bcm2712";
+
+  # RPi kernel doesn't have tpm-crb module
+  boot.initrd.systemd.tpm2.enable = false;
+
   time.timeZone = "America/Chicago";
   users.users.root = {
     initialPassword = "root";
