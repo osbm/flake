@@ -137,18 +137,14 @@ in
     })
 
     (lib.mkIf (cfg.enable && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot) {
-      environment.persistence."/persist" = {
+      environment.persistence."/persist".users.osbm = {
         directories = [
           {
-            directory = "/home/osbm/.config/syncthing";
-            user = "osbm";
-            group = "users";
+            directory = ".config/syncthing";
             mode = "0700";
           }
           {
-            directory = "/home/osbm/.local/state/syncthing";
-            user = "osbm";
-            group = "users";
+            directory = ".local/state/syncthing";
             mode = "0700";
           }
         ];
