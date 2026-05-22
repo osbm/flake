@@ -89,7 +89,6 @@ in
         user = "osbm";
         dataDir = "/home/osbm";
         configDir = "/home/osbm/.syncthing";
-        databaseDir = "/home/osbm/.syncthing/db";
         openDefaultPorts = false;
         guiAddress = "0.0.0.0:8384";
         # port is 8384
