@@ -1,28 +1,25 @@
 let
-  # define a block that just takes a hostname and returns attrset to not repeat the same fields
   sshBlock = hostname: {
-    inherit hostname;
-    user = "osbm";
-    identityFile = "~/.ssh/id_ed25519";
-    hashKnownHosts = true;
-    compression = true;
+    HostName = hostname;
+    User = "osbm";
+    IdentityFile = "~/.ssh/id_ed25519";
+    HashKnownHosts = true;
+    Compression = true;
   };
-  # sshBlockDroid is the same as sshBlock but with 8090 as the port
   sshBlockDroid = hostname: {
-    inherit hostname;
-    user = "osbm";
-    identityFile = "~/.ssh/id_ed25519";
-    port = 8022;
-    hashKnownHosts = true;
-    compression = true;
-    # fish not found error ???
+    HostName = hostname;
+    User = "osbm";
+    IdentityFile = "~/.ssh/id_ed25519";
+    Port = 8022;
+    HashKnownHosts = true;
+    Compression = true;
   };
   sshBlockAlgorynth = hostname: {
-    inherit hostname;
-    user = "algorynth";
-    identityFile = "~/.ssh/id_ed25519";
-    hashKnownHosts = true;
-    compression = true;
+    HostName = hostname;
+    User = "algorynth";
+    IdentityFile = "~/.ssh/id_ed25519";
+    HashKnownHosts = true;
+    Compression = true;
   };
 in
 {
@@ -30,7 +27,7 @@ in
     enable = true;
     enableDefaultConfig = false;
 
-    matchBlocks = {
+    settings = {
       ymir = sshBlock "192.168.0.2";
       ymir-ts = sshBlock "ymir.curl-boga.ts.net";
       atreus = sshBlockDroid "192.168.0.3";
@@ -48,16 +45,14 @@ in
       apollo = sshBlock "152.53.152.129";
       apollo-ts = sshBlock "apollo.curl-boga.ts.net";
       apollo-initrd = {
-        hostname = "152.53.152.129";
-        port = 2222;
-        user = "root";
-        identityFile = "~/.ssh/id_ed25519";
-        hashKnownHosts = true;
-        compression = true;
-        extraOptions = {
-          RequestTTY = "yes";
-          RemoteCommand = "systemd-tty-ask-password-agent --query";
-        };
+        HostName = "152.53.152.129";
+        Port = 2222;
+        User = "root";
+        IdentityFile = "~/.ssh/id_ed25519";
+        HashKnownHosts = true;
+        Compression = true;
+        RequestTTY = "yes";
+        RemoteCommand = "systemd-tty-ask-password-agent --query";
       };
       ares = sshBlock "192.168.0.6";
       ares-ts = sshBlock "ares.curl-boga.ts.net";
@@ -65,7 +60,6 @@ in
       artemis-ts = sshBlock "artemis.curl-boga.ts.net";
       luoji = sshBlockDroid "192.168.0.7";
       luoji-ts = sshBlockDroid "luoji.curl-boga.ts.net";
-      # artemis
       # Algorynth infrastructure
       huginn = sshBlockAlgorynth "159.195.69.95";
       huginn-ts = sshBlockAlgorynth "huginn.curl-boga.ts.net";
