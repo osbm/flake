@@ -88,6 +88,8 @@ in
         enable = true;
         user = "osbm";
         dataDir = "/home/osbm";
+        configDir = "/home/osbm/.syncthing";
+        databaseDir = "/home/osbm/.syncthing/db";
         openDefaultPorts = false;
         guiAddress = "0.0.0.0:8384";
         # port is 8384
@@ -140,11 +142,7 @@ in
       environment.persistence."/persist".users.osbm = {
         directories = [
           {
-            directory = ".config/syncthing";
-            mode = "0700";
-          }
-          {
-            directory = ".local/state/syncthing";
+            directory = ".syncthing";
             mode = "0700";
           }
         ];
