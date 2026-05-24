@@ -98,13 +98,6 @@
               group = "redis-rspamd";
               mode = "0750";
             }
-            # Sieve is a scripting language for filtering email messages.
-            {
-              directory = config.mailserver.sieveDirectory; # /var/sieve by default
-              user = "virtualMail";
-              group = "virtualMail";
-              mode = "0770";
-            }
             # Mail folder
             {
               directory = config.mailserver.storage.path; # /var/vmail by default
