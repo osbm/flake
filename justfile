@@ -109,8 +109,8 @@ build-iso: check-git
 # Usage: just flash-harmonica-sd /dev/sdX
 # Refuses non-USB devices to avoid clobbering the system disk.
 flash-harmonica-sd DEVICE: build-sd-image-harmonica
-  #!/usr/bin/env sh
-  set -eu
+  #!/usr/bin/env bash
+  set -euo pipefail
   if [ "$(lsblk -o TRAN -nr {{DEVICE}} | head -1)" != "usb" ]; then
     echo "ERROR: {{DEVICE}} is not a USB device. Refusing." >&2; exit 1
   fi
@@ -126,17 +126,17 @@ flash-harmonica-sd DEVICE: build-sd-image-harmonica
   sudo partprobe {{DEVICE}}
   sleep 2
   MNT=$(mktemp -d)
+  TMPKEY=$(mktemp)
+  trap 'rm -f "$TMPKEY"; sudo umount "$MNT" 2>/dev/null || true; rmdir "$MNT" 2>/dev/null || true' EXIT
+  # decrypt to local tempfile FIRST so a silent failure aborts before we touch the SD
+  nix run nixpkgs#age -- -d -i "$HOME/.ssh/id_ed25519" secrets/harmonica-host-key-private.age > "$TMPKEY"
+  ssh-keygen -y -f "$TMPKEY" >/dev/null   # validate it's actually a usable SSH private key
   sudo mount {{DEVICE}}2 "$MNT"
   sudo mkdir -p "$MNT/etc/ssh"
-  nix run nixpkgs#age -- -d -i ~/.ssh/id_ed25519 secrets/harmonica-host-key-private.age \
-    | sudo tee "$MNT/etc/ssh/ssh_host_ed25519_key" > /dev/null
-  sudo chmod 600 "$MNT/etc/ssh/ssh_host_ed25519_key"
-  echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK/JPg7q+BzTUy2aWNH6NFCe6k1QB9oxvHYuh6WdxHSW root@harmonica" \
-    | sudo tee "$MNT/etc/ssh/ssh_host_ed25519_key.pub" > /dev/null
+  sudo install -m 600 -o root -g root "$TMPKEY" "$MNT/etc/ssh/ssh_host_ed25519_key"
+  printf '%s root@harmonica\n' "$(ssh-keygen -y -f "$TMPKEY")" | sudo tee "$MNT/etc/ssh/ssh_host_ed25519_key.pub" > /dev/null
   sudo chmod 644 "$MNT/etc/ssh/ssh_host_ed25519_key.pub"
   sudo sync
-  sudo umount "$MNT"
-  rmdir "$MNT"
   echo "Flashed + host key deployed. Eject and insert into the Pi."
 
 setup-apollo-nixos:
