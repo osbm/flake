@@ -105,11 +105,39 @@ build-sd-image-pochita: check-git
 build-iso: check-git
   nom build -L .#nixosConfigurations.iso.config.system.build.isoImage
 
-flash-sd-image-harmonica:
-  # raise error because this command should be edited before running
-  false
-  nom build -L .#nixosConfigurations.harmonica-sd.config.system.build.sdImage
-  sudo dd if=result/sd-image/nixos-image-sd-card-25.05.20250224.0196c01-aarch64-linux.img of=/dev/sda bs=4M status=progress conv=fsync
+# Flash harmonica SD card AND pre-deploy the host SSH key so agenix can decrypt at first boot.
+# Usage: just flash-harmonica-sd /dev/sdX
+# Refuses non-USB devices to avoid clobbering the system disk.
+flash-harmonica-sd DEVICE: build-sd-image-harmonica
+  #!/usr/bin/env sh
+  set -eu
+  if [ "$(lsblk -o TRAN -nr {{DEVICE}} | head -1)" != "usb" ]; then
+    echo "ERROR: {{DEVICE}} is not a USB device. Refusing." >&2; exit 1
+  fi
+  if mount | grep -q "^{{DEVICE}}"; then
+    echo "ERROR: {{DEVICE}} has mounted partitions. Unmount first." >&2; exit 1
+  fi
+  IMG=$(ls result/sd-image/*.img | head -1)
+  echo "Flashing $IMG -> {{DEVICE}}"
+  sudo -v
+  sudo wipefs -a {{DEVICE}}
+  sudo dd if="$IMG" of={{DEVICE}} bs=4M status=progress conv=fsync
+  sync
+  sudo partprobe {{DEVICE}}
+  sleep 2
+  MNT=$(mktemp -d)
+  sudo mount {{DEVICE}}2 "$MNT"
+  sudo mkdir -p "$MNT/etc/ssh"
+  nix run nixpkgs#age -- -d -i ~/.ssh/id_ed25519 secrets/harmonica-host-key-private.age \
+    | sudo tee "$MNT/etc/ssh/ssh_host_ed25519_key" > /dev/null
+  sudo chmod 600 "$MNT/etc/ssh/ssh_host_ed25519_key"
+  echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK/JPg7q+BzTUy2aWNH6NFCe6k1QB9oxvHYuh6WdxHSW root@harmonica" \
+    | sudo tee "$MNT/etc/ssh/ssh_host_ed25519_key.pub" > /dev/null
+  sudo chmod 644 "$MNT/etc/ssh/ssh_host_ed25519_key.pub"
+  sudo sync
+  sudo umount "$MNT"
+  rmdir "$MNT"
+  echo "Flashed + host key deployed. Eject and insert into the Pi."
 
 setup-apollo-nixos:
   nano /tmp/secret.key
