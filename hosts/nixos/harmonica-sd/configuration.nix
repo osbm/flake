@@ -21,7 +21,11 @@
 
   networking.hostName = "harmonica";
 
-  age.secrets.harmonica-wifi-env.file = ../../../secrets/harmonica-wifi-env.age;
+  age.secrets.harmonica-wifi-env = {
+    file = ../../../secrets/harmonica-wifi-env.age;
+    owner = "wpa_supplicant";
+    group = "wpa_supplicant";
+  };
 
   networking = {
     interfaces."wlan0".useDHCP = true;
