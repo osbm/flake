@@ -39,4 +39,8 @@ in
   "harmonica-host-key-private.age".publicKeys = [
     osbm
   ];
+  "harmonica-wifi-env.age".publicKeys = [
+    harmonica
+    osbm
+  ];
 }
