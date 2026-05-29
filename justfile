@@ -123,7 +123,7 @@ flash-harmonica-sd DEVICE: build-sd-image-harmonica
   sudo wipefs -a {{DEVICE}}
   sudo dd if="$IMG" of={{DEVICE}} bs=4M status=progress conv=fsync
   sync
-  sudo partprobe {{DEVICE}}
+  sudo blockdev --rereadpt {{DEVICE}}
   sleep 2
   MNT=$(mktemp -d)
   TMPKEY=$(mktemp)
