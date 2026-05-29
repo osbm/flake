@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   ...
 }:
@@ -20,18 +21,17 @@
 
   networking.hostName = "harmonica";
 
+  age.secrets.harmonica-wifi-env.file = ../../../secrets/harmonica-wifi-env.age;
+
   networking = {
     interfaces."wlan0".useDHCP = true;
     wireless = {
       enable = true;
       interfaces = [ "wlan0" ];
+      secretsFile = config.age.secrets.harmonica-wifi-env.path;
       networks = {
-        "House_Bayram" = {
-          psk = "PASSWORD";
-        };
-        "it_hurts_when_IP" = {
-          psk = "PASSWORD";
-        };
+        "House_Bayram".pskRaw = "ext:HOUSE_BAYRAM_PSK";
+        # TODO: add "it_hurts_when_IP" back here (and its PSK var in harmonica-wifi-env.age)
       };
     };
   };
