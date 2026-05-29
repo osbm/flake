@@ -14,6 +14,9 @@
   # https://www.raspberrypi.com/documentation/computers/linux_kernel.html#native-build-configuration
   raspberry-pi-nix.board = "bcm2712";
 
+  # systemd-in-initrd hangs on Pi 5; legacy script initrd works
+  boot.initrd.systemd.enable = false;
+
   # RPi kernel doesn't have tpm-crb module
   boot.initrd.systemd.tpm2.enable = false;
 
