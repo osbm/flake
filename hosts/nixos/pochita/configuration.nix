@@ -47,6 +47,15 @@
     programs.graphical.enable = false;
   };
 
+  # systemd-in-initrd hangs waiting for NVMe by-partuuid device on Pi 5; legacy script initrd works
+  boot.initrd.systemd.enable = false;
+
+  # load in initrd, else stage-2 races the /boot/firmware mount and drops to emergency mode
+  boot.initrd.kernelModules = [
+    "nls_cp437"
+    "nls_iso8859-1"
+  ];
+
   zramSwap.enable = true;
 
   networking.hostName = "pochita";

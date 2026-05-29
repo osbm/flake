@@ -28,9 +28,11 @@
     "/boot/firmware" = {
       device = "/dev/disk/by-uuid/2178-694E";
       fsType = "vfat";
+      # nofail: don't block boot if vfat codepage modprobe is broken on current nixpkgs
       options = [
         "fmask=0022"
         "dmask=0022"
+        "nofail"
       ];
     };
   };
