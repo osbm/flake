@@ -16,7 +16,7 @@
     algorithm = "zstd";
   };
 
-  image.fileName = "zero2.img";
+  image.fileName = "harmonica.img";
   sdImage = {
     # bzip2 compression takes loads of time with emulation, skip it. Enable this if you're low on space.
     compressImage = false;
