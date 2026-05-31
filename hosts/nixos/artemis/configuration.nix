@@ -55,10 +55,13 @@
 
   networking.hostName = "artemis";
 
-  # Work around nix-daemon substituter hangs on aarch64/mobile:
-  # libcurl can deadlock with multiple parallel handles, leaving data
-  # unread in the kernel recv buffer and freezing the build forever
-  # (default stalled-download-timeout only fires on zero-byte streams).
+  # Belt-and-suspenders for nix-daemon substituter hangs on aarch64/mobile.
+  # NOT a real fix: the underlying libcurl multi-handle deadlock prevents
+  # curl's progress callback from running, so stalled-download-timeout
+  # never gets checked. Verified ineffective on 2026-05-31 (same hang
+  # reproduced with these values passed via --option). The actual
+  # workaround is to build artemis's closure on another host and push via
+  # `just deploy artemis` — do not substitute on artemis directly.
   nix.settings = {
     connect-timeout = 5;
     stalled-download-timeout = 30;
