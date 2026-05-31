@@ -55,6 +55,17 @@
 
   networking.hostName = "artemis";
 
+  # Work around nix-daemon substituter hangs on aarch64/mobile:
+  # libcurl can deadlock with multiple parallel handles, leaving data
+  # unread in the kernel recv buffer and freezing the build forever
+  # (default stalled-download-timeout only fires on zero-byte streams).
+  nix.settings = {
+    connect-timeout = 5;
+    stalled-download-timeout = 30;
+    download-attempts = 3;
+    max-substitution-jobs = 1;
+  };
+
   # mobile-nixos needs aliases (uses nettools instead of net-tools)
   nixpkgs = {
     config.allowAliases = true;
