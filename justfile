@@ -102,6 +102,95 @@ build-sd-image-harmonica: check-git
 build-sd-image-pochita: check-git
   nom build -L .#nixosConfigurations.pochita-sd.config.system.build.sdImage
 
+# Build (just) the system closure for harmonica-encrypted; the actual SD card is
+# produced by `flash-harmonica-encrypted-sd` because the layout includes LUKS.
+build-harmonica-encrypted: check-git
+  nom build -L .#nixosConfigurations.harmonica-encrypted.config.system.build.toplevel --out-link result-harmonica-encrypted
+
+# Flash an encrypted harmonica SD card with LUKS-encrypted root + TTY decryption.
+# Usage: just flash-harmonica-encrypted-sd /dev/sdX [PASSPHRASE]
+# Layout:  p1 = vfat FIRMWARE (128 MiB) — Pi firmware reads this
+#          p2 = LUKS (rest) labeled cryptroot, ext4 inside labeled NIXOSROOT
+flash-harmonica-encrypted-sd DEVICE PASSPHRASE="changeme": build-harmonica-encrypted
+  #!/usr/bin/env bash
+  set -euo pipefail
+  DEV={{DEVICE}}
+  PASS={{PASSPHRASE}}
+  if [ "$(lsblk -o TRAN -nr $DEV | head -1)" != "usb" ]; then
+    echo "ERROR: $DEV is not a USB device. Refusing." >&2; exit 1
+  fi
+  if mount | grep -q "^$DEV"; then
+    echo "ERROR: $DEV has mounted partitions. Unmount first." >&2; exit 1
+  fi
+  CLOSURE=$(readlink -f result-harmonica-encrypted)
+  RPI_FW=$(nix eval --raw nixpkgs#raspberrypifw)/share/raspberrypi/boot
+  echo "Closure:  $CLOSURE"
+  echo "RPi-fw:   $RPI_FW"
+  echo "Device:   $DEV"
+  sudo -v
+
+  # 1. wipe + partition
+  sudo wipefs -a "$DEV"
+  sudo sfdisk "$DEV" <<EOF
+  label: gpt
+  size=128MiB, type=EBD0A0A2-B9E5-4433-87C0-68B6B72699C7, name="FIRMWARE"
+  type=0FC63DAF-8483-4772-8E79-3D69D8477DE4, name="cryptroot"
+  EOF
+  sudo blockdev --rereadpt "$DEV"
+  sleep 2
+
+  # 2. format FAT + LUKS + ext4-inside-LUKS
+  sudo mkfs.vfat -F 32 -n FIRMWARE "${DEV}1"
+  echo -n "$PASS" | sudo cryptsetup luksFormat --type luks2 --label CRYPTROOT --batch-mode "${DEV}2" -
+  echo -n "$PASS" | sudo cryptsetup open --key-file - "${DEV}2" cryptroot_inst
+  sudo mkfs.ext4 -L NIXOSROOT /dev/mapper/cryptroot_inst
+
+  # 3. mount target
+  MNT=$(mktemp -d)
+  trap 'sudo umount "$MNT/boot/firmware" 2>/dev/null || true; sudo umount "$MNT" 2>/dev/null || true; sudo cryptsetup close cryptroot_inst 2>/dev/null || true; rmdir "$MNT" 2>/dev/null || true' EXIT
+  sudo mount /dev/mapper/cryptroot_inst "$MNT"
+  sudo mkdir -p "$MNT/boot/firmware"
+  sudo mount "${DEV}1" "$MNT/boot/firmware"
+
+  # 4. install the closure to cryptroot
+  sudo nixos-install --root "$MNT" --system "$CLOSURE" --no-root-passwd --no-channel-copy
+
+  # 5. populate /boot/firmware (Pi firmware blobs + kernel + initrd + config.txt + cmdline.txt)
+  sudo cp "$RPI_FW"/{bootcode.bin,start*.elf,fixup*.dat} "$MNT/boot/firmware/"
+  sudo cp "$RPI_FW"/bcm*.dtb "$MNT/boot/firmware/"
+  sudo cp -r "$RPI_FW/overlays" "$MNT/boot/firmware/"
+  sudo cp -L "$CLOSURE/kernel"  "$MNT/boot/firmware/kernel.img"
+  sudo cp -L "$CLOSURE/initrd"  "$MNT/boot/firmware/initrd"
+  printf '%s\n' \
+    'arm_64bit=1' \
+    'kernel=kernel.img' \
+    'initramfs initrd followkernel' \
+    'enable_uart=1' \
+    'disable_overscan=1' \
+    | sudo tee "$MNT/boot/firmware/config.txt" > /dev/null
+  printf '%s\n' \
+    'console=tty1 console=serial0,115200n8 root=/dev/mapper/cryptroot rootfstype=ext4 rootwait init=/sbin/init loglevel=4' \
+    | sudo tee "$MNT/boot/firmware/cmdline.txt" > /dev/null
+
+  # 6. pre-deploy the harmonica host SSH key (so agenix can decrypt at first boot)
+  TMPKEY=$(mktemp)
+  nix run nixpkgs#age -- -d -i "$HOME/.ssh/id_ed25519" secrets/harmonica-host-key-private.age > "$TMPKEY"
+  ssh-keygen -y -f "$TMPKEY" >/dev/null
+  sudo install -m 600 -o root -g root "$TMPKEY" "$MNT/etc/ssh/ssh_host_ed25519_key"
+  printf '%s root@harmonica\n' "$(ssh-keygen -y -f "$TMPKEY")" | sudo tee "$MNT/etc/ssh/ssh_host_ed25519_key.pub" > /dev/null
+  sudo chmod 644 "$MNT/etc/ssh/ssh_host_ed25519_key.pub"
+  rm -f "$TMPKEY"
+
+  # 7. flush + clean up
+  sudo sync
+  sudo umount "$MNT/boot/firmware"
+  sudo umount "$MNT"
+  sudo cryptsetup close cryptroot_inst
+  rmdir "$MNT"
+  trap - EXIT
+  echo "Flashed. LUKS passphrase: $PASS"
+  echo "Insert SD into the Pi; it will prompt for the passphrase at the TTY."
+
 build-iso: check-git
   nom build -L .#nixosConfigurations.iso.config.system.build.isoImage
 
