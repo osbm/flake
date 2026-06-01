@@ -19,6 +19,7 @@
           extraGroups = [
             "wheel"
             "networkmanager"
+            "video"
           ]
           ++ lib.optional config.osbmModules.virtualisation.docker.enable "docker";
           openssh.authorizedKeys.keys = lib.mkDefault [
