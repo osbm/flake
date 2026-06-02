@@ -92,6 +92,15 @@
     asciiquarium
     neovim
     kitty
+
+    # Camera diagnostic + capture stack. Camera does not work yet on
+    # mobile-nixos enchilada (kernel 6.4 has no IMX519/IMX376/IMX371
+    # sensor drivers — those landed in pmOS's 6.14-based fork). These
+    # tools are here so we can probe media topology once the kernel
+    # is bumped.
+    libcamera
+    v4l-utils
+    megapixels
   ];
 
   # Audio: PipeWire is too quiet on this device, use PulseAudio instead
