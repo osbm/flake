@@ -61,6 +61,11 @@
   networking.hostName = "pochita";
   networking.networkmanager.enable = true;
 
+  # nixpkgs's hardware.deviceTree.enable default reads
+  # config.boot.kernelPackages.kernel.buildDTBs, which raspberry-pi-nix's
+  # kernel doesn't expose. Set it explicitly to bypass the broken default.
+  hardware.deviceTree.enable = true;
+
   # log of shame: osbm blamed nix when he wrote "hostname" instead of "hostName"
 
   environment.systemPackages = [

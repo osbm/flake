@@ -14,6 +14,11 @@
   # https://www.raspberrypi.com/documentation/computers/linux_kernel.html#native-build-configuration
   raspberry-pi-nix.board = "bcm2712";
 
+  # nixpkgs's hardware.deviceTree.enable default reads
+  # config.boot.kernelPackages.kernel.buildDTBs, which raspberry-pi-nix's
+  # kernel doesn't expose. Set it explicitly to bypass the broken default.
+  hardware.deviceTree.enable = true;
+
   # systemd-in-initrd hangs on Pi 5; legacy script initrd works
   boot.initrd.systemd.enable = false;
 
