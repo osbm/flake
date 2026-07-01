@@ -37,6 +37,19 @@
     decky-loader.enable = true;
   };
 
+  # Steam Deck UI (CEF) ignores fontconfig and only reads real font files from
+  # ~/.local/share/fonts and /usr/share/fonts, so system fonts render as tofu
+  # boxes. Populate the X11 font dir and symlink it into the user's home.
+  # See: https://github.com/Jovian-Experiments/Jovian-NixOS/issues/355
+  fonts.fontDir.enable = true;
+
+  system.userActivationScripts.linkSteamFonts.text = ''
+    if [[ ! -h "$HOME/.local/share/fonts" ]]; then
+      mkdir -p "$HOME/.local/share"
+      ln -s /run/current-system/sw/share/X11/fonts "$HOME/.local/share/fonts"
+    fi
+  '';
+
   networking = {
     hostName = "ares";
 
