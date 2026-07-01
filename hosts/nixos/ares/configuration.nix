@@ -15,6 +15,7 @@
       steam.enable = true;
     };
     services.syncthing.enable = true;
+    fonts.enable = true;
     hardware = {
       # hibernation.enable = false;
       sound.enable = true;
