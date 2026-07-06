@@ -22,6 +22,7 @@
       # seafile.enable = true;
       syncthing.enable = true;
       prometheus.enable = true;
+      hermes.enable = true;
 
       # Backup server - exposes data for pull-based backups
       backup-server = {

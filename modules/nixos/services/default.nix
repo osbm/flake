@@ -9,6 +9,7 @@
     ./openssh.nix
     ./forgejo.nix
     ./glance.nix
+    ./hermes.nix
     ./hydra.nix
     ./immich.nix
     ./jellyfin.nix

@@ -43,4 +43,8 @@ in
     harmonica
     osbm
   ];
+  "hermes-env.age".publicKeys = [
+    apollo
+    osbm
+  ];
 }

@@ -189,6 +189,7 @@
         };
       };
       ollama.enable = lib.mkEnableOption "ollama";
+      hermes.enable = lib.mkEnableOption "hermes-agent personal AI agent";
       forgejo.enable = lib.mkEnableOption "forgejo";
       atticd.enable = lib.mkEnableOption "atticd";
       glance.enable = lib.mkEnableOption "glance";
