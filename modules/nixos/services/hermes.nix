@@ -98,7 +98,9 @@ in
           User = "hermes";
           Group = "hermes";
           WorkingDirectory = "/var/lib/hermes/workspace";
-          ExecStart = "${config.services.hermes-agent.package}/bin/hermes serve --skip-build --host 127.0.0.1 --port 9119";
+          # `serve` became a headless backend upstream; the browser UI moved
+          # to the `dashboard` subcommand
+          ExecStart = "${config.services.hermes-agent.package}/bin/hermes dashboard --skip-build --no-open --host 127.0.0.1 --port 9119";
           Restart = "on-failure";
           RestartSec = 5;
           UMask = "0007";
