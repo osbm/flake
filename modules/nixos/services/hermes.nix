@@ -21,7 +21,7 @@ in
         # Claude Max subscription via `hermes login anthropic` (auth.json);
         # nix-managed keys win over TUI edits on every activation
         settings = {
-          model = "anthropic/claude-sonnet-4.6";
+          model = "anthropic/claude-opus-4.8";
           # fallback chain, tried in order when the subscription pool is
           # throttled/exhausted
           # haiku shares the subscription pool but has its own rate-limit
