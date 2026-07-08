@@ -24,7 +24,13 @@ in
           model = "anthropic/claude-sonnet-4.6";
           # fallback chain, tried in order when the subscription pool is
           # throttled/exhausted
+          # haiku shares the subscription pool but has its own rate-limit
+          # bucket, so it keeps telegram alive when sonnet/opus are throttled
           fallback_model = [
+            {
+              provider = "anthropic";
+              model = "claude-haiku-4-5";
+            }
             # {
             #   provider = "deepseek";
             #   model = "deepseek-v4-pro";
