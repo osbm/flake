@@ -12,7 +12,6 @@
       # blender with cuda is not foss?!?
       # "blender"
       "obsidian"
-      "claude-code"
     ];
 
     environment.systemPackages = with pkgs; [
@@ -27,7 +26,6 @@
       vscode
       chromium
       thunderbird
-      claude-code
       obsidian
     ];
   };

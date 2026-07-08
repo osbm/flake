@@ -6,7 +6,13 @@
 }:
 {
   config = lib.mkIf config.osbmModules.programs.commandLine.enable {
+    osbmModules.nixSettings.allowedUnfreePackages = [
+      "claude-code"
+    ];
+
     environment.systemPackages = with pkgs; [
+      claude-code
+
       # networking
       wget
       curl
