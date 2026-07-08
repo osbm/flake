@@ -25,14 +25,14 @@ in
           # fallback chain, tried in order when the subscription pool is
           # throttled/exhausted
           fallback_model = [
-            {
-              provider = "deepseek";
-              model = "deepseek-v4-pro";
-            }
-            {
-              provider = "gemini";
-              model = "gemini-3.1-pro-preview";
-            }
+            # {
+            #   provider = "deepseek";
+            #   model = "deepseek-v4-pro";
+            # }
+            # {
+            #   provider = "gemini";
+            #   model = "gemini-3.1-pro-preview";
+            # }
           ];
         };
       };
