@@ -37,6 +37,10 @@
     decky-loader.enable = true;
   };
 
+  # Jovian's decky-loader still builds its frontend with pnpm 9, which nixpkgs
+  # marks insecure. Build-time only; drop this once upstream moves to pnpm 10.
+  nixpkgs.config.permittedInsecurePackages = [ "pnpm-9.15.9" ];
+
   # Steam Deck UI (CEF) ignores fontconfig and only reads real font files from
   # ~/.local/share/fonts and /usr/share/fonts, so system fonts render as tofu
   # boxes. Populate the X11 font dir and symlink it into the user's home.
