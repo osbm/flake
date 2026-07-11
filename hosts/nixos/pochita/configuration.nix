@@ -66,6 +66,11 @@
   # kernel doesn't expose. Set it explicitly to bypass the broken default.
   hardware.deviceTree.enable = true;
 
+  # Same story: system.boot.loader.kernelFile now defaults to
+  # config.boot.kernelPackages.kernel.target, which raspberry-pi-nix's kernel
+  # also doesn't expose. "Image" is the aarch64 value the old default used.
+  system.boot.loader.kernelFile = "Image";
+
   # log of shame: osbm blamed nix when he wrote "hostname" instead of "hostName"
 
   environment.systemPackages = [
