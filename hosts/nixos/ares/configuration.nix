@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -40,6 +40,18 @@
   # Jovian's decky-loader still builds its frontend with pnpm 9, which nixpkgs
   # marks insecure. Build-time only; drop this once upstream moves to pnpm 10.
   nixpkgs.config.permittedInsecurePackages = [ "pnpm-9.15.9" ];
+
+  # Tripwires so the exception above can't silently outlive its reason.
+  assertions = [
+    {
+      assertion = inputs.jovian-nixos.rev == "eb1d4e013417487d515db93fafcd3e75c9e0f843";
+      message = "jovian-nixos was updated: check whether decky-loader still builds with pnpm 9. If not, remove the permittedInsecurePackages entry and these assertions; otherwise bump the pinned rev here.";
+    }
+    {
+      assertion = pkgs.pnpm_9.meta.knownVulnerabilities or [ ] != [ ];
+      message = "pnpm_9 is no longer marked insecure: remove the pnpm-9.15.9 permittedInsecurePackages entry and these assertions.";
+    }
+  ];
 
   # Steam Deck UI (CEF) ignores fontconfig and only reads real font files from
   # ~/.local/share/fonts and /usr/share/fonts, so system fonts render as tofu
