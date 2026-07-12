@@ -44,49 +44,68 @@ let
       exec python ${./app.py} ${toString config.osbmModules.services.wanikani-stats.port}
     '';
   };
+  cfg = config.osbmModules.services.wanikani-stats;
 in
 {
-  config = lib.mkIf config.osbmModules.services.wanikani-stats.enable {
-    networking.firewall.allowedTCPPorts =
-      lib.optional config.osbmModules.services.wanikani-stats.openFirewall
-        config.osbmModules.services.wanikani-stats.port;
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.port;
 
-    systemd = {
-      services = {
-        wanikani-stats = {
-          description = "WaniKani Stats Service";
-          after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
-          serviceConfig = {
-            Type = "simple";
-            ExecStart = "${lib.getExe wanikani-stats-flask}";
-            StateDirectory = "/var/lib/wanikani-stats";
-            Restart = "on-failure";
-            User = "root";
-            Group = "root";
+      systemd = {
+        services = {
+          wanikani-stats = {
+            description = "WaniKani Stats Service";
+            after = [ "network.target" ];
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              Type = "simple";
+              ExecStart = "${lib.getExe wanikani-stats-flask}";
+              StateDirectory = "/var/lib/wanikani-stats";
+              Restart = "on-failure";
+              User = "root";
+              Group = "root";
+            };
+          };
+
+          # Timer to restart the service every 12 hours
+          wanikani-stats-restart = {
+            description = "Restart WaniKani Stats Service";
+            serviceConfig = {
+              Type = "oneshot";
+              ExecStart = "${pkgs.systemd}/bin/systemctl restart wanikani-stats.service";
+              User = "root";
+            };
           };
         };
 
-        # Timer to restart the service every 12 hours
-        wanikani-stats-restart = {
-          description = "Restart WaniKani Stats Service";
-          serviceConfig = {
-            Type = "oneshot";
-            ExecStart = "${pkgs.systemd}/bin/systemctl restart wanikani-stats.service";
-            User = "root";
+        timers.wanikani-stats-restart = {
+          description = "Timer to restart WaniKani Stats Service every 12 hours";
+          wantedBy = [ "timers.target" ];
+          timerConfig = {
+            OnCalendar = "*-*-* 00,12:00:00";
+            Persistent = true;
+            RandomizedDelaySec = "5m";
           };
         };
       };
+    })
 
-      timers.wanikani-stats-restart = {
-        description = "Timer to restart WaniKani Stats Service every 12 hours";
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnCalendar = "*-*-* 00,12:00:00";
-          Persistent = true;
-          RandomizedDelaySec = "5m";
+    # subdomain behind nginx, tailnet-only (same pattern as hermes.osbm.dev):
+    # DNS resolves to apollo's tailnet IP and the vhost rejects non-tailnet
+    # sources in case the public IP is hit directly with a matching SNI
+    (lib.mkIf (cfg.enable && config.osbmModules.services.nginx.enable) {
+      services.nginx.virtualHosts."wanikani-stats.osbm.dev" = {
+        forceSSL = true;
+        useACMEHost = "osbm.dev";
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:${toString cfg.port}";
+          extraConfig = ''
+            allow 100.64.0.0/10;
+            allow fd7a:115c:a1e0::/48;
+            deny all;
+          '';
         };
       };
-    };
-  };
+    })
+  ];
 }
