@@ -61,8 +61,10 @@ in
       # let the main user run `hermes` against the service state
       users.users.${config.osbmModules.defaultUser}.extraGroups = [ "hermes" ];
 
-      # plain python3 for skill scripts (duolingo etc.)
+      # plain python3 for skill scripts (duolingo etc.); in systemPackages so
+      # it also survives the login-shell PATH reset (see anki block below)
       systemd.services.hermes-agent.path = [ pkgs.python3 ];
+      environment.systemPackages = [ pkgs.python3 ];
 
       # tighten the upstream unit: hide /home, drop capabilities, block
       # kernel-facing surfaces. Writes stay confined to /var/lib/hermes.
@@ -98,6 +100,11 @@ in
         group = "hermes";
         mode = "0440";
       };
+
+      # systemPackages, not just unit path: hermes's exec tool spawns login
+      # shells, and /etc/set-environment resets PATH to the system profiles —
+      # unit-level path additions don't survive that
+      environment.systemPackages = [ anki-python ];
 
       systemd.services.hermes-agent = {
         path = [ anki-python ];
