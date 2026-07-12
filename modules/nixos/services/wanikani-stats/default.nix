@@ -34,10 +34,6 @@ let
         ppkgs: with ppkgs; [
           flask
           pandas
-          numpy
-          jinja2
-          matplotlib
-          seaborn
           plotly
         ]
       ))
