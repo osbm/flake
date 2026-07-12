@@ -47,4 +47,8 @@ in
     apollo
     osbm
   ];
+  "wanikani-env.age".publicKeys = [
+    apollo
+    osbm
+  ];
 }

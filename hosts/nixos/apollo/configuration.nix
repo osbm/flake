@@ -24,6 +24,14 @@
       prometheus.enable = true;
       hermes.enable = true;
 
+      # wanikani archiver + dashboard (moved from pochita); port stays
+      # firewalled — apollo is public-facing, reach it over tailscale
+      wanikani-fetch-data.enable = true;
+      wanikani-stats = {
+        enable = true;
+        openFirewall = false;
+      };
+
       # Backup server - exposes data for pull-based backups
       backup-server = {
         enable = true;

@@ -213,6 +213,12 @@
           default = 8501;
           description = "Port for the WaniKani Stats service";
         };
+
+        openFirewall = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Open the stats port in the firewall (disable on public-facing hosts)";
+        };
       };
 
       system-logger = {

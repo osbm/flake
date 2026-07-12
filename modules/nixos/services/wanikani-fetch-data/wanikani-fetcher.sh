@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 shopt -s nullglob
-API_TOKEN="2da24e4a-ba89-4c4a-9047-d08f21e9dd01"
+# provided via systemd EnvironmentFile (age secret)
+API_TOKEN="${WANIKANI_API_TOKEN:?WANIKANI_API_TOKEN is not set}"
 date=$(date +%Y-%m-%d)
 
 # check if todays date is already in the logs folder
@@ -61,6 +62,19 @@ fetch_and_merge review_statistics
 fetch_and_merge spaced_repetition_systems
 fetch_and_merge study_materials
 fetch_and_merge subjects
+
+# subjects.json is ~30MB and rarely changes, so it doesn't go into the daily
+# zip. Instead keep a single current copy, and archive a dated version only
+# when the content actually changed (e.g. WaniKani moved lessons between
+# levels).
+current_subjects="/var/lib/wanikani-logs/subjects.json"
+new_subjects="$tmp_dir/data/subjects.json"
+if [ ! -f "$current_subjects" ] || ! cmp -s "$new_subjects" "$current_subjects"; then
+  mkdir -p "/var/lib/wanikani-logs/subjects-changes"
+  echo "subjects.json changed, archiving dated copy"
+  cp "$new_subjects" "/var/lib/wanikani-logs/subjects-changes/subjects_$date.json"
+fi
+mv "$new_subjects" "$current_subjects"
 
 curl -s "https://api.wanikani.com/v2/summary" \
   -H "Wanikani-Revision: 20170710" \

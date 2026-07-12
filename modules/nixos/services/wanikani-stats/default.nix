@@ -51,9 +51,9 @@ let
 in
 {
   config = lib.mkIf config.osbmModules.services.wanikani-stats.enable {
-    networking.firewall.allowedTCPPorts = [
-      config.osbmModules.services.wanikani-stats.port
-    ];
+    networking.firewall.allowedTCPPorts =
+      lib.optional config.osbmModules.services.wanikani-stats.openFirewall
+        config.osbmModules.services.wanikani-stats.port;
 
     systemd = {
       services = {
