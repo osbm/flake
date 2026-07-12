@@ -55,4 +55,8 @@ in
     apollo
     osbm
   ];
+  "duolingo-env.age".publicKeys = [
+    apollo
+    osbm
+  ];
 }

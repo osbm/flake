@@ -24,7 +24,12 @@ in
         enable = true;
         # hermes CLI/TUI/dashboard for interactive use, shares the service HERMES_HOME
         addToSystemPackages = true;
-        environmentFiles = [ config.age.secrets.hermes-env.path ];
+        environmentFiles = [
+          config.age.secrets.hermes-env.path
+          # DUOLINGO_JWT / _USERNAME / _USER_ID for the duolingo skill;
+          # the browser-cookie JWT effectively never expires (exp year 2169)
+          config.age.secrets.duolingo-env.path
+        ];
         # Claude Max subscription via `hermes login anthropic` (auth.json);
         # nix-managed keys win over TUI edits on every activation
         settings = {
@@ -51,9 +56,13 @@ in
       };
 
       age.secrets.hermes-env.file = ../../../secrets/hermes-env.age;
+      age.secrets.duolingo-env.file = ../../../secrets/duolingo-env.age;
 
       # let the main user run `hermes` against the service state
       users.users.${config.osbmModules.defaultUser}.extraGroups = [ "hermes" ];
+
+      # plain python3 for skill scripts (duolingo etc.)
+      systemd.services.hermes-agent.path = [ pkgs.python3 ];
 
       # tighten the upstream unit: hide /home, drop capabilities, block
       # kernel-facing surfaces. Writes stay confined to /var/lib/hermes.
