@@ -64,12 +64,27 @@ PLOT_LAYOUT = dict(
 )
 
 
-def get_zip_files():
-    return sorted(f for f in DATA_DIR.glob("wanikani_data_*.zip") if f.is_file())
+def get_snapshots():
+    """Daily snapshots: plain directories (current format) or zips (legacy)."""
+    return sorted(
+        p
+        for p in DATA_DIR.glob("wanikani_data_*")
+        if p.is_dir() or (p.is_file() and p.suffix == ".zip")
+    )
 
 
-def read_json_from_zip(zip_path, name):
-    with zipfile.ZipFile(zip_path, "r") as z:
+def snapshot_date(snapshot):
+    return snapshot.name.removeprefix("wanikani_data_").removesuffix(".zip")
+
+
+def read_json(snapshot, name):
+    if snapshot.is_dir():
+        path = snapshot / name
+        if not path.is_file():
+            return None
+        with open(path) as f:
+            return json.load(f)
+    with zipfile.ZipFile(snapshot, "r") as z:
         if name not in z.namelist():
             return None
         with z.open(name) as f:
@@ -77,15 +92,15 @@ def read_json_from_zip(zip_path, name):
 
 
 @functools.lru_cache(maxsize=None)
-def load_zip_timeseries(zip_path):
-    """Per-day numbers used by the time-series charts (cached per zip)."""
-    data = {"date": zip_path.stem.split("_")[-1]}
+def load_snapshot_timeseries(snapshot):
+    """Per-day numbers used by the time-series charts (cached per snapshot)."""
+    data = {"date": snapshot_date(snapshot)}
 
-    summary = read_json_from_zip(zip_path, "summary.json")
+    summary = read_json(snapshot, "summary.json")
     data["num_reviews"] = len(summary["data"]["reviews"][0]["subject_ids"])
     data["num_lessons"] = len(summary["data"]["lessons"][0]["subject_ids"])
 
-    assignments = read_json_from_zip(zip_path, "assignments.json")
+    assignments = read_json(snapshot, "assignments.json")
     srs_stages = [0] * 10
     for assignment in assignments["data"]:
         srs_stages[assignment["data"]["srs_stage"]] += 1
@@ -96,14 +111,14 @@ def load_zip_timeseries(zip_path):
 
 
 @functools.lru_cache(maxsize=4)
-def load_details(zip_path):
-    """Detail data (only needed from the newest zip)."""
+def load_details(snapshot):
+    """Detail data (only needed from the newest snapshot)."""
     return {
-        "user": read_json_from_zip(zip_path, "user.json"),
-        "summary": read_json_from_zip(zip_path, "summary.json"),
-        "level_progressions": read_json_from_zip(zip_path, "level_progressions.json"),
-        "review_statistics": read_json_from_zip(zip_path, "review_statistics.json"),
-        "assignments": read_json_from_zip(zip_path, "assignments.json"),
+        "user": read_json(snapshot, "user.json"),
+        "summary": read_json(snapshot, "summary.json"),
+        "level_progressions": read_json(snapshot, "level_progressions.json"),
+        "review_statistics": read_json(snapshot, "review_statistics.json"),
+        "assignments": read_json(snapshot, "assignments.json"),
     }
 
 
@@ -120,8 +135,8 @@ def load_subjects(cache_key):
         with open(standalone) as f:
             subjects = json.load(f)
     else:
-        for zip_path in reversed(get_zip_files()):
-            subjects = read_json_from_zip(zip_path, "subjects.json")
+        for snapshot in reversed(get_snapshots()):
+            subjects = read_json(snapshot, "subjects.json")
             if subjects is not None:
                 break
 
@@ -147,7 +162,7 @@ def subjects_cache_key():
     standalone = DATA_DIR / "subjects.json"
     if standalone.is_file():
         return f"standalone:{standalone.stat().st_mtime_ns}"
-    files = get_zip_files()
+    files = get_snapshots()
     return f"zip:{files[-1].name}" if files else "none"
 
 
@@ -156,7 +171,7 @@ def parse_ts(value):
 
 
 def get_dataframe():
-    df = pd.DataFrame(load_zip_timeseries(p) for p in get_zip_files())
+    df = pd.DataFrame(load_snapshot_timeseries(p) for p in get_snapshots())
     df.sort_values(by="date", inplace=True)
 
     _, total_subjects = load_subjects(subjects_cache_key())
@@ -455,7 +470,7 @@ def summary_cards_html(df, details):
 
 def build_dashboard(inline_plotly=False):
     df = get_dataframe()
-    details = load_details(get_zip_files()[-1])
+    details = load_details(get_snapshots()[-1])
 
     figures = [
         fig_srs_composition(df),

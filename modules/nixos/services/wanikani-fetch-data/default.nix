@@ -11,7 +11,6 @@ let
     runtimeInputs = with pkgs; [
       curl
       jq
-      zip
     ];
     text = builtins.readFile ./wanikani-fetcher.sh;
   };

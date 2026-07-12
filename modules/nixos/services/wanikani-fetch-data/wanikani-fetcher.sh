@@ -5,7 +5,7 @@ API_TOKEN="${WANIKANI_API_TOKEN:?WANIKANI_API_TOKEN is not set}"
 date=$(date +%Y-%m-%d)
 
 # check if todays date is already in the logs folder
-if [ -f "/var/lib/wanikani-logs/wanikani_data_$date.zip" ]; then
+if [ -d "/var/lib/wanikani-logs/wanikani_data_$date" ] || [ -f "/var/lib/wanikani-logs/wanikani_data_$date.zip" ]; then
   echo "Data for today already exists. Exiting..."
   exit 0
 fi
@@ -98,9 +98,10 @@ curl -s "https://api.wanikani.com/v2/user" \
   -o "$tmp_dir/data/user.json"
 
 
-# get the date as a variable and use it to zip the data folder
-zip -j -r "/var/lib/wanikani-logs/wanikani_data_$date.zip" "$tmp_dir/data"
-echo "Data zipped to /var/lib/wanikani-logs/wanikani_data_$date.zip"
+# plain daily folder: directly readable json, ZFS zstd handles compression
+mv "$tmp_dir/data" "/var/lib/wanikani-logs/wanikani_data_$date"
+chmod 755 "/var/lib/wanikani-logs/wanikani_data_$date"
+echo "Data saved to /var/lib/wanikani-logs/wanikani_data_$date"
 
 echo "Cleaning up temporary files..."
 rm -r "$tmp_dir"
