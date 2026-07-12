@@ -197,7 +197,6 @@
       immich.enable = lib.mkEnableOption "immich";
       paperless.enable = lib.mkEnableOption "paperless";
       vscode-server.enable = lib.mkEnableOption "vscode-server";
-      wanikani-bypass-lessons.enable = lib.mkEnableOption "wanikani-bypass-lessons";
       wanikani-fetch-data.enable = lib.mkEnableOption "wanikani-fetch-data";
 
       wanikani-stats = {

@@ -14,7 +14,6 @@
     hardware.systemd-boot.enable = false; # Raspberry Pi uses init-script bootloader
     familyUser.enable = true;
     services = {
-      wanikani-bypass-lessons.enable = true;
       wanikani-fetch-data.enable = true;
       wanikani-stats.enable = true;
       syncthing.enable = true;

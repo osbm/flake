@@ -31,7 +31,6 @@
 
     # custom services
     ./system-logger
-    ./wanikani-bypass-lessons.nix
     ./wanikani-fetch-data
     ./wanikani-stats
 
