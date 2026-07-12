@@ -7,6 +7,13 @@
 }:
 let
   cfg = config.osbmModules.services.hermes;
+  # plain python3 with the anki lib's vendored site-packages on PYTHONPATH.
+  # pkgs.anki's "lib" output bundles every python dep, so this stays headless —
+  # no Qt/webengine closure like `toPythonModule pkgs.anki` would drag in.
+  anki-python = pkgs.writeShellScriptBin "anki-python" ''
+    export PYTHONPATH="${pkgs.anki.lib}/lib/${pkgs.python3.libPrefix}/site-packages''${PYTHONPATH:+:$PYTHONPATH}"
+    exec ${pkgs.python3}/bin/python3 "$@"
+  '';
 in
 {
   imports = [ inputs.hermes-agent.nixosModules.default ];
@@ -67,6 +74,30 @@ in
           "AF_UNIX"
           "AF_NETLINK"
         ];
+      };
+    })
+
+    # anki client seat: when this host also runs the anki sync server, hermes
+    # becomes a regular sync client (own collection copy under
+    # /var/lib/hermes/anki) — it reads the revlog and creates decks through the
+    # sync protocol, never touching the server's data files directly.
+    # The skill lives in /var/lib/hermes/.hermes/skills/anki.
+    (lib.mkIf (cfg.enable && config.osbmModules.services.anki-sync-server.enable) {
+      # widen the server's password secret so the hermes user can read it too
+      # (the sync server itself reads it as root via LoadCredential)
+      age.secrets.anki-sync-password = {
+        group = "hermes";
+        mode = "0440";
+      };
+
+      systemd.services.hermes-agent = {
+        path = [ anki-python ];
+        environment = {
+          # loopback endpoint — no need to round-trip through nginx/tailnet
+          ANKI_SYNC_ENDPOINT = "http://127.0.0.1:${toString config.services.anki-sync-server.port}/";
+          ANKI_SYNC_USERNAME = "osbm";
+          ANKI_SYNC_PASSWORD_FILE = config.age.secrets.anki-sync-password.path;
+        };
       };
     })
 
