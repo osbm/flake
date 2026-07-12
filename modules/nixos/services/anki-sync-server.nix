@@ -42,10 +42,17 @@ in
       };
     })
 
-    # collections and media live here
+    # collections and media live here. The upstream unit uses DynamicUser,
+    # which makes /var/lib/anki-sync-server a symlink into /var/lib/private —
+    # persist the real directory, not the symlink target's parent.
     (lib.mkIf (cfg.enable && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot) {
       environment.persistence."/persist" = {
-        directories = [ "/var/lib/anki-sync-server" ];
+        directories = [
+          {
+            directory = "/var/lib/private/anki-sync-server";
+            mode = "0700";
+          }
+        ];
       };
     })
   ];
