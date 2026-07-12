@@ -63,16 +63,27 @@ fetch_and_merge spaced_repetition_systems
 fetch_and_merge study_materials
 fetch_and_merge subjects
 
-# subjects.json is ~30MB and rarely changes, so it doesn't go into the daily
-# zip. Instead keep a single current copy, and archive a dated version only
-# when the content actually changed (e.g. WaniKani moved lessons between
-# levels).
+# subjects.json is large and WaniKani edits its content (mnemonics, audio,
+# meanings) almost daily, so it doesn't go into the daily zip and raw copies
+# aren't archived. Keep a single current copy, plus a dated level-map
+# snapshot ({id, level, hidden}) only when levels/membership actually change
+# (e.g. lessons moved between levels).
 current_subjects="/var/lib/wanikani-logs/subjects.json"
 new_subjects="$tmp_dir/data/subjects.json"
-if [ ! -f "$current_subjects" ] || ! cmp -s "$new_subjects" "$current_subjects"; then
-  mkdir -p "/var/lib/wanikani-logs/subjects-changes"
-  echo "subjects.json changed, archiving dated copy"
-  cp "$new_subjects" "/var/lib/wanikani-logs/subjects-changes/subjects_$date.json"
+mkdir -p "/var/lib/wanikani-logs/subjects-changes"
+
+level_map() {
+  jq -c '[.data[] | {id, level: .data.level, hidden: (.data.hidden_at != null)}] | sort_by(.id)' "$1"
+}
+
+proj_old=""
+if [ -f "$current_subjects" ]; then
+  proj_old=$(level_map "$current_subjects")
+fi
+proj_new=$(level_map "$new_subjects")
+if [ "$proj_new" != "$proj_old" ]; then
+  echo "subject levels/membership changed, archiving level snapshot"
+  echo "$proj_new" > "/var/lib/wanikani-logs/subjects-changes/levels_$date.json"
 fi
 mv "$new_subjects" "$current_subjects"
 
