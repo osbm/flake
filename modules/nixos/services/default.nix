@@ -25,6 +25,7 @@
     ./healthcheck.nix
     ./radicale.nix
     ./syncthing.nix
+    ./anki-sync-server.nix
     ./tailscale.nix
     ./vaultwarden.nix
     ./vscode-server.nix

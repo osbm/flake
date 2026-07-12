@@ -24,6 +24,9 @@
       prometheus.enable = true;
       hermes.enable = true;
 
+      # anki sync server for all devices + the hermes agent
+      anki-sync-server.enable = true;
+
       # wanikani archiver + dashboard (moved from pochita); port stays
       # firewalled — apollo is public-facing, reach it over tailscale
       wanikani-fetch-data.enable = true;

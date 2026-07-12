@@ -51,4 +51,8 @@ in
     apollo
     osbm
   ];
+  "anki-sync-password.age".publicKeys = [
+    apollo
+    osbm
+  ];
 }
