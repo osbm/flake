@@ -58,6 +58,9 @@ in
         RestrictNamespaces = true;
         LockPersonality = true;
         CapabilityBoundingSet = "";
+        # hermes may read the wanikani archive but never write it
+        # ("-" = ignore on hosts where the path doesn't exist)
+        ReadOnlyPaths = [ "-/var/lib/wanikani-logs" ];
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
