@@ -153,6 +153,8 @@ def load_subjects(cache_key):
             "characters": subj["data"].get("characters") or subj["data"].get("slug"),
             "level": subj["data"]["level"],
             "type": subj["object"],
+            # official wanikani permalink, e.g. .../vocabulary/茶の湯
+            "url": subj["data"].get("document_url"),
             "hidden": bool(hidden),
         }
     return id_map, active
@@ -414,13 +416,16 @@ def leech_table_html(details):
                 "stage": SRS_STAGE_NAMES[stage],
                 "accuracy": d["percentage_correct"],
                 "wrong": wrong,
+                "url": subj.get("url") or "#",
             }
         )
 
     leeches.sort(key=lambda x: (x["accuracy"], -x["wrong"]))
     rows = "".join(
         f"""<tr>
-            <td class="item" style="color: {TYPE_COLORS.get(l["type"], "#fff")}">{l["characters"]}</td>
+            <td class="item"><a href="{l["url"]}" target="_blank" rel="noopener"
+                style="color: {TYPE_COLORS.get(l["type"], "#fff")}; text-decoration: none;"
+                >{l["characters"]}</a></td>
             <td>{l["type"].replace("_", " ")}</td>
             <td>{l["level"]}</td>
             <td>{l["stage"]}</td>
