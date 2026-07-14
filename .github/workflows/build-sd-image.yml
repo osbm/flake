@@ -32,4 +32,6 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: sd-image
+          path: sd-image.zip
+          if-no-files-found: error
 
