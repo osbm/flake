@@ -155,6 +155,14 @@
                           url = "https://hermes.osbm.dev";
                         }
                         {
+                          icon = "si:anki";
+                          title = "Anki Sync";
+                          url = "https://anki.osbm.dev";
+                          # the sync server has no web UI; a bare GET on /
+                          # returns 404 when it's up, so count that as healthy
+                          alt-status-codes = [ 404 ];
+                        }
+                        {
                           icon = "sh:grafana";
                           title = "Grafana";
                           url = "http://pochita.curl-boga.ts.net:3000";
