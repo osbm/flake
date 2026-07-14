@@ -28,7 +28,6 @@
     ./anki-sync-server.nix
     ./tailscale.nix
     ./vaultwarden.nix
-    ./vscode-server.nix
 
     # custom services
     ./system-logger
