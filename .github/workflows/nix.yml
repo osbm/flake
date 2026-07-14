@@ -14,6 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: cachix/install-nix-action@v31
+      - uses: nix-community/cache-nix-action@v6
+        with:
+          # cache the store (flake inputs, eval deps) keyed on the lockfile
+          primary-key: nix-${{ runner.os }}-${{ hashFiles('flake.lock') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-
+          gc-max-store-size-linux: 2G
       - run: nix flake check --accept-flake-config
 
   # per-host eval so a broken host is visible at a glance in the PR checks;
@@ -39,4 +45,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: cachix/install-nix-action@v31
+      - uses: nix-community/cache-nix-action@v6
+        with:
+          # one shared cache for all hosts; jobs with an exact-key hit skip saving
+          primary-key: nix-${{ runner.os }}-${{ hashFiles('flake.lock') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-
+          gc-max-store-size-linux: 2G
       - run: nix eval --accept-flake-config --raw .#nixosConfigurations.${{ matrix.target-system }}.config.system.build.toplevel.drvPath
