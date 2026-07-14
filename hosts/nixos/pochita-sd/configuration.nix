@@ -19,6 +19,11 @@
   # kernel doesn't expose. Set it explicitly to bypass the broken default.
   hardware.deviceTree.enable = true;
 
+  # Same story: system.boot.loader.kernelFile defaults to
+  # config.boot.kernelPackages.kernel.target, which raspberry-pi-nix's kernel
+  # also doesn't expose. "Image" is the aarch64 value the old default used.
+  system.boot.loader.kernelFile = "Image";
+
   # systemd-in-initrd hangs on Pi 5; legacy script initrd works
   boot.initrd.systemd.enable = false;
 
