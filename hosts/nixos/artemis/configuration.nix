@@ -55,12 +55,6 @@
 
   networking.hostName = "artemis";
 
-  # nixpkgs's hardware.deviceTree.enable default reads
-  # config.boot.kernelPackages.kernel.buildDTBs, which mobile-nixos's
-  # kernel-builder doesn't expose in passthru. Set it explicitly to
-  # bypass the broken default evaluation.
-  hardware.deviceTree.enable = true;
-
   # Belt-and-suspenders for nix-daemon substituter hangs on aarch64/mobile.
   # NOT a real fix: the underlying libcurl multi-handle deadlock prevents
   # curl's progress callback from running, so stalled-download-timeout
