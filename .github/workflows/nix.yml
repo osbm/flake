@@ -8,24 +8,35 @@ on:
       - README.md
 
 jobs:
-  build:
+  # formatting (treefmt check output) + evaluates every nixosConfiguration
+  flake-check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+      - run: nix flake check --accept-flake-config
+
+  # per-host eval so a broken host is visible at a glance in the PR checks;
+  # eval of the toplevel drvPath is equivalent to the old dry-run build
+  eval-host:
     strategy:
+      fail-fast: false
       matrix:
         target-system:
-          - ymir
-          - tartarus
+          - apollo
+          - ares
+          - artemis
+          - harmonica
+          - harmonica-encrypted
+          - harmonica-sd
+          - iso
           - pochita
           - pochita-sd
-          - harmonica
+          - tartarus
+          - wallfacer
+          - ymir
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
       - uses: cachix/install-nix-action@v31
-      - run: nix flake check --accept-flake-config
-      - run: nix build --accept-flake-config --dry-run .#nixosConfigurations.${{ matrix.target-system }}.config.system.build.toplevel
-  check-formatting:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v6
-      - uses: cachix/install-nix-action@v31
-      - run: nix flake check --accept-flake-config
+      - run: nix eval --accept-flake-config --raw .#nixosConfigurations.${{ matrix.target-system }}.config.system.build.toplevel.drvPath

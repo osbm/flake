@@ -2,7 +2,7 @@ name: Build and test the packages i maintain on Nixpkgs
 
 
 on:
-  # cron every hour at 3 minutes 00:03 AM, 01:03 AM etc.
+  # daily at 00:03 UTC
   schedule:
     - cron: '3 0 * * *'
   workflow_dispatch:
