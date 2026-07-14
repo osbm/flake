@@ -150,6 +150,11 @@
                           url = "https://wanikani-stats.osbm.dev";
                         }
                         {
+                          icon = "si:anthropic";
+                          title = "Hermes";
+                          url = "https://hermes.osbm.dev";
+                        }
+                        {
                           icon = "sh:grafana";
                           title = "Grafana";
                           url = "http://pochita.curl-boga.ts.net:3000";
