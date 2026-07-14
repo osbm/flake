@@ -163,6 +163,14 @@
                           alt-status-codes = [ 404 ];
                         }
                         {
+                          icon = "sh:dovecot";
+                          title = "Mail";
+                          url = "https://mail.osbm.dev";
+                          # no webmail; the vhost only exists for the ACME
+                          # cert, so 404 means nginx + cert are alive
+                          alt-status-codes = [ 404 ];
+                        }
+                        {
                           icon = "sh:grafana";
                           title = "Grafana";
                           url = "http://pochita.curl-boga.ts.net:3000";
