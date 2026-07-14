@@ -7,6 +7,8 @@
 }:
 let
   cfg = config.osbmModules.services.hermes;
+  # python for hermes skill scripts: stdlib (duolingo) + caldav (radicale)
+  hermes-python = pkgs.python3.withPackages (ps: [ ps.caldav ]);
   # plain python3 with the anki lib's vendored site-packages on PYTHONPATH.
   # pkgs.anki's "lib" output bundles every python dep, so this stays headless —
   # no Qt/webengine closure like `toPythonModule pkgs.anki` would drag in.
@@ -29,6 +31,9 @@ in
           # DUOLINGO_JWT / _USERNAME / _USER_ID for the duolingo skill;
           # the browser-cookie JWT effectively never expires (exp year 2169)
           config.age.secrets.duolingo-env.path
+          # CALDAV_* for the calendar skill (radicale user "hermes":
+          # read on osbm's collections, write on osbm/hermes-agenda)
+          config.age.secrets.radicale-hermes-env.path
         ];
         # Claude Max subscription via `hermes login anthropic` (auth.json);
         # nix-managed keys win over TUI edits on every activation
@@ -57,14 +62,15 @@ in
 
       age.secrets.hermes-env.file = ../../../secrets/hermes-env.age;
       age.secrets.duolingo-env.file = ../../../secrets/duolingo-env.age;
+      age.secrets.radicale-hermes-env.file = ../../../secrets/radicale-hermes-env.age;
 
       # let the main user run `hermes` against the service state
       users.users.${config.osbmModules.defaultUser}.extraGroups = [ "hermes" ];
 
-      # plain python3 for skill scripts (duolingo etc.); in systemPackages so
+      # python for skill scripts (duolingo, calendar); in systemPackages so
       # it also survives the login-shell PATH reset (see anki block below)
-      systemd.services.hermes-agent.path = [ pkgs.python3 ];
-      environment.systemPackages = [ pkgs.python3 ];
+      systemd.services.hermes-agent.path = [ hermes-python ];
+      environment.systemPackages = [ hermes-python ];
 
       # tighten the upstream unit: hide /home, drop capabilities, block
       # kernel-facing surfaces. Writes stay confined to /var/lib/hermes.

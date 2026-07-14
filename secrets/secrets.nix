@@ -59,4 +59,8 @@ in
     apollo
     osbm
   ];
+  "radicale-hermes-env.age".publicKeys = [
+    apollo
+    osbm
+  ];
 }

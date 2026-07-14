@@ -1,8 +1,40 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
+let
+  # first match wins. Owner rules mirror radicale's defaults; on top of them
+  # the hermes agent gets its own calendar under osbm's principal (so osbm's
+  # clients auto-discover it) and read access to the rest of osbm's data.
+  rightsFile = pkgs.writeText "radicale-rights" ''
+    [hermes-agenda-full]
+    user: hermes
+    collection: osbm/hermes-agenda
+    permissions: RrWw
+
+    [hermes-reads-osbm]
+    user: hermes
+    collection: osbm(/[^/]+)?
+    permissions: Rr
+
+    [root]
+    user: .+
+    collection:
+    permissions: R
+
+    [principal]
+    user: .+
+    collection: {user}
+    permissions: RW
+
+    [collections]
+    user: .+
+    collection: {user}/[^/]+
+    permissions: rw
+  '';
+in
 {
   config = lib.mkMerge [
     (lib.mkIf config.osbmModules.services.radicale.enable {
@@ -16,6 +48,10 @@
             type = "htpasswd";
             htpasswd_filename = "/var/lib/radicale/htpasswd";
             htpasswd_encryption = "bcrypt";
+          };
+          rights = {
+            type = "from_file";
+            file = toString rightsFile;
           };
           storage = {
             filesystem_folder = "/var/lib/radicale/collections";
