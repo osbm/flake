@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: cachix/install-nix-action@v31
-      - uses: nix-community/cache-nix-action@v6
+      - uses: nix-community/cache-nix-action@v7
         with:
           # cache the store (flake inputs, eval deps) keyed on the lockfile
           primary-key: nix-${{ runner.os }}-${{ hashFiles('flake.lock') }}
@@ -45,7 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: cachix/install-nix-action@v31
-      - uses: nix-community/cache-nix-action@v6
+      - uses: nix-community/cache-nix-action@v7
         with:
           # one shared cache for all hosts; jobs with an exact-key hit skip saving
           primary-key: nix-${{ runner.os }}-${{ hashFiles('flake.lock') }}
