@@ -29,6 +29,8 @@
 
       gc = {
         automatic = true;
+        # default is daily; once a week is plenty
+        dates = "weekly";
         options = "--delete-older-than 7d";
       };
 
