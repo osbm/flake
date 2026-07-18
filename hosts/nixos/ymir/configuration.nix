@@ -9,12 +9,10 @@
     ../../../modules/nixos
   ];
 
-  # hermes desktop GUI, connects in remote mode to the gateway on apollo
-  # (https://hermes.osbm.dev). The default package's `hermes desktop` expects
-  # GUI sources the nix env strips — the flake's `desktop` output is the
-  # prebuilt Electron shell. CLI kept for `ssh -t apollo hermes` fallback.
+  # hermes desktop GUI (Electron shell), connects in remote mode to the
+  # gateway on apollo (https://hermes.osbm.dev) — no local agent runtime
+  # needed for that. Terminal access to the same agent: `ssh -t apollo hermes`.
   environment.systemPackages = [
-    inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default
     inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.desktop
   ];
 
