@@ -1,7 +1,18 @@
 {
+  pkgs,
+  inputs,
+  ...
+}:
+{
   imports = [
     ./hardware-configuration.nix
     ../../../modules/nixos
+  ];
+
+  # hermes CLI for `hermes desktop` — the GUI connects in remote mode to the
+  # gateway on apollo (https://hermes.osbm.dev); no local hermes service here
+  environment.systemPackages = [
+    inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   osbmModules = {
