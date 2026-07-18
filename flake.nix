@@ -68,6 +68,13 @@
       url = "github:NousResearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # fork with the electron node-headers hash fix for the desktop app
+    # (upstream issue #61443); separate input so apollo's hermes-agent
+    # service doesn't rebuild. Drop once upstream fixes their desktop.nix.
+    hermes-desktop = {
+      url = "github:osbm/hermes-agent/electron-headers-hash";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

@@ -12,8 +12,9 @@
   # hermes desktop GUI (Electron shell), connects in remote mode to the
   # gateway on apollo (https://hermes.osbm.dev) — no local agent runtime
   # needed for that. Terminal access to the same agent: `ssh -t apollo hermes`.
+  # Built from the hermes-desktop fork input until upstream #61443 is fixed.
   environment.systemPackages = [
-    inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.desktop
+    inputs.hermes-desktop.packages.${pkgs.stdenv.hostPlatform.system}.desktop
   ];
 
   osbmModules = {
