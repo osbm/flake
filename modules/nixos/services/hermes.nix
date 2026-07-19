@@ -128,6 +128,8 @@ in
     # additionally rejects non-tailnet sources in case the public IP is hit
     # directly with a matching SNI.
     (lib.mkIf (cfg.enable && config.osbmModules.services.nginx.enable) {
+      age.secrets.hermes-dashboard-token.file = ../../../secrets/hermes-dashboard-token.age;
+
       systemd.services.hermes-web = {
         description = "Hermes Agent Web Dashboard";
         wantedBy = [ "multi-user.target" ];
@@ -154,6 +156,10 @@ in
           User = "hermes";
           Group = "hermes";
           WorkingDirectory = "/var/lib/hermes/workspace";
+          # pins the dashboard's loopback-mode session token so remote
+          # clients (hermes desktop on ymir) can authenticate with a stable
+          # credential instead of the per-restart ephemeral one
+          EnvironmentFile = config.age.secrets.hermes-dashboard-token.path;
           # `serve` became a headless backend upstream; the browser UI moved
           # to the `dashboard` subcommand
           ExecStart = "${config.services.hermes-agent.package}/bin/hermes dashboard --skip-build --no-open --host 127.0.0.1 --port 9119";

@@ -63,4 +63,8 @@ in
     apollo
     osbm
   ];
+  "hermes-dashboard-token.age".publicKeys = [
+    apollo
+    osbm
+  ];
 }
