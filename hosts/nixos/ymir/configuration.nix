@@ -3,6 +3,26 @@
   inputs,
   ...
 }:
+let
+  hermesPkg = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default;
+
+  # upstream #61443: nix/desktop.nix hardcodes the electron node-headers
+  # hash, and electronjs.org re-published the v41.9.1 tarball, so the build
+  # fails with a hash mismatch. Re-import a hash-corrected copy of that one
+  # file, feeding it the passthru pieces from the already-locked package —
+  # no extra flake input, and the agent itself is untouched. Drop when
+  # upstream fixes desktop.nix.
+  patchedDesktopNix = builtins.toFile "hermes-desktop-fixed.nix" (
+    builtins.replaceStrings
+      [ "sha256-zi/QMwRZ0+FwE9XTE+DiSIeJXAwxmLKEaBWD5W3pMOI=" ]
+      [ "sha256-zOl8rx6woWh7aeRUOlkTMviKc/EAQQX6nr/MxAx1ZPI=" ]
+      (builtins.readFile "${inputs.hermes-agent}/nix/desktop.nix")
+  );
+  hermes-desktop = pkgs.callPackage patchedDesktopNix {
+    inherit (hermesPkg) hermesNpmLib;
+    hermesAgent = hermesPkg;
+  };
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -12,9 +32,7 @@
   # hermes desktop GUI (Electron shell), connects in remote mode to the
   # gateway on apollo (https://hermes.osbm.dev) — no local agent runtime
   # needed for that. Terminal access to the same agent: `ssh -t apollo hermes`.
-  environment.systemPackages = [
-    inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.desktop
-  ];
+  environment.systemPackages = [ hermes-desktop ];
 
   osbmModules = {
     desktopEnvironment = {
