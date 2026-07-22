@@ -44,8 +44,8 @@
   # Tripwires so the exception above can't silently outlive its reason.
   assertions = [
     {
-      # 69b45849 (2026-07 bump): decky-loader still pnpm_9, exception still needed
-      assertion = inputs.jovian-nixos.rev == "69b458491084c117e6db8761aa52597e67446296";
+      # cf938378 (2026-07-22 bump): decky-loader 3.2.6 still pnpm_9, exception still needed
+      assertion = inputs.jovian-nixos.rev == "cf9383788741bdabcb13f5c323a978fd63e681e8";
       message = "jovian-nixos was updated: check whether decky-loader still builds with pnpm 9. If not, remove the permittedInsecurePackages entry and these assertions; otherwise bump the pinned rev here.";
     }
     {
