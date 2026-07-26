@@ -47,6 +47,10 @@ in
     apollo
     osbm
   ];
+  "deepseek-env.age".publicKeys = [
+    apollo
+    osbm
+  ];
   "wanikani-env.age".publicKeys = [
     apollo
     osbm

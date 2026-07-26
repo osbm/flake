@@ -34,6 +34,10 @@ in
           # CALDAV_* for the calendar skill (radicale user "hermes":
           # read on osbm's collections, write on osbm/hermes-agenda)
           config.age.secrets.radicale-hermes-env.path
+          # DEEPSEEK_API_KEY for the deepseek fallback_model entry below —
+          # a separate provider so it survives full Anthropic-pool exhaustion
+          # (haiku can't, it shares the subscription bucket)
+          config.age.secrets.deepseek-env.path
         ];
         # Claude Max subscription via `hermes login anthropic` (auth.json);
         # nix-managed keys win over TUI edits on every activation
@@ -50,10 +54,14 @@ in
               provider = "anthropic";
               model = "claude-haiku-4-5";
             }
-            # {
-            #   provider = "deepseek";
-            #   model = "deepseek-v4-pro";
-            # }
+            # separate provider (own API key + balance), so it keeps chat AND
+            # cron alive when the whole Anthropic subscription pool is
+            # exhausted — the case haiku above can't cover. deepseek-chat /
+            # deepseek-reasoner are retired; the API only accepts v4-pro/v4-flash.
+            {
+              provider = "deepseek";
+              model = "deepseek-v4-pro";
+            }
             # {
             #   provider = "gemini";
             #   model = "gemini-3.1-pro-preview";
@@ -63,6 +71,7 @@ in
       };
 
       age.secrets.hermes-env.file = ../../../secrets/hermes-env.age;
+      age.secrets.deepseek-env.file = ../../../secrets/deepseek-env.age;
       age.secrets.duolingo-env.file = ../../../secrets/duolingo-env.age;
       age.secrets.radicale-hermes-env.file = ../../../secrets/radicale-hermes-env.age;
 
