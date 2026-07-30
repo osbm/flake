@@ -58,6 +58,16 @@
   networking.hostName = "pochita";
   networking.networkmanager.enable = true;
 
+  # Tailscale exit node: route tailnet clients out through pochita's home
+  # connection. "both" enables IPv4/IPv6 forwarding (server side) while keeping
+  # client routing features, since pochita is also a normal tailnet client.
+  # The --advertise-exit-node flag already persists in /var/lib/tailscale from
+  # `tailscale set`, but declaring it keeps intent explicit and survives re-auth.
+  # NOTE: still requires one-time approval in the Tailscale admin console
+  # (Machines → pochita → Edit route settings → Use as exit node).
+  services.tailscale.useRoutingFeatures = "both";
+  services.tailscale.extraUpFlags = [ "--advertise-exit-node" ];
+
   # nixpkgs's hardware.deviceTree.enable default reads
   # config.boot.kernelPackages.kernel.buildDTBs, which raspberry-pi-nix's
   # kernel doesn't expose. Set it explicitly to bypass the broken default.
