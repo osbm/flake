@@ -69,16 +69,7 @@
     max-substitution-jobs = 1;
   };
 
-  nixpkgs = {
-    system = "aarch64-linux";
-    # Compat shim: nixpkgs moved pkgs.xorg.* to the top level,
-    # but mobile-nixos still references pkgs.xorg.*
-    overlays = [
-      (final: _prev: {
-        xorg = final;
-      })
-    ];
-  };
+  nixpkgs.system = "aarch64-linux";
 
   # Minimal essential packages
   environment.systemPackages = with pkgs; [
