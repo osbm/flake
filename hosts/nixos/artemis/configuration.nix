@@ -69,9 +69,7 @@
     max-substitution-jobs = 1;
   };
 
-  # mobile-nixos needs aliases (uses nettools instead of net-tools)
   nixpkgs = {
-    config.allowAliases = true;
     system = "aarch64-linux";
     # Compat shim: nixpkgs moved pkgs.xorg.* to the top level,
     # but mobile-nixos still references pkgs.xorg.*
