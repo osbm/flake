@@ -21,7 +21,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/master";
@@ -39,10 +38,6 @@
     raspberry-pi-nix = {
       url = "github:nix-community/raspberry-pi-nix";
     };
-    # colmena = {
-    #   url = "github:zhaofengli/colmena";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -122,31 +117,5 @@
 
       nixosModules.default = ./modules/nixos;
       homeManagerModules.default = ./modules/home-manager;
-      # packages = forAllSystems (
-      #   system:
-      #   let
-      #     makeNixosConfigWithSystemOverride =
-      #       configName:
-      #       nixpkgs.lib.nixosSystem {
-      #         specialArgs = { inherit inputs outputs; };
-      #         modules = [
-      #           ./hosts/nixos/${configName}/configuration.nix
-      #           { nixpkgs.hostPlatform = nixpkgs.lib.mkForce system; }
-      #         ];
-      #       };
-      #     dotfilesMachineNames = [
-      #       "ymir"
-      #       "pochita"
-      #       "tartarus"
-      #       "wallfacer"
-      #     ];
-      #   in
-      #   builtins.listToAttrs (
-      #     map (name: {
-      #       name = "${name}-dotfiles";
-      #       value = (makeNixosConfigWithSystemOverride name).config.home-manager.users.osbm.home-files;
-      #     }) dotfilesMachineNames
-      #   )
-      # );
     };
 }
