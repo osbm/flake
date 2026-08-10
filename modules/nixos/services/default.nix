@@ -1,7 +1,6 @@
 {
   imports = [
     ./actual.nix
-    ./anubis.nix
     ./atticd.nix
     ./backup-client.nix
     ./backup-server.nix
