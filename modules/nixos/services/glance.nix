@@ -125,6 +125,11 @@
                           url = "https://actual.osbm.dev"; # todo migrate to budget.osbm.dev
                         }
                         {
+                          icon = "sh:hledger";
+                          title = "hledger";
+                          url = "https://hledger.osbm.dev";
+                        }
+                        {
                           icon = "sh:ntfy";
                           title = "Ntfy";
                           url = "https://ntfy.osbm.dev";
