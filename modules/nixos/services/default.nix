@@ -9,6 +9,7 @@
     ./forgejo.nix
     ./glance.nix
     ./hermes.nix
+    ./hledger.nix
     ./hydra.nix
     ./immich.nix
     ./jellyfin.nix

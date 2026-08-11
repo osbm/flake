@@ -13,6 +13,7 @@
       vaultwarden.enable = true;
       immich.enable = true;
       actual.enable = true;
+      hledger.enable = true;
       ntfy.enable = true;
       radicale.enable = true;
       paperless.enable = true;

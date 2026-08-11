@@ -128,6 +128,7 @@
       };
 
       actual.enable = lib.mkEnableOption "actual";
+      hledger.enable = lib.mkEnableOption "hledger-web + hledger CLI";
       syncthing = {
         enable = lib.mkEnableOption "syncthing";
         conflictAlerts = {
