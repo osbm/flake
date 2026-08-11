@@ -29,12 +29,18 @@ in
         "f ${journal} 0660 hledger hledger -"
         # default ACL: files created later (by hermes, the web UI, or the
         # main user) are group-writable regardless of the creator's umask —
-        # every group member keeps full access to everything, always
-        "A+ /var/lib/hledger-web - - - - d:g:hledger:rwX,g:hledger:rwX"
+        # every group member keeps full access to everything, always.
+        # (plain rwx, not rwX — tmpfiles can't parse the conditional bit in
+        # ACLs; the create-mode mask keeps the x off files anyway)
+        "a+ /var/lib/hledger-web - - - - d:g:hledger:rwx"
       ];
 
       # keep files created by the web UI group-writable
       systemd.services.hledger-web.serviceConfig.UMask = "0007";
+      # upstream sets StateDirectory=hledger-web, and systemd resets the dir
+      # to StateDirectoryMode on every start — without this it clobbers the
+      # tmpfiles 2770 back to 0755 and locks the hledger group out
+      systemd.services.hledger-web.serviceConfig.StateDirectoryMode = "2770";
 
       # hledger CLI for interactive use against the same journal
       environment.systemPackages = [ pkgs.hledger ];
