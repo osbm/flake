@@ -27,6 +27,10 @@ in
       systemd.tmpfiles.rules = [
         "d /var/lib/hledger-web 2770 hledger hledger -"
         "f ${journal} 0660 hledger hledger -"
+        # default ACL: files created later (by hermes, the web UI, or the
+        # main user) are group-writable regardless of the creator's umask —
+        # every group member keeps full access to everything, always
+        "A+ /var/lib/hledger-web - - - - d:g:hledger:rwX,g:hledger:rwX"
       ];
 
       # keep files created by the web UI group-writable
@@ -41,9 +45,17 @@ in
     })
 
     # hermes seat: the agent reads and appends transactions and runs reports
-    # through the hledger CLI, same journal the web UI serves
+    # through the hledger CLI, same journal the web UI serves. Full group
+    # access — the separation from /var/lib/hermes only restricts what
+    # hledger-web can see, never the agent
     (lib.mkIf (cfg.enable && config.osbmModules.services.hermes.enable) {
       users.users.hermes.extraGroups = [ "hledger" ];
+
+      # make the finance dir visible from the agent's workspace so it finds
+      # the books by just looking around
+      systemd.tmpfiles.rules = [
+        "L /var/lib/hermes/workspace/finance - - - - /var/lib/hledger-web"
+      ];
 
       systemd.services.hermes-agent = {
         # hledger is already in systemPackages (survives the login-shell
