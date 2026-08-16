@@ -85,6 +85,29 @@ in
       # let the main user run `hermes` against the service state
       users.users.${config.osbmModules.defaultUser}.extraGroups = [ "hermes" ];
 
+      # shared-brain seat: the Claude Code CLI (running as the main user, who is
+      # in the hermes group) reads the same skills, persona and memories the
+      # agent uses — two front-ends onto one brain instead of two assistants
+      # that know different things. Sharing is one-way by construction: hermes
+      # keeps ProtectHome and never reads /home, we reach into its dir instead.
+      #
+      # hermes creates .hermes itself as 0700, which blocks group traversal, so
+      # everything below it is unreachable no matter how the children are moded.
+      # 2770 + a default ACL opens the door and keeps files the agent writes
+      # later group-readable. auth.json keeps its own 0600 — the OAuth tokens
+      # never become group-readable, only the knowledge does.
+      systemd.tmpfiles.rules = [
+        "d /var/lib/hermes/.hermes 2770 hermes hermes -"
+        "a+ /var/lib/hermes/.hermes - - - - d:g:hermes:rwx"
+        # files that predate the ACL above keep their old modes; widen exactly
+        # the ones we share (MEMORY.md is 0600 today) and nothing else
+        "z /var/lib/hermes/.hermes/SOUL.md 0660 hermes hermes -"
+        "z /var/lib/hermes/.hermes/skills 2770 hermes hermes -"
+        "z /var/lib/hermes/.hermes/memories 2770 hermes hermes -"
+        "z /var/lib/hermes/.hermes/memories/MEMORY.md 0660 hermes hermes -"
+        "z /var/lib/hermes/.hermes/memories/USER.md 0660 hermes hermes -"
+      ];
+
       # python for skill scripts (duolingo, calendar); in systemPackages so
       # it also survives the login-shell PATH reset (see anki block below)
       systemd.services.hermes-agent.path = [ hermes-python ];
