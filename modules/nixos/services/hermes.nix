@@ -42,9 +42,16 @@ in
         # Claude Max subscription via `hermes login anthropic` (auth.json);
         # nix-managed keys win over TUI edits on every activation
         settings = {
-          # new-style model id; the old "anthropic/claude-opus-4.8" form gets
-          # normalized with a warning on every turn
-          model = "claude-opus-4-8";
+          # dict form with an explicit provider: since hermes 0.20.0 (#29285),
+          # exported API keys outrank the OAuth login in provider auto-detection,
+          # so a bare model string let DEEPSEEK_API_KEY (loaded for the fallback
+          # below) hijack every new session onto deepseek. `provider` pins the
+          # primary to the Max subscription; `default` is the canonical model-id
+          # key ("model"/"name" are legacy aliases).
+          model = {
+            provider = "anthropic";
+            default = "claude-opus-4-8";
+          };
           # fallback chain, tried in order when the subscription pool is
           # throttled/exhausted
           # haiku shares the subscription pool but has its own rate-limit
