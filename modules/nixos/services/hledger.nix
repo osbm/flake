@@ -27,15 +27,12 @@ in
       systemd.tmpfiles.rules = [
         "d /var/lib/hledger-web 2770 hledger hledger -"
         "f ${journal} 0660 hledger hledger -"
-        # default ACL: files created later (by hermes, the web UI, or the
-        # main user) are group-writable regardless of the creator's umask —
-        # every group member keeps full access to everything, always.
-        # (plain rwx, not rwX — tmpfiles can't parse the conditional bit in
-        # ACLs; the create-mode mask keeps the x off files anyway)
-        "a+ /var/lib/hledger-web - - - - d:g:hledger:rwx"
       ];
 
-      # keep files created by the web UI group-writable
+      # keep files created by the web UI group-writable. a default ACL on the
+      # dir would cover every writer at once, but the ZFS root is acltype=off
+      # (pool-wide default), so setfacl is unavailable and each writing unit
+      # has to set its own umask instead
       systemd.services.hledger-web.serviceConfig.UMask = "0007";
       # upstream sets StateDirectory=hledger-web, and systemd resets the dir
       # to StateDirectoryMode on every start — without this it clobbers the
@@ -71,6 +68,10 @@ in
         environment.LEDGER_FILE = journal;
         # upstream unit confines writes to /var/lib/hermes; widen for the journal
         serviceConfig.ReadWritePaths = [ "/var/lib/hledger-web" ];
+        # same reason as hledger-web above: no ACLs on ZFS, so anything the
+        # agent creates in the finance dir needs group-write from the umask
+        # or osbm loses access to files his own agent wrote
+        serviceConfig.UMask = "0007";
       };
     })
 
