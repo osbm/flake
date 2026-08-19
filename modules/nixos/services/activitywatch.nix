@@ -52,6 +52,9 @@ in
           allow 100.64.0.0/10;
           allow fd7a:115c:a1e0::/48;
           deny all;
+          # aw-server rejects non-localhost Host headers (DNS-rebinding
+          # protection) — the tailnet-only vhost provides the real guard
+          proxy_set_header Host "localhost:5600";
         '';
       };
     };
