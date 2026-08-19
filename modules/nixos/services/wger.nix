@@ -168,6 +168,27 @@ in
       '';
     };
 
+    # nightly logical dump: version-proof, trivially restorable with psql.
+    # Lands under /persist, so ZFS snapshots keep history; 14 days local.
+    systemd.services.wger-backup = {
+      description = "wger nightly pg_dump";
+      path = [ pkgs.podman ];
+      script = ''
+        mkdir -p /var/lib/wger/backups
+        podman exec wger-db pg_dump -U wger wger \
+          > /var/lib/wger/backups/wger-$(date +%F).sql
+        find /var/lib/wger/backups -name "wger-*.sql" -mtime +14 -delete
+      '';
+      serviceConfig.Type = "oneshot";
+    };
+    systemd.timers.wger-backup = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "04:30";
+        Persistent = true;
+      };
+    };
+
     systemd.services.podman-wger-db = {
       after = [ "wger-init.service" ];
       requires = [ "wger-init.service" ];
