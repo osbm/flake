@@ -130,6 +130,16 @@
                           url = "https://hledger.osbm.dev";
                         }
                         {
+                          icon = "sh:activitywatch";
+                          title = "ActivityWatch";
+                          url = "https://aw.osbm.dev";
+                        }
+                        {
+                          icon = "sh:wger";
+                          title = "wger";
+                          url = "https://wger.osbm.dev";
+                        }
+                        {
                           icon = "sh:ntfy";
                           title = "Ntfy";
                           url = "https://ntfy.osbm.dev";
