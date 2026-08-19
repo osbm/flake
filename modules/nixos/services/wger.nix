@@ -239,7 +239,12 @@ in
     environment.persistence."/persist" =
       lib.mkIf config.osbmModules.hardware.disko.zfs.root.impermanenceRoot
         {
-          directories = [ "/var/lib/wger" ];
+          directories = [
+            "/var/lib/wger"
+            # podman image + network storage — without this every reboot
+            # re-pulls ~1GB of images before the stack can start
+            "/var/lib/containers"
+          ];
         };
   };
 }
