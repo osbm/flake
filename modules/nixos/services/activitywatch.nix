@@ -25,6 +25,16 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       environment.HOME = "/var/lib/activitywatch";
+      # aw-server only trusts localhost origins by default; the web UI is
+      # served from aw.osbm.dev, so its POSTs need an explicit CORS allow
+      preStart = ''
+        mkdir -p /var/lib/activitywatch/.config/activitywatch/aw-server-rust
+        cat > /var/lib/activitywatch/.config/activitywatch/aw-server-rust/config.toml <<'EOF'
+        address = "127.0.0.1"
+        port = 5600
+        cors = ["https://aw.osbm.dev"]
+        EOF
+      '';
       serviceConfig = {
         User = "activitywatch";
         Group = "activitywatch";
