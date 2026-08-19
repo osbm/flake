@@ -22,7 +22,9 @@ in
       backend = "podman";
       containers = {
         wger-db = {
-          image = "docker.io/postgres:15-alpine";
+          # postgres 15 — major version pinned forever; bumping majors is a
+          # deliberate data migration, never a routine update
+          image = "docker.io/postgres@sha256:fe0737ba566a2c5b2a28f34433c0a423261900ec17b9bf7ad115e1aae7e57f1b";
           volumes = [
             "/var/lib/wger/postgres:/var/lib/postgresql/data"
             # creates the powersync_storage user+schema on first init only
@@ -43,7 +45,9 @@ in
         };
 
         wger = {
-          image = "docker.io/wger/server:latest";
+          # digest-pinned (was :latest as of 2026-08-19); update = bump digest,
+          # review on the forge, rebuild — migrations run at startup
+          image = "docker.io/wger/server@sha256:e8c89644a22afdda5c97edfe575168c5fd75fd412d6877c224125d8663c009a1";
           # gunicorn listens on 8000 inside the container
           ports = [ "127.0.0.1:8283:8000" ];
           volumes = [
@@ -55,7 +59,8 @@ in
         };
 
         wger-powersync = {
-          image = "docker.io/journeyapps/powersync-service:latest";
+          # digest-pinned (was :latest as of 2026-08-19)
+          image = "docker.io/journeyapps/powersync-service@sha256:0fc9f65e693c07f1206007acddb87141402c09ef20589e29a0dfe20d57ce80b6";
           cmd = [
             "start"
             "-r"
