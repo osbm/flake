@@ -16,7 +16,8 @@ in
     virtualisation.oci-containers = {
       backend = "podman";
       containers.wger = {
-        image = "wger/server:latest";
+        # fully qualified — podman has no unqualified-search registries on NixOS
+        image = "docker.io/wger/server:latest";
         ports = [ "127.0.0.1:8283:80" ];
         volumes = [
           "/var/lib/wger/db:/home/wger/db"
