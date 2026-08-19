@@ -83,7 +83,12 @@ in
       age.secrets.radicale-hermes-env.file = ../../../secrets/radicale-hermes-env.age;
 
       # let the main user run `hermes` against the service state
-      users.users.${config.osbmModules.defaultUser}.extraGroups = [ "hermes" ];
+      users.users.${config.osbmModules.defaultUser}.extraGroups = [
+        "hermes"
+        # read `journalctl -u hermes-agent` without sudo — needed to diagnose
+        # runtime events like the .hermes chmod-to-0700 incident (2026-08-18)
+        "systemd-journal"
+      ];
 
       # shared-brain seat: the Claude Code CLI (running as the main user, who is
       # in the hermes group) reads the same skills, persona and memories the

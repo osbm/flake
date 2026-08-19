@@ -14,6 +14,9 @@
       immich.enable = true;
       actual.enable = true;
       hledger.enable = true;
+      # screen-time collector (watchers on ymir report here) + workout tracker
+      activitywatch.enable = true;
+      wger.enable = true;
       ntfy.enable = true;
       radicale.enable = true;
       paperless.enable = true;
