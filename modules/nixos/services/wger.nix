@@ -18,7 +18,8 @@ in
       containers.wger = {
         # fully qualified — podman has no unqualified-search registries on NixOS
         image = "docker.io/wger/server:latest";
-        ports = [ "127.0.0.1:8283:80" ];
+        # gunicorn listens on 8000 inside the container (not 80)
+        ports = [ "127.0.0.1:8283:8000" ];
         volumes = [
           "/var/lib/wger/db:/home/wger/db"
           "/var/lib/wger/media:/home/wger/media"
@@ -28,22 +29,56 @@ in
       };
     };
 
-    # secret key generated once on first start; env file also carries the
-    # site config so it survives image updates
+    # the env file is regenerated declaratively on every start; only the
+    # secrets (django SECRET_KEY + JWT keypair for the mobile app) persist in
+    # /var/lib/wger/secrets.env. JWT keys can't be generated here — they come
+    # from `podman exec wger ./manage.py generate-jwt-keys` once; the app
+    # works without them until then (web login is session-based).
     systemd.services.podman-wger.preStart = ''
       mkdir -p /var/lib/wger/db /var/lib/wger/media /var/lib/wger/static
-      if [ ! -f /var/lib/wger/env ]; then
-        {
-          echo "SECRET_KEY=$(head -c 32 /dev/urandom | base64 | tr -d '=+/')"
-          echo "SITE_URL=https://wger.osbm.dev"
-          echo "CSRF_TRUSTED_ORIGINS=https://wger.osbm.dev"
-          echo "X_FORWARDED_PROTO_HEADER_SET=True"
-          # single-user home instance: no open registration
-          echo "ALLOW_REGISTRATION=False"
-          echo "ALLOW_GUEST_USERS=False"
-        } > /var/lib/wger/env
-        chmod 600 /var/lib/wger/env
+      # container runs as uid 1000; volumes must be writable by it
+      chown -R 1000:1000 /var/lib/wger/db /var/lib/wger/media /var/lib/wger/static
+      if [ ! -f /var/lib/wger/secrets.env ]; then
+        echo "SECRET_KEY=$(head -c 32 /dev/urandom | base64 | tr -d '=+/')" \
+          > /var/lib/wger/secrets.env
+        chmod 600 /var/lib/wger/secrets.env
       fi
+      {
+        cat /var/lib/wger/secrets.env
+        cat <<'CFG'
+      SITE_URL=https://wger.osbm.dev
+      CSRF_TRUSTED_ORIGINS=https://wger.osbm.dev
+      X_FORWARDED_PROTO_HEADER_SET=True
+      NUMBER_OF_PROXIES=1
+      # single-user home instance: no open registration
+      ALLOW_REGISTRATION=False
+      ALLOW_GUEST_USERS=False
+      TIME_ZONE=Europe/Istanbul
+      TZ=Europe/Istanbul
+      # latest image has no DB defaults — sqlite is plenty for one user
+      DJANGO_DB_ENGINE=django.db.backends.sqlite3
+      DJANGO_DB_DATABASE=/home/wger/db/database.sqlite
+      DJANGO_DB_USER=
+      DJANGO_DB_PASSWORD=
+      DJANGO_DB_HOST=
+      DJANGO_DB_PORT=5432
+      PS_DATABASE_URI=
+      # no redis: in-process cache, celery off (sync jobs run via manage.py)
+      DJANGO_CACHE_BACKEND=django.core.cache.backends.locmem.LocMemCache
+      DJANGO_CACHE_LOCATION=
+      USE_CELERY=False
+      SYNC_EXERCISES_CELERY=False
+      SYNC_EXERCISE_IMAGES_CELERY=False
+      SYNC_EXERCISE_VIDEOS_CELERY=False
+      SYNC_INGREDIENTS_CELERY=False
+      CACHE_API_EXERCISES_CELERY=False
+      DJANGO_PERFORM_MIGRATIONS=True
+      DJANGO_COLLECTSTATIC_ON_STARTUP=True
+      WGER_USE_GUNICORN=True
+      DJANGO_DEBUG=False
+      CFG
+      } > /var/lib/wger/env
+      chmod 600 /var/lib/wger/env
     '';
 
     # tailnet-only, same pattern as hledger/aw
