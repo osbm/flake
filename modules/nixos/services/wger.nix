@@ -193,6 +193,11 @@ in
           allow fd7a:115c:a1e0::/48;
           deny all;
           client_max_body_size 100M;
+          # wger validates these to know it's behind an https proxy
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Real-IP $remote_addr;
         '';
       };
       # powersync API (websocket/stream) for the mobile app
