@@ -94,6 +94,26 @@ in
           client_max_body_size 100M;
         '';
       };
+      # gunicorn doesn't serve assets — nginx reads them straight from the
+      # container volumes, as in wger's official compose setup
+      locations."/static/" = {
+        alias = "/var/lib/wger/static/";
+        extraConfig = ''
+          allow 100.64.0.0/10;
+          allow fd7a:115c:a1e0::/48;
+          deny all;
+          expires 1d;
+        '';
+      };
+      locations."/media/" = {
+        alias = "/var/lib/wger/media/";
+        extraConfig = ''
+          allow 100.64.0.0/10;
+          allow fd7a:115c:a1e0::/48;
+          deny all;
+          expires 1d;
+        '';
+      };
     };
 
     # workout history + nutrition log are the books of the body — persist
