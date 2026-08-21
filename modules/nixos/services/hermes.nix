@@ -113,6 +113,28 @@ in
         "z /var/lib/hermes/.hermes/memories/USER.md 0660 hermes hermes -"
       ];
 
+      # the hermes runtime re-chmods .hermes to 0700 at runtime (observed
+      # 2026-08-18 17:06 and 2026-08-21 12:52), cutting the group out until
+      # the next boot-time tmpfiles pass. Watchdog: restore 2770 within 5
+      # minutes and log each occurrence so the trigger can be identified.
+      systemd.services.hermes-perm-watchdog = {
+        script = ''
+          mode=$(stat -c %a /var/lib/hermes/.hermes)
+          if [ "$mode" != "2770" ]; then
+            echo "hermes reverted .hermes to $mode — restoring 2770"
+            chmod 2770 /var/lib/hermes/.hermes
+          fi
+        '';
+        serviceConfig.Type = "oneshot";
+      };
+      systemd.timers.hermes-perm-watchdog = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnBootSec = "5min";
+          OnUnitActiveSec = "5min";
+        };
+      };
+
       # python for skill scripts (duolingo, calendar); in systemPackages so
       # it also survives the login-shell PATH reset (see anki block below)
       systemd.services.hermes-agent.path = [ hermes-python ];
