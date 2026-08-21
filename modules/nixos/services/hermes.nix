@@ -109,6 +109,25 @@ in
         "L /var/lib/hermes/.hermes/SOUL.md - - - - /var/lib/hermes/shared/SOUL.md"
       ];
 
+      # commons janitor: two agents (hermes + osbm's CLI) write here with
+      # different default modes — hermes's memory writer makes 0600 files,
+      # osbm's umask makes group-read-only ones. Every 15 min, everything in
+      # the commons becomes group-rw. Privacy belongs in .hermes, untouched.
+      systemd.services.hermes-commons-janitor = {
+        script = ''
+          find /var/lib/hermes/shared /var/lib/hermes/workspace \
+            -type f -exec chmod ug+rw {} + 2>/dev/null || true
+          find /var/lib/hermes/shared /var/lib/hermes/workspace \
+            -type d -exec chmod ug+rwx,g+s {} + 2>/dev/null || true
+        '';
+        serviceConfig.Type = "oneshot";
+      };
+      systemd.timers.hermes-commons-janitor = {
+        wantedBy = [ "timers.target" ];
+        timerConfig.OnBootSec = "2min";
+        timerConfig.OnUnitActiveSec = "15min";
+      };
+
       # python for skill scripts (duolingo, calendar); in systemPackages so
       # it also survives the login-shell PATH reset (see anki block below)
       systemd.services.hermes-agent.path = [ hermes-python ];
