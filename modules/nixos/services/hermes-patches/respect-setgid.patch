@@ -1,0 +1,22 @@
+Respect setgid parent directories in secure_parent_dir
+
+A setgid bit on a directory never appears by accident -- it is an
+explicit admin declaration of intentional group sharing (e.g. a
+multi-agent setup where a second assistant reads the same memories).
+Forcing such a directory to 0700 on every auth token refresh breaks
+that contract. The secret files inside keep their own 0600 modes.
+
+--- a/hermes_constants.py
++++ b/hermes_constants.py
+@@ -1024,6 +1024,11 @@
+     if parent == Path("/") or len(parent.parts) < 3:
+         return
+     try:
++        # A setgid parent is an explicit admin declaration of intentional
++        # group sharing; tightening it to 0700 would break that contract.
++        # The secret files inside keep their own restrictive modes.
++        if parent.stat().st_mode & 0o2000:
++            return
+         os.chmod(parent, 0o700)
+     except OSError:
+         pass

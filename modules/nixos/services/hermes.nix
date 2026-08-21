@@ -24,6 +24,40 @@ in
     (lib.mkIf cfg.enable {
       services.hermes-agent = {
         enable = true;
+        # patched: secure_parent_dir() chmods .hermes to 0700 on every OAuth
+        # token refresh (observed 2026-08-18 17:06, 2026-08-21 12:52), cutting
+        # the hermes group out of the shared-memory dir. The patch makes it
+        # respect setgid parents — a setgid dir is an explicit admin
+        # declaration of intentional group sharing. Candidate for upstream.
+        #
+        # Mechanism: the package is a uv2nix wheel, so `patches` in
+        # overrideAttrs never reaches the python source. Instead the one
+        # module is copied from the SAME flake input (tracks updates), the
+        # patch applied to it (build fails loudly if upstream drifts), and
+        # the wrapper prepends it on PYTHONPATH so it shadows the wheel copy.
+        package =
+          let
+            orig = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default;
+            patchedConstants = pkgs.runCommand "hermes-constants-setgid" { } ''
+              mkdir -p $out
+              cp ${inputs.hermes-agent}/hermes_constants.py $out/hermes_constants.py
+              cd $out
+              patch -p1 < ${./hermes-patches/respect-setgid.patch}
+            '';
+          in
+          pkgs.symlinkJoin {
+            name = "hermes-agent-setgid-patched";
+            paths = [ orig ];
+            nativeBuildInputs = [ pkgs.makeWrapper ];
+            postBuild = ''
+              for bin in ${orig}/bin/*; do
+                name=$(basename "$bin")
+                rm "$out/bin/$name"
+                makeWrapper "$bin" "$out/bin/$name" \
+                  --prefix PYTHONPATH : ${patchedConstants}
+              done
+            '';
+          };
         # hermes CLI/TUI/dashboard for interactive use, shares the service HERMES_HOME
         addToSystemPackages = true;
         environmentFiles = [
