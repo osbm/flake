@@ -9,8 +9,8 @@
     ../../../modules/nixos/programs/command-line.nix
     ../../../modules/nixos/programs/neovim.nix
     ../../../modules/nixos/system/nix-settings.nix
-    inputs.nix-index-database.darwinModules.nix-index
-    inputs.home-manager.darwinModules.home-manager
+    inputs.nix-index-database-darwin.darwinModules.nix-index
+    inputs.home-manager-darwin.darwinModules.home-manager
   ];
 
   osbmModules = {
@@ -18,7 +18,6 @@
     nixSettings.allowedUnfreePackages = [
       "cursor"
       "vscode"
-      "claude-code"
     ];
   };
 
@@ -54,7 +53,8 @@
     # libreoffice
     # ungoogled-chromium
     code-cursor
-    claude-code
+    # claude-code is installed via the native installer (self-updating):
+    #   curl -fsSL https://claude.ai/install.sh | bash
     # ollama
   ];
   system.stateVersion = 6;

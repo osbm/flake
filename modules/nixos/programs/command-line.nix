@@ -6,78 +6,79 @@
 }:
 {
   config = lib.mkIf config.osbmModules.programs.commandLine.enable {
-    osbmModules.nixSettings.allowedUnfreePackages = [
+    osbmModules.nixSettings.allowedUnfreePackages = lib.optionals (!pkgs.stdenv.hostPlatform.isDarwin) [
       "claude-code"
     ];
 
-    environment.systemPackages = with pkgs; [
-      claude-code
+    environment.systemPackages =
+      # on darwin claude-code comes from the native self-updating installer instead
+      lib.optionals (!pkgs.stdenv.hostPlatform.isDarwin) [ pkgs.claude-code ]
+      ++ (with pkgs; [
+        # networking
+        wget
+        curl
+        dig
+        rclone
 
-      # networking
-      wget
-      curl
-      dig
-      rclone
+        # text editors
+        nano
 
-      # text editors
-      nano
+        # version control
+        (pkgs.gitFull.override {
+          osxkeychainSupport = false;
+        })
+        git-lfs
+        lazygit
+        gh
 
-      # version control
-      (pkgs.gitFull.override {
-        osxkeychainSupport = false;
-      })
-      git-lfs
-      lazygit
-      gh
+        # nix tools
+        nix-output-monitor
+        nixd
+        nix-inspect
+        nh
 
-      # nix tools
-      nix-output-monitor
-      nixd
-      nix-inspect
-      nh
+        # information and vanity
+        onefetch
+        pfetch
+        htop
+        btop
+        cloc
+        inxi
+        tlrc
+        pciutils
 
-      # information and vanity
-      onefetch
-      pfetch
-      htop
-      btop
-      cloc
-      inxi
-      tlrc
-      pciutils
+        # basic quality of life
+        eza
+        file
+        dysk
+        trash-cli
+        zoxide
+        lazysql
+        jq
+        ripgrep
+        dust
+        bat
+        just
+        tree
+        fd
+        yazi
+        duf
 
-      # basic quality of life
-      eza
-      file
-      dysk
-      trash-cli
-      zoxide
-      lazysql
-      jq
-      ripgrep
-      dust
-      bat
-      just
-      tree
-      fd
-      yazi
-      duf
+        # archives
+        zip
+        unzip
 
-      # archives
-      zip
-      unzip
+        # shell
+        fish
+        starship
 
-      # shell
-      fish
-      starship
+        # multiplexers
+        tmux
 
-      # multiplexers
-      tmux
-
-      (pkgs.writeShellScriptBin "wake-ymir" ''
-        echo waking up ymir
-        ${pkgs.wakeonlan}/bin/wakeonlan 04:7c:16:e6:d9:13
-      '')
-    ];
+        (pkgs.writeShellScriptBin "wake-ymir" ''
+          echo waking up ymir
+          ${pkgs.wakeonlan}/bin/wakeonlan 04:7c:16:e6:d9:13
+        '')
+      ]);
   };
 }

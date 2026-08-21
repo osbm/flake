@@ -22,9 +22,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # x86_64-darwin was dropped from unstable (26.11); 26.05 is the last release
+    # supporting it, with security fixes until end of 2026. Only prometheus uses it.
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
     nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/master";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
+    };
+    home-manager-darwin = {
+      url = "github:nix-community/home-manager/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
     nix-on-droid = {
       url = "github:nix-community/nix-on-droid";
@@ -41,6 +48,11 @@
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # last revision whose weekly index still includes x86_64-darwin (dropped upstream 2026-07-12)
+    nix-index-database-darwin = {
+      url = "github:nix-community/nix-index-database/fab14c7b63499d57cb6673d5690168c3ec42b99a";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
     disko = {
       url = "github:nix-community/disko";
@@ -83,7 +95,10 @@
         "aarch64-darwin"
       ];
       forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems f;
-      makePkgs = system: import nixpkgs { inherit system; };
+      # unstable no longer evaluates for x86_64-darwin
+      makePkgs =
+        system:
+        import (if system == "x86_64-darwin" then inputs.nixpkgs-darwin else nixpkgs) { inherit system; };
       makeNixosConfig =
         configName:
         nixpkgs.lib.nixosSystem {

@@ -34,6 +34,9 @@
       set -ga update-environment TERM_PROGRAM
       set-option -g default-command "${lib.getExe pkgs.fish} -l"
       set-window-option -g mode-keys vi
+
+      # machine-local overrides, not managed by nix (skipped silently if absent)
+      source-file -q ~/.config/tmux/local.conf
     '';
   };
 }

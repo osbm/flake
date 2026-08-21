@@ -14,6 +14,9 @@
     BROWSER = lib.mkDefault "firefox";
   };
 
+  # for self-updating tools installed outside nix (claude-code native installer on darwin)
+  home.sessionPath = [ "$HOME/.local/bin" ];
+
   home.packages = [ pkgs.forgejo-cli ];
 
   home.shellAliases = {

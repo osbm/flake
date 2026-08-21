@@ -2,6 +2,7 @@
   inputs,
   lib,
   config,
+  pkgs,
   ...
 }:
 {
@@ -29,10 +30,22 @@
 
       gc = {
         automatic = true;
-        # default is daily; once a week is plenty
-        dates = "weekly";
         options = "--delete-older-than 7d";
-      };
+      }
+      # default is daily; once a week is plenty (nix-darwin 26.05 has no `dates`,
+      # it takes a launchd calendar interval instead)
+      // (
+        if pkgs.stdenv.hostPlatform.isDarwin then
+          {
+            interval = {
+              Weekday = 0;
+              Hour = 3;
+              Minute = 0;
+            };
+          }
+        else
+          { dates = "weekly"; }
+      );
 
       optimise.automatic = true;
 
@@ -40,7 +53,8 @@
 
       registry = lib.mkIf (inputs ? self && inputs ? nixpkgs) {
         self.flake = inputs.self;
-        nixpkgs.flake = inputs.nixpkgs;
+        # unstable no longer evaluates for x86_64-darwin, so darwin hosts get the pinned branch
+        nixpkgs.flake = if pkgs.stdenv.hostPlatform.isDarwin then inputs.nixpkgs-darwin else inputs.nixpkgs;
         osbm-nvim = lib.mkIf (inputs ? osbm-nvim) {
           flake = inputs.osbm-nvim;
         };
