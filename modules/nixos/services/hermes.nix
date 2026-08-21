@@ -24,40 +24,6 @@ in
     (lib.mkIf cfg.enable {
       services.hermes-agent = {
         enable = true;
-        # patched: secure_parent_dir() chmods .hermes to 0700 on every OAuth
-        # token refresh (observed 2026-08-18 17:06, 2026-08-21 12:52), cutting
-        # the hermes group out of the shared-memory dir. The patch makes it
-        # respect setgid parents — a setgid dir is an explicit admin
-        # declaration of intentional group sharing. Candidate for upstream.
-        #
-        # Mechanism: the package is a uv2nix wheel, so `patches` in
-        # overrideAttrs never reaches the python source. Instead the one
-        # module is copied from the SAME flake input (tracks updates), the
-        # patch applied to it (build fails loudly if upstream drifts), and
-        # the wrapper prepends it on PYTHONPATH so it shadows the wheel copy.
-        package =
-          let
-            orig = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default;
-            patchedConstants = pkgs.runCommand "hermes-constants-setgid" { } ''
-              mkdir -p $out
-              cp ${inputs.hermes-agent}/hermes_constants.py $out/hermes_constants.py
-              cd $out
-              patch -p1 < ${./hermes-patches/respect-setgid.patch}
-            '';
-          in
-          pkgs.symlinkJoin {
-            name = "hermes-agent-setgid-patched";
-            paths = [ orig ];
-            nativeBuildInputs = [ pkgs.makeWrapper ];
-            postBuild = ''
-              for bin in ${orig}/bin/*; do
-                name=$(basename "$bin")
-                rm "$out/bin/$name"
-                makeWrapper "$bin" "$out/bin/$name" \
-                  --prefix PYTHONPATH : ${patchedConstants}
-              done
-            '';
-          };
         # hermes CLI/TUI/dashboard for interactive use, shares the service HERMES_HOME
         addToSystemPackages = true;
         environmentFiles = [
@@ -124,50 +90,24 @@ in
         "systemd-journal"
       ];
 
-      # shared-brain seat: the Claude Code CLI (running as the main user, who is
-      # in the hermes group) reads the same skills, persona and memories the
-      # agent uses — two front-ends onto one brain instead of two assistants
-      # that know different things. Sharing is one-way by construction: hermes
-      # keeps ProtectHome and never reads /home, we reach into its dir instead.
+      # shared-brain seat: the Claude Code CLI (running as the main user, who
+      # is in the hermes group) reads the same skills, persona and memories
+      # the agent uses — two front-ends onto one brain.
       #
-      # hermes creates .hermes itself as 0700, which blocks group traversal, so
-      # everything below it is unreachable no matter how the children are moded.
-      # 2770 + a default ACL opens the door and keeps files the agent writes
-      # later group-readable. auth.json keeps its own 0600 — the OAuth tokens
-      # never become group-readable, only the knowledge does.
+      # Layout: the shared files live OUTSIDE hermes's private den, in
+      # /var/lib/hermes/shared (group-writable); symlinks inside .hermes point
+      # there so hermes finds everything at its usual paths. hermes re-chmods
+      # .hermes to 0700 on every OAuth token write (secure_parent_dir) — with
+      # this layout nobody else ever needs to traverse .hermes, so it can.
+      # auth.json/cron stay hermes-private; only the knowledge is shared.
       systemd.tmpfiles.rules = [
-        "d /var/lib/hermes/.hermes 2770 hermes hermes -"
-        "a+ /var/lib/hermes/.hermes - - - - d:g:hermes:rwx"
-        # files that predate the ACL above keep their old modes; widen exactly
-        # the ones we share (MEMORY.md is 0600 today) and nothing else
-        "z /var/lib/hermes/.hermes/SOUL.md 0660 hermes hermes -"
-        "z /var/lib/hermes/.hermes/skills 2770 hermes hermes -"
-        "z /var/lib/hermes/.hermes/memories 2770 hermes hermes -"
-        "z /var/lib/hermes/.hermes/memories/MEMORY.md 0660 hermes hermes -"
-        "z /var/lib/hermes/.hermes/memories/USER.md 0660 hermes hermes -"
+        "d /var/lib/hermes/shared 2770 hermes hermes -"
+        "d /var/lib/hermes/shared/memories 2770 hermes hermes -"
+        "d /var/lib/hermes/shared/skills 2770 hermes hermes -"
+        "L /var/lib/hermes/.hermes/memories - - - - /var/lib/hermes/shared/memories"
+        "L /var/lib/hermes/.hermes/skills - - - - /var/lib/hermes/shared/skills"
+        "L /var/lib/hermes/.hermes/SOUL.md - - - - /var/lib/hermes/shared/SOUL.md"
       ];
-
-      # the hermes runtime re-chmods .hermes to 0700 at runtime (observed
-      # 2026-08-18 17:06 and 2026-08-21 12:52), cutting the group out until
-      # the next boot-time tmpfiles pass. Watchdog: restore 2770 within 5
-      # minutes and log each occurrence so the trigger can be identified.
-      systemd.services.hermes-perm-watchdog = {
-        script = ''
-          mode=$(stat -c %a /var/lib/hermes/.hermes)
-          if [ "$mode" != "2770" ]; then
-            echo "hermes reverted .hermes to $mode — restoring 2770"
-            chmod 2770 /var/lib/hermes/.hermes
-          fi
-        '';
-        serviceConfig.Type = "oneshot";
-      };
-      systemd.timers.hermes-perm-watchdog = {
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnBootSec = "5min";
-          OnUnitActiveSec = "5min";
-        };
-      };
 
       # python for skill scripts (duolingo, calendar); in systemPackages so
       # it also survives the login-shell PATH reset (see anki block below)
