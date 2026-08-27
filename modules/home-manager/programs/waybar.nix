@@ -10,7 +10,7 @@
     # systemd.enable is false because niri launches waybar via its own config
     (lib.mkIf
       (
-        pkgs.stdenv.isLinux
+        pkgs.stdenv.hostPlatform.isLinux
         && nixosConfig != null
         && (
           nixosConfig.osbmModules.desktopEnvironment.niri.enable

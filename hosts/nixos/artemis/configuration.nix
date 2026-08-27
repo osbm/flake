@@ -10,6 +10,20 @@
     ../../../modules/nixos
   ];
 
+  # mobile-nixos still uses the stdenv.isLinux alias that nixpkgs removed
+  # (2026-08 unstable); shim the alias back until fixed upstream — eval-only,
+  # same outPath, so nothing rebuilds
+  nixpkgs.overlays = [
+    (final: prev: {
+      stdenv = prev.stdenv // {
+        isLinux = prev.stdenv.hostPlatform.isLinux;
+        isDarwin = prev.stdenv.hostPlatform.isDarwin;
+        isAarch64 = prev.stdenv.hostPlatform.isAarch64;
+        isx86_64 = prev.stdenv.hostPlatform.isx86_64;
+      };
+    })
+  ];
+
   osbmModules = {
     desktopEnvironment.gnome.enable = true;
     hardware = {

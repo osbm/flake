@@ -1,6 +1,6 @@
 { pkgs, lib, ... }:
 {
-  config = lib.mkIf pkgs.stdenv.isLinux {
+  config = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
     home.packages = [ pkgs.awww ];
 
     systemd.user.services.awww = {
