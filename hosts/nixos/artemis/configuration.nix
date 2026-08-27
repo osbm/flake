@@ -14,7 +14,7 @@
   # (2026-08 unstable); shim the alias back until fixed upstream — eval-only,
   # same outPath, so nothing rebuilds
   nixpkgs.overlays = [
-    (final: prev: {
+    (_final: prev: {
       stdenv = prev.stdenv // {
         isLinux = prev.stdenv.hostPlatform.isLinux;
         isDarwin = prev.stdenv.hostPlatform.isDarwin;
