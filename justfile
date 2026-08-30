@@ -242,7 +242,7 @@ sweep *args:
 
 # Deploy to a specific machine natively using nh
 deploy HOST:
-  nh os switch . --hostname {{HOST}} --target-host osbm@{{HOST}}-ts
+  nh os switch . --hostname {{HOST}} --target-host osbm@{{HOST}}-ts -j1
 
 # Deploy to ALL machines natively via nh
 deploy-all:
