@@ -4,7 +4,7 @@
   ...
 }:
 let
-  hermes-desktop = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.desktop;
+  hermes-desktop = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.hermes-desktop;
 in
 {
   imports = [
