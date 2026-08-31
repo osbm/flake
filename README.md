@@ -31,5 +31,5 @@ I may have some tendency on naming my hosts after mythological figures...
 | | router  | |
 | | ONT | |
 | hermes | anker soundcore earphones | |
-| | Casio watch | |
+| chronos | Casio watch | |
 
