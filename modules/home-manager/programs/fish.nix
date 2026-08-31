@@ -5,11 +5,6 @@
       set -g fish_greeting
     '';
     functions = {
-      gitu = ''
-        git add --all
-        git commit -m "$argv"
-        git push
-      '';
       y = ''
         set tmp (mktemp -t "yazi-cwd.XXXXXX")
         command yazi $argv --cwd-file="$tmp"
