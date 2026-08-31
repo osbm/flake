@@ -94,13 +94,15 @@ in
       # is in the hermes group) reads the same skills, persona and memories
       # the agent uses — two front-ends onto one brain.
       #
-      # Layout: the shared files live OUTSIDE hermes's private den, in
-      # /var/lib/hermes/shared (group-writable); symlinks inside .hermes point
-      # there so hermes finds everything at its usual paths. hermes re-chmods
-      # .hermes to 0700 on every OAuth token write (secure_parent_dir) — with
-      # this layout nobody else ever needs to traverse .hermes, so it can.
-      # auth.json/cron stay hermes-private; only the knowledge is shared.
+      # Layout: the shared files live in /var/lib/hermes/shared
+      # (group-writable); symlinks inside .hermes point there so hermes finds
+      # everything at its usual paths. The den itself is ALSO group-accessible
+      # (2770, osbm's decision 2026-08-31: both agents get the same view) —
+      # only auth.json stays 0600, hermes-private. hermes re-chmods .hermes to
+      # 0700 on every OAuth token write (secure_parent_dir, not configurable);
+      # the parity path unit below reverts that within moments.
       systemd.tmpfiles.rules = [
+        "d /var/lib/hermes/.hermes 2770 hermes hermes -"
         "d /var/lib/hermes/shared 2770 hermes hermes -"
         "d /var/lib/hermes/shared/memories 2770 hermes hermes -"
         "d /var/lib/hermes/shared/skills 2770 hermes hermes -"
@@ -109,15 +111,34 @@ in
         "L /var/lib/hermes/.hermes/SOUL.md - - - - /var/lib/hermes/shared/SOUL.md"
       ];
 
+      # parity watchdog: inotify on the den fires on hermes's own chmod
+      # (IN_ATTRIB), so group access is restored right after each token
+      # write instead of waiting for the janitor. The mode check keeps the
+      # unit from retriggering itself forever (chmod always emits IN_ATTRIB,
+      # even when the mode doesn't change).
+      systemd.paths.hermes-den-parity = {
+        wantedBy = [ "paths.target" ];
+        pathConfig.PathChanged = "/var/lib/hermes/.hermes";
+      };
+      systemd.services.hermes-den-parity = {
+        script = ''
+          if [ "$(stat -c %a /var/lib/hermes/.hermes)" != "2770" ]; then
+            chmod 2770 /var/lib/hermes/.hermes
+          fi
+        '';
+        serviceConfig.Type = "oneshot";
+      };
+
       # commons janitor: two agents (hermes + osbm's CLI) write here with
       # different default modes — hermes's memory writer makes 0600 files,
       # osbm's umask makes group-read-only ones. Every 15 min, everything in
-      # the commons becomes group-rw. Privacy belongs in .hermes, untouched.
+      # the commons AND the den becomes group-rw; only auth.json (tokens)
+      # stays hermes-private.
       systemd.services.hermes-commons-janitor = {
         script = ''
-          find /var/lib/hermes/shared /var/lib/hermes/workspace \
-            -type f -exec chmod ug+rw {} + 2>/dev/null || true
-          find /var/lib/hermes/shared /var/lib/hermes/workspace \
+          find /var/lib/hermes/shared /var/lib/hermes/workspace /var/lib/hermes/.hermes \
+            -type f -not -name 'auth.json*' -exec chmod ug+rw {} + 2>/dev/null || true
+          find /var/lib/hermes/shared /var/lib/hermes/workspace /var/lib/hermes/.hermes \
             -type d -exec chmod ug+rwx,g+s {} + 2>/dev/null || true
         '';
         serviceConfig.Type = "oneshot";
