@@ -98,9 +98,8 @@ in
       # (group-writable); symlinks inside .hermes point there so hermes finds
       # everything at its usual paths. The den itself is ALSO group-accessible
       # (2770, osbm's decision 2026-08-31: both agents get the same view) —
-      # only auth.json stays 0600, hermes-private. hermes re-chmods .hermes to
-      # 0700 on every OAuth token write (secure_parent_dir, not configurable);
-      # the parity path unit below reverts that within moments.
+      # only auth.json stays 0600, hermes-private. The janitor below keeps it
+      # that way at runtime.
       systemd.tmpfiles.rules = [
         "d /var/lib/hermes/.hermes 2770 hermes hermes -"
         "d /var/lib/hermes/shared 2770 hermes hermes -"
@@ -111,35 +110,24 @@ in
         "L /var/lib/hermes/.hermes/SOUL.md - - - - /var/lib/hermes/shared/SOUL.md"
       ];
 
-      # parity watchdog: inotify on the den fires on hermes's own chmod
-      # (IN_ATTRIB), so group access is restored right after each token
-      # write instead of waiting for the janitor. The mode check keeps the
-      # unit from retriggering itself forever (chmod always emits IN_ATTRIB,
-      # even when the mode doesn't change).
-      systemd.paths.hermes-den-parity = {
-        wantedBy = [ "paths.target" ];
-        pathConfig.PathChanged = "/var/lib/hermes/.hermes";
-      };
-      systemd.services.hermes-den-parity = {
-        script = ''
-          if [ "$(stat -c %a /var/lib/hermes/.hermes)" != "2770" ]; then
-            chmod 2770 /var/lib/hermes/.hermes
-          fi
-        '';
-        serviceConfig.Type = "oneshot";
-      };
-
-      # commons janitor: two agents (hermes + osbm's CLI) write here with
+      # commons janitor: two agents (hermes + osbm's CLI) write with
       # different default modes — hermes's memory writer makes 0600 files,
-      # osbm's umask makes group-read-only ones. Every 15 min, everything in
-      # the commons AND the den becomes group-rw; only auth.json (tokens)
-      # stays hermes-private.
+      # osbm's umask makes group-read-only ones — and the hermes harness
+      # re-chmods the den to 0700 on every token write (secure_parent_dir,
+      # not configurable). This makes everything group-rw again; only
+      # auth.json (tokens) stays hermes-private. Runs every 15 min AND
+      # whenever the den changes (path unit below). The `! -perm` guards
+      # matter: chmod always emits IN_ATTRIB even when the mode is
+      # unchanged, so unguarded chmods would retrigger the path unit in an
+      # endless loop.
       systemd.services.hermes-commons-janitor = {
         script = ''
+          find /var/lib/hermes/.hermes -maxdepth 0 \
+            ! -perm 2770 -exec chmod 2770 {} + 2>/dev/null || true
           find /var/lib/hermes/shared /var/lib/hermes/workspace /var/lib/hermes/.hermes \
-            -type f -not -name 'auth.json*' -exec chmod ug+rw {} + 2>/dev/null || true
+            -type f -not -name 'auth.json*' ! -perm -0660 -exec chmod ug+rw {} + 2>/dev/null || true
           find /var/lib/hermes/shared /var/lib/hermes/workspace /var/lib/hermes/.hermes \
-            -type d -exec chmod ug+rwx,g+s {} + 2>/dev/null || true
+            -mindepth 1 -type d ! -perm -2770 -exec chmod ug+rwx,g+s {} + 2>/dev/null || true
         '';
         serviceConfig.Type = "oneshot";
       };
@@ -147,6 +135,13 @@ in
         wantedBy = [ "timers.target" ];
         timerConfig.OnBootSec = "2min";
         timerConfig.OnUnitActiveSec = "15min";
+      };
+      # same-named path unit implicitly triggers the janitor service:
+      # inotify fires on the harness's chmod (IN_ATTRIB), restoring group
+      # access moments after each token write instead of after ≤15 min.
+      systemd.paths.hermes-commons-janitor = {
+        wantedBy = [ "paths.target" ];
+        pathConfig.PathChanged = "/var/lib/hermes/.hermes";
       };
 
       # python for skill scripts (duolingo, calendar); in systemPackages so
