@@ -130,6 +130,12 @@ in
             -mindepth 1 -type d ! -perm -2770 -exec chmod ug+rwx,g+s {} + 2>/dev/null || true
         '';
         serviceConfig.Type = "oneshot";
+        # hermes-agent writes bursts of files into .hermes on startup; each
+        # one fires the path unit, and 5 starts in 10s trips the default
+        # start limit and fails BOTH units (seen on the 2026-09-01 switch).
+        # The perm guards already prevent self-loops, so unlimited starts
+        # of this ~50ms no-op sweep are safe.
+        unitConfig.StartLimitIntervalSec = 0;
       };
       systemd.timers.hermes-commons-janitor = {
         wantedBy = [ "timers.target" ];
