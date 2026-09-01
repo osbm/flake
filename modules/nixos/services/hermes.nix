@@ -18,7 +18,10 @@ let
   '';
 in
 {
-  imports = [ inputs.hermes-agent.nixosModules.default ];
+  imports = [
+    inputs.hermes-agent.nixosModules.default
+    inputs.hermes-webui.nixosModules.default
+  ];
 
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
@@ -281,6 +284,102 @@ in
       };
     })
 
+    # hermes-webui (chat.osbm.dev): mobile-first browser UI onto the same
+    # brain — third front-end next to Telegram and the CLI. It runs the agent
+    # IN-PROCESS against the shared HERMES_HOME (no stable agent API boundary
+    # yet, so the flake pins both hermes inputs to update together; see
+    # flake.nix). Running as the hermes user means it can read auth.json —
+    # accepted trade-off (2026-09-01): small auditable codebase, tailnet-only
+    # vhost, own password auth.
+    (lib.mkIf (cfg.enable && config.osbmModules.services.nginx.enable) {
+      # HERMES_WEBUI_PASSWORD — webui's built-in auth, NOT nginx basic auth:
+      # proxy auth breaks the installed PWA's service-worker update fetches
+      age.secrets.hermes-webui-env.file = ../../../secrets/hermes-webui-env.age;
+
+      services.hermes-webui = {
+        enable = true;
+        host = "127.0.0.1";
+        port = 8787;
+        # run as the agent's account so it shares the den (upstream-sanctioned
+        # for co-located agents; the module then skips its own user creation)
+        user = "hermes";
+        group = "hermes";
+        hermesHome = "/var/lib/hermes/.hermes";
+        # derives HERMES_WEBUI_PYTHON from passthru.hermesVenv — same closure
+        # as the running agent, so the pair can't skew on one host
+        agent.package = config.services.hermes-agent.package;
+        environmentFiles = [
+          config.age.secrets.hermes-webui-env.path
+          # same provider/skill env as hermes-agent.service, so webui chats
+          # have CLI parity (fallback chain, duolingo, calendar)
+          config.age.secrets.hermes-env.path
+          config.age.secrets.duolingo-env.path
+          config.age.secrets.radicale-hermes-env.path
+          config.age.secrets.deepseek-env.path
+        ];
+        # anki seat parity with the agent service (see anki block above)
+        extraEnvironment = lib.mkIf config.osbmModules.services.anki-sync-server.enable {
+          ANKI_SYNC_ENDPOINT = "http://127.0.0.1:${toString config.services.anki-sync-server.port}/";
+          ANKI_SYNC_USERNAME = "osbm";
+          ANKI_SYNC_PASSWORD_FILE = config.age.secrets.anki-sync-password.path;
+        };
+      };
+
+      systemd.services.hermes-webui = {
+        # not required (webui reads the store lazily), but let the agent
+        # create/migrate HERMES_HOME first on boot
+        after = [ "hermes-agent.service" ];
+        # tool exec from webui chats needs the same runtime as the agent unit
+        path = [
+          config.services.hermes-agent.package
+          pkgs.bash
+          pkgs.coreutils
+          pkgs.git
+          hermes-python
+        ]
+        ++ lib.optional config.osbmModules.services.anki-sync-server.enable anki-python;
+
+        serviceConfig = {
+          # group-share the den like every other hermes writer; the upstream
+          # module's 0077 would make the janitor re-chmod everything it touches
+          UMask = lib.mkForce "0007";
+
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          ReadWritePaths = [
+            "/var/lib/hermes"
+            "/var/lib/hermes-webui"
+          ];
+          ReadOnlyPaths = [ "-/var/lib/wanikani-logs" ];
+          PrivateTmp = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          RestrictNamespaces = true;
+          LockPersonality = true;
+        };
+      };
+
+      services.nginx.virtualHosts."chat.osbm.dev" = {
+        forceSSL = true;
+        useACMEHost = "osbm.dev";
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:8787";
+          proxyWebsockets = true;
+          extraConfig = ''
+            allow 100.64.0.0/10;
+            allow fd7a:115c:a1e0::/48;
+            deny all;
+            # chat streams over SSE: unbuffered, and outlive the 60s default
+            # read timeout between heartbeats
+            proxy_buffering off;
+            proxy_read_timeout 1h;
+          '';
+        };
+      };
+    })
+
     # impermanence: memories, skills, sessions and config live here
     (lib.mkIf (cfg.enable && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot) {
       environment.persistence."/persist" = {
@@ -290,6 +389,13 @@ in
             user = "hermes";
             group = "hermes";
             mode = "0770";
+          }
+          # webui sessions/settings state (separate from the den by design)
+          {
+            directory = "/var/lib/hermes-webui";
+            user = "hermes";
+            group = "hermes";
+            mode = "0700";
           }
         ];
       };

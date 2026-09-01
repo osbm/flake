@@ -75,6 +75,13 @@
       url = "github:NousResearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # webui imports agent modules directly (no stable API boundary yet:
+    # nesquena/hermes-webui#1925) — mixed versions are unsupported upstream,
+    # so update/pin BOTH hermes inputs together
+    hermes-webui = {
+      url = "github:nesquena/hermes-webui";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     llm-agents = {
       url = "github:numtide/llm-agents.nix";
       inputs.nixpkgs.follows = "nixpkgs";
