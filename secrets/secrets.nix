@@ -71,8 +71,4 @@ in
     apollo
     osbm
   ];
-  "hermes-webui-env.age".publicKeys = [
-    apollo
-    osbm
-  ];
 }

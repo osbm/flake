@@ -292,10 +292,8 @@ in
     # accepted trade-off (2026-09-01): small auditable codebase, tailnet-only
     # vhost, own password auth.
     (lib.mkIf (cfg.enable && config.osbmModules.services.nginx.enable) {
-      # HERMES_WEBUI_PASSWORD — webui's built-in auth, NOT nginx basic auth:
-      # proxy auth breaks the installed PWA's service-worker update fetches
-      age.secrets.hermes-webui-env.file = ../../../secrets/hermes-webui-env.age;
-
+      # no password auth: the vhost is tailnet-only (and the bind loopback-only),
+      # so reachability already implies it's one of osbm's devices
       services.hermes-webui = {
         enable = true;
         host = "127.0.0.1";
@@ -309,7 +307,6 @@ in
         # as the running agent, so the pair can't skew on one host
         agent.package = config.services.hermes-agent.package;
         environmentFiles = [
-          config.age.secrets.hermes-webui-env.path
           # same provider/skill env as hermes-agent.service, so webui chats
           # have CLI parity (fallback chain, duolingo, calendar)
           config.age.secrets.hermes-env.path
