@@ -368,6 +368,13 @@ in
             allow 100.64.0.0/10;
             allow fd7a:115c:a1e0::/48;
             deny all;
+            # the webui's CSRF gate compares the browser Origin against the
+            # Host header it receives — without this it sees 127.0.0.1:8787
+            # and rejects every POST ("Cross-origin mismatch")
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
             # chat streams over SSE: unbuffered, and outlive the 60s default
             # read timeout between heartbeats
             proxy_buffering off;
