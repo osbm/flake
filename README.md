@@ -18,7 +18,7 @@ I may have some tendency on naming my hosts after mythological figures...
 | prometheus | Work Laptop | x86_64-darwin |
 | artemis | Oneplus 6 (mobile nixos) | aarch64-linux |
 | harmonica | Raspberry Pi Zero 2 | aarch64-linux |
-| ares | Valve Steam Deck | aarch64-linux |
+| ares | Valve Steam Deck | x86_64-linux |
 | apollo | netcup VPS | x86_64-linux |
 | hecatoncheires | corne v2 | |
 | | corne v4 | |
