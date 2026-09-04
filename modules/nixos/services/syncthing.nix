@@ -40,7 +40,6 @@ let
         "tartarus"
         "luoji"
         "apollo"
-        "prometheus"
       ];
       ignorePatterns = [
         ".git"
@@ -142,7 +141,6 @@ in
                 ares = "U6AVFUV-NBSJHAK-NX2IAH5-KMSK5NY-D3NEYV4-O7PG2FZ-F3DMWLH-BD732QS";
                 artemis = "SGXJ4VY-R3S5LLZ-I3WQ5CE-XJYRKSF-PAL5H5O-CICMUGQ-QTX74MY-X4P2NAK";
                 apollo = "7PVG2VU-WVS2LZZ-SIOJ23J-TG32BYM-WBAA6T5-462GXRU-AHSFA77-VVFPLQZ";
-                prometheus = "TODRPTH-HALIAQS-UC543ZV-I6WRHUB-ISU4OFU-JXCTPB3-BYMQAQV-7XIM6A4";
                 # atreus = "ATREUS-DEVICE-ID";
                 # puck = "PUCK-DEVICE-ID";
               };

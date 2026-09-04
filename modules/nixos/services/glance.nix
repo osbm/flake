@@ -237,11 +237,6 @@
                           icon = "si:syncthing";
                         }
                         {
-                          title = "prometheus";
-                          url = "https://prometheus.sync.osbm.dev";
-                          icon = "si:syncthing";
-                        }
-                        {
                           title = "apollo";
                           url = "https://apollo.sync.osbm.dev";
                           icon = "si:syncthing";
