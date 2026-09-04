@@ -131,6 +131,14 @@
       wger.enable = lib.mkEnableOption "wger workout/nutrition tracker";
       hledger.enable = lib.mkEnableOption "hledger-web + hledger CLI";
       syncthing.enable = lib.mkEnableOption "syncthing";
+      vault-backup = {
+        enable = lib.mkEnableOption "nightly git commit+push of the synced obsidian vault (sole-committer host only)";
+        path = lib.mkOption {
+          type = lib.types.str;
+          default = "/home/osbm/Documents/rerouting";
+          description = "Path of the vault working tree";
+        };
+      };
       jellyfin.enable = lib.mkEnableOption "jellyfin";
       mailserver.enable = lib.mkEnableOption "mailserver";
       vaultwarden.enable = lib.mkEnableOption "vaultwarden";

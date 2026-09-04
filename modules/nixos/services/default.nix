@@ -23,6 +23,7 @@
     ./loki.nix
     ./grafana
     ./alloy.nix
+    ./vault-backup.nix
     ./healthcheck.nix
     ./radicale.nix
     ./syncthing.nix

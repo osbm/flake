@@ -23,6 +23,8 @@
       # healthcheck.enable = true;
       # seafile.enable = true;
       syncthing.enable = true;
+      # apollo is the vault's sole git committer (see vault-backup.nix)
+      vault-backup.enable = true;
       prometheus.enable = true;
       hermes.enable = true;
 
