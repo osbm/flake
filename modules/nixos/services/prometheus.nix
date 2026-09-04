@@ -47,16 +47,29 @@ let
         def do_POST(self):
             data = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
             for alert in data.get("alerts", []):
-                instance = alert.get("labels", {}).get("instance", "unknown")
+                labels = alert.get("labels", {})
+                annotations = alert.get("annotations", {})
+                instance = labels.get("instance", "unknown")
                 name = instance.split(".")[0]
                 status = alert.get("status", "unknown")
-                if status == "firing":
-                    msg = f"{name} just went dark"
-                    priority = "urgent"
-                    tags = "skull"
+                alertname = labels.get("alertname", "Alert")
+                if alertname == "MachineDown":
+                    # keep the classic casual phrasing for the original alert
+                    if status == "firing":
+                        msg = f"{name} just went dark"
+                        priority = "urgent"
+                        tags = "skull"
+                    else:
+                        msg = f"{name} is back up"
+                        priority = "default"
+                        tags = "white_check_mark"
+                elif status == "firing":
+                    msg = annotations.get("summary", alertname)
+                    priority = "urgent" if labels.get("severity") == "critical" else "default"
+                    tags = "warning"
                 else:
-                    msg = f"{name} is back up"
-                    priority = "default"
+                    msg = f"resolved: {annotations.get('summary', alertname)}"
+                    priority = "min"
                     tags = "white_check_mark"
                 req = urllib.request.Request(
                     "http://localhost:2586/alerts",
@@ -122,6 +135,41 @@ in
                   annotations = {
                     summary = "{{ $labels.instance }} is down";
                     description = "{{ $labels.instance }} has been unreachable for more than 1 minute.";
+                  };
+                }
+              ];
+            }
+            {
+              name = "syncthing";
+              rules = [
+                {
+                  alert = "SyncthingConflict";
+                  expr = "max by (folder) (syncthing_folder_conflict_files) > 0";
+                  "for" = "5m";
+                  labels.severity = "warning";
+                  annotations = {
+                    summary = "syncthing conflict in {{ $labels.folder }}";
+                    description = "{{ $value }} conflict file(s) in folder {{ $labels.folder }} — resolve by hand, versioning keeps the losers.";
+                  };
+                }
+                {
+                  alert = "SyncthingDown";
+                  expr = "syncthing_up == 0";
+                  "for" = "10m";
+                  labels.severity = "warning";
+                  annotations = {
+                    summary = "syncthing dead on {{ $labels.instance }}";
+                    description = "The syncthing REST API on {{ $labels.instance }} has not answered for 10 minutes.";
+                  };
+                }
+                {
+                  alert = "SyncthingStuck";
+                  expr = "sum by (instance, folder) (syncthing_folder_need_items) > 0";
+                  "for" = "2h";
+                  labels.severity = "warning";
+                  annotations = {
+                    summary = "{{ $labels.folder }} stuck on {{ $labels.instance }}";
+                    description = "Folder {{ $labels.folder }} on {{ $labels.instance }} has had {{ $value }} out-of-sync items for 2+ hours — probably a disconnected peer or an ignore/permission problem.";
                   };
                 }
               ];
