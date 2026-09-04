@@ -127,7 +127,6 @@
         };
       };
 
-      actual.enable = lib.mkEnableOption "actual";
       activitywatch.enable = lib.mkEnableOption "central ActivityWatch server";
       wger.enable = lib.mkEnableOption "wger workout/nutrition tracker";
       hledger.enable = lib.mkEnableOption "hledger-web + hledger CLI";

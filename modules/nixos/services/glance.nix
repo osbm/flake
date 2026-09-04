@@ -120,11 +120,6 @@
                           url = "https://immich.osbm.dev";
                         }
                         {
-                          icon = "sh:actual-budget";
-                          title = "Actual Budget";
-                          url = "https://actual.osbm.dev"; # todo migrate to budget.osbm.dev
-                        }
-                        {
                           icon = "sh:hledger";
                           title = "hledger";
                           url = "https://hledger.osbm.dev";
