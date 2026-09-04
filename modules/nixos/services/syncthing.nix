@@ -111,10 +111,12 @@ in
                 addresses = [ "tcp://${name}:22000" ];
               })
               {
-                wallfacer = "L7LZQ4A-SXV6NAQ-EZII4HQ-DEUHHJG-HE57CJA-S3OZ7FI-5MACY26-M5LQFQH";
-                pochita = "KHRI624-S7YHFJJ-KX7IATC-QFSS6X6-U2OUDN3-HWREAVI-7ABRS4P-SUSK6A6";
+                # IDs re-verified 2026-09-04 (ymir/pochita/wallfacer had regenerated
+                # identities; old IDs caused months of "unknown device" rejections)
+                wallfacer = "637HJBQ-MJPJCVC-2ULZR32-OOAGFKZ-EJNIYGE-3IG67SL-OTL5T5L-GHWL6AE";
+                pochita = "MMTR7XX-CETSB5B-LFPBN7S-A4ASTRW-J2DYX72-SAJTZVM-XLYBLR7-BEPSGAK";
                 luoji = "54O4Q42-GXACXO6-BK7TF4Q-NVBW6OF-ODPPVWO-WLW43CV-ZZEZXQD-JUAF7AY";
-                ymir = "BDBLJP4-ANZ46I6-4YVIU7K-GXPYGGG-JIVKGZ6-BUNH2YD-HBYBYC3-NNC5FAU";
+                ymir = "S2EJFTI-FKJYEDG-YXUKO3P-BQ23D32-GFCEBJV-6MSDZ73-MYJFDE7-N437XQ3";
                 tartarus = "SBBZZOL-IJ7PTAK-4LB6SPE-QKQZ2I2-62HVQSV-MN3C7JL-WHUTA2K-SVDGPA6";
                 ares = "U6AVFUV-NBSJHAK-NX2IAH5-KMSK5NY-D3NEYV4-O7PG2FZ-F3DMWLH-BD732QS";
                 artemis = "SGXJ4VY-R3S5LLZ-I3WQ5CE-XJYRKSF-PAL5H5O-CICMUGQ-QTX74MY-X4P2NAK";

@@ -170,6 +170,13 @@
                           url = "https://hermes.osbm.dev";
                         }
                         {
+                          icon = "si:anthropic";
+                          title = "Hermes Chat";
+                          url = "https://chat.osbm.dev";
+                          # websocket-first UI; bare GET answers 501 when alive
+                          alt-status-codes = [ 501 ];
+                        }
+                        {
                           icon = "si:anki";
                           title = "Anki Sync";
                           url = "https://anki.osbm.dev";

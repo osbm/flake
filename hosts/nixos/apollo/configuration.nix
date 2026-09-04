@@ -24,6 +24,8 @@
       # healthcheck.enable = true;
       # seafile.enable = true;
       syncthing.enable = true;
+      # conflict files sync to all peers, so one always-on watcher covers the fleet
+      syncthing.conflictAlerts.enable = true;
       prometheus.enable = true;
       hermes.enable = true;
 
