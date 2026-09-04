@@ -80,6 +80,46 @@ let
         "https://ntfy.osbm.dev/syncthing-conflicts" || true
     fi
   '';
+  # Exports syncthing state as node-exporter textfile metrics. Reads the API
+  # key locally from config.xml, so no secrets live in the repo.
+  metricsScript = pkgs.writeScript "syncthing-metrics" ''
+    #!${pkgs.python3}/bin/python3
+    import json, os, re, urllib.request
+
+    OUT = "/var/lib/node-exporter/syncthing.prom"
+    cfg = open("/home/osbm/.syncthing/config.xml").read()
+    key = re.search(r"<apikey>([^<]+)</apikey>", cfg).group(1)
+
+    def get(path):
+        req = urllib.request.Request("http://localhost:8384" + path, headers={"X-API-Key": key})
+        with urllib.request.urlopen(req, timeout=10) as r:
+            return json.load(r)
+
+    lines = []
+    try:
+        devices = {d["deviceID"]: d["name"] for d in get("/rest/config/devices")}
+        conns = get("/rest/system/connections")["connections"]
+        for did, c in conns.items():
+            name = devices.get(did, did[:7])
+            lines.append(f'syncthing_device_connected{{device="{name}"}} {1 if c["connected"] else 0}')
+        for f in get("/rest/config/folders"):
+            fid, path = f["id"], f["path"]
+            st = get(f"/rest/db/status?folder={fid}")
+            lines.append(f'syncthing_folder_need_items{{folder="{fid}"}} {st.get("needTotalItems", 0)}')
+            lines.append(f'syncthing_folder_need_bytes{{folder="{fid}"}} {st.get("needBytes", 0)}')
+            lines.append(f'syncthing_folder_errors{{folder="{fid}"}} {st.get("errors", 0)}')
+            conflicts = 0
+            for root, _, files in os.walk(os.path.expanduser(path)):
+                conflicts += sum(1 for n in files if ".sync-conflict-" in n)
+            lines.append(f'syncthing_folder_conflict_files{{folder="{fid}"}} {conflicts}')
+        lines.append("syncthing_up 1")
+    except Exception:
+        lines.append("syncthing_up 0")
+
+    with open(OUT + ".tmp", "w") as fh:
+        fh.write("\n".join(lines) + "\n")
+    os.replace(OUT + ".tmp", OUT)
+  '';
 in
 {
   config = lib.mkMerge [
@@ -147,6 +187,27 @@ in
             mode = "0700";
           }
         ];
+      };
+    })
+
+    # Syncthing metrics -> node-exporter textfile collector -> existing
+    # prometheus "node" job on apollo. No new scrape configs, no repo secrets.
+    (lib.mkIf (cfg.enable && config.osbmModules.services.node-exporter.enable) {
+      systemd.services.syncthing-metrics = {
+        description = "Export syncthing state for node-exporter";
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = metricsScript;
+          ReadWritePaths = [ "/var/lib/node-exporter" ];
+        };
+      };
+      systemd.timers.syncthing-metrics = {
+        description = "Timer for syncthing metrics export";
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnBootSec = "2min";
+          OnUnitActiveSec = "2min";
+        };
       };
     })
 

@@ -1,0 +1,140 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "links": [],
+  "panels": [
+    {
+      "title": "Syncthing API up",
+      "description": "Is each host's syncthing daemon answering its REST API",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "value", "options": { "0": { "text": "DOWN", "color": "red" }, "1": { "text": "UP", "color": "green" } } }
+          ],
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 1 } ] }
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "textMode": "value_and_name", "colorMode": "background" },
+      "targets": [
+        { "expr": "syncthing_up", "legendFormat": "{{instance}}", "instant": true, "refId": "A" }
+      ]
+    },
+    {
+      "title": "Total conflict files",
+      "description": "Sum of *.sync-conflict-* files across all folders and hosts",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 1 } ] }
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" },
+      "targets": [
+        { "expr": "sum(max by (folder) (syncthing_folder_conflict_files))", "legendFormat": "conflicts", "instant": true, "refId": "A" }
+      ]
+    },
+    {
+      "title": "Out-of-sync items (per host, per folder)",
+      "description": "needTotalItems — anything above zero for long means sync is stuck",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "yellow", "value": 1 }, { "color": "red", "value": 100 } ] }
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "textMode": "value_and_name", "colorMode": "background" },
+      "targets": [
+        { "expr": "sum by (instance, folder) (syncthing_folder_need_items) > 0 or vector(0)", "legendFormat": "{{instance}} {{folder}}", "instant": true, "refId": "A" }
+      ]
+    },
+    {
+      "title": "Device connection matrix",
+      "description": "1 = connected. Rows: observing host (instance) x observed device.",
+      "type": "table",
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 6 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "cellOptions": { "type": "color-background" }, "align": "center" },
+          "mappings": [
+            { "type": "value", "options": { "0": { "text": "✕", "color": "red" }, "1": { "text": "✓", "color": "green" } } }
+          ],
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 1 } ] }
+        },
+        "overrides": []
+      },
+      "options": { "showHeader": true },
+      "targets": [
+        { "expr": "syncthing_device_connected", "format": "table", "instant": true, "refId": "A" }
+      ],
+      "transformations": [
+        { "id": "labelsToFields", "options": {} },
+        { "id": "groupingToMatrix", "options": { "columnField": "device", "rowField": "instance", "valueField": "Value" } }
+      ]
+    },
+    {
+      "title": "Connected devices over time",
+      "type": "timeseries",
+      "gridPos": { "h": 10, "w": 12, "x": 12, "y": 6 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": { "custom": { "fillOpacity": 10, "lineWidth": 2 }, "min": 0 },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        { "expr": "sum by (instance) (syncthing_device_connected)", "legendFormat": "{{instance}}", "refId": "A" }
+      ]
+    },
+    {
+      "title": "Out-of-sync items over time",
+      "type": "timeseries",
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": { "custom": { "fillOpacity": 10, "lineWidth": 2 }, "min": 0 },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        { "expr": "sum by (instance, folder) (syncthing_folder_need_items)", "legendFormat": "{{instance}} {{folder}}", "refId": "A" }
+      ]
+    },
+    {
+      "title": "Conflict files over time",
+      "type": "timeseries",
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": { "custom": { "fillOpacity": 10, "lineWidth": 2 }, "min": 0 },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        { "expr": "max by (folder) (syncthing_folder_conflict_files)", "legendFormat": "{{folder}}", "refId": "A" }
+      ]
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["syncthing"],
+  "templating": {
+    "list": [
+      { "current": {}, "hide": 0, "includeAll": false, "name": "DS_PROMETHEUS", "query": "prometheus", "type": "datasource" }
+    ]
+  },
+  "time": { "from": "now-24h", "to": "now" },
+  "title": "Syncthing Fleet",
+  "uid": "syncthing-fleet"
+}
