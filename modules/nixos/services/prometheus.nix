@@ -106,6 +106,15 @@ in
             }
           ];
           scrape_interval = "15s";
+          # short hostnames as instance ("apollo" not "apollo.curl-boga.ts.net:9100")
+          relabel_configs = [
+            {
+              source_labels = [ "__address__" ];
+              regex = "([^.]+)\\..*";
+              target_label = "instance";
+              replacement = "$1";
+            }
+          ];
         }
       ];
 
