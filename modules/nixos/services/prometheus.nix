@@ -165,7 +165,7 @@ in
                 }
                 {
                   alert = "SyncthingDown";
-                  expr = "syncthing_up == 0";
+                  expr = "syncthing_up{instance!=\"luoji\"} == 0"; # phones doze; that is not an incident
                   "for" = "10m";
                   labels.severity = "warning";
                   annotations = {
