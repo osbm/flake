@@ -25,17 +25,6 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
-      # Vault access policy (self-healing on every boot/switch):
-      # hermes reads the whole obsidian vault, writes only its own subtree;
-      # /var/lib/hermes/workspace is a symlink into the vault (2026-09-08 merge)
-      systemd.tmpfiles.rules = [
-        "a+ /home/osbm - - - - g:hermes:x"
-        "a+ /home/osbm/Documents - - - - g:hermes:x"
-        "A+ /home/osbm/Documents/rerouting - - - - g:hermes:rX,d:g:hermes:rX"
-        "A+ /home/osbm/Documents/rerouting/hermes - - - - g:hermes:rwX,d:g:hermes:rwX"
-        "L+ /var/lib/hermes/workspace - - - - /home/osbm/Documents/rerouting/hermes"
-      ];
-
       services.hermes-agent = {
         enable = true;
         # hermes CLI/TUI/dashboard for interactive use, shares the service HERMES_HOME
@@ -122,6 +111,14 @@ in
         "L /var/lib/hermes/.hermes/memories - - - - /var/lib/hermes/shared/memories"
         "L /var/lib/hermes/.hermes/skills - - - - /var/lib/hermes/shared/skills"
         "L /var/lib/hermes/.hermes/SOUL.md - - - - /var/lib/hermes/shared/SOUL.md"
+        # Vault access policy (2026-09-08 merge, self-healing every boot/switch):
+        # hermes reads the whole obsidian vault, writes only its own subtree;
+        # /var/lib/hermes/workspace is a symlink into the vault
+        "a+ /home/osbm - - - - g:hermes:x"
+        "a+ /home/osbm/Documents - - - - g:hermes:x"
+        "A+ /home/osbm/Documents/rerouting - - - - g:hermes:rX,d:g:hermes:rX"
+        "A+ /home/osbm/Documents/rerouting/hermes - - - - g:hermes:rwX,d:g:hermes:rwX"
+        "L+ /var/lib/hermes/workspace - - - - /home/osbm/Documents/rerouting/hermes"
       ];
 
       # commons janitor: two agents (hermes + osbm's CLI) write with
