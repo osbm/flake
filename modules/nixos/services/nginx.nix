@@ -36,11 +36,6 @@
 
         # Route [name].sync.osbm.dev -> [name].curl-boga.ts.net:8384
         appendHttpConfig = ''
-          # devices whose syncthing GUI forces TLS (self-signed) get https upstream
-          map $device $syncthing_scheme {
-            default "http";
-            luoji "https";
-          }
           server {
             listen 80;
             listen 443 ssl;
@@ -52,9 +47,8 @@
             resolver 100.100.100.100;
 
             location / {
-              set $backend $syncthing_scheme://$device.curl-boga.ts.net:8384;
+              set $backend http://$device.curl-boga.ts.net:8384;
               proxy_pass $backend;
-              proxy_ssl_verify off;
               proxy_set_header Host $host;
               proxy_set_header X-Real-IP $remote_addr;
               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

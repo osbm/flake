@@ -76,7 +76,7 @@ let
     # root-only, installed imperatively, never in the repo). Metrics carry an
     # explicit instance label; prometheus honors it (honor_labels on the node job).
     REMOTES = [
-        ("luoji", "https://luoji.curl-boga.ts.net:8384", "/var/lib/syncthing-remote-keys/luoji.key"),
+        ("luoji", "http://luoji.curl-boga.ts.net:8384", "/var/lib/syncthing-remote-keys/luoji.key"),
     ]
 
     import ssl
