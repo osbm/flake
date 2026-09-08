@@ -212,6 +212,10 @@ in
               normalization = "formD";
               relatime = "on";
               "com.sun:auto-snapshot" = "false";
+              # POSIX ACLs (hermes agent reads osbm's vault); set imperatively on
+              # apollo zroot/root+persist 2026-09-08, declared here for reinstalls
+              acltype = "posixacl";
+              xattr = "sa";
             };
             options = {
               ashift = "12";
@@ -292,6 +296,10 @@ in
               normalization = "formD";
               relatime = "on";
               "com.sun:auto-snapshot" = "false";
+              # POSIX ACLs (hermes agent reads osbm's vault); set imperatively on
+              # apollo zroot/root+persist 2026-09-08, declared here for reinstalls
+              acltype = "posixacl";
+              xattr = "sa";
             };
             options = {
               ashift = "12";
