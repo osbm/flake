@@ -37,10 +37,10 @@ in
     };
 
     systemd.timers.vault-backup = {
-      description = "Nightly vault backup commit";
+      description = "Hourly vault backup commit";
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnCalendar = "03:00";
+        OnCalendar = "hourly";
         Persistent = true;
       };
     };
