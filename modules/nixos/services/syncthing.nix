@@ -72,10 +72,25 @@ let
     cfg = open("/home/osbm/.syncthing/config.xml").read()
     key = re.search(r"<apikey>([^<]+)</apikey>", cfg).group(1)
 
-    def get(path):
-        req = urllib.request.Request("http://localhost:8384" + path, headers={"X-API-Key": key})
-        with urllib.request.urlopen(req, timeout=10) as r:
+    # non-NixOS syncthing instances polled remotely by apollo (key files are
+    # root-only, installed imperatively, never in the repo). Metrics carry an
+    # explicit instance label; prometheus honors it (honor_labels on the node job).
+    REMOTES = [
+        ("luoji", "https://luoji.curl-boga.ts.net:8384", "/var/lib/syncthing-remote-keys/luoji.key"),
+    ]
+
+    import ssl
+    _insecure = ssl.create_default_context()
+    _insecure.check_hostname = False
+    _insecure.verify_mode = ssl.CERT_NONE  # fork uses a self-signed GUI cert
+
+    def api(base, k, path):
+        req = urllib.request.Request(base + path, headers={"X-API-Key": k})
+        with urllib.request.urlopen(req, timeout=10, context=_insecure if base.startswith("https") else None) as r:
             return json.load(r)
+
+    def get(path):
+        return api("http://localhost:8384", key, path)
 
     lines = []
     try:
@@ -97,6 +112,21 @@ let
         lines.append("syncthing_up 1")
     except Exception:
         lines.append("syncthing_up 0")
+
+    import socket
+    for rname, rurl, rkeyfile in (REMOTES if socket.gethostname() == "apollo" else []):
+        try:
+            rkey = open(rkeyfile).read().strip()
+            devices = {d["deviceID"]: d["name"] for d in api(rurl, rkey, "/rest/config/devices")}
+            for did, c in api(rurl, rkey, "/rest/system/connections")["connections"].items():
+                name = devices.get(did, did[:7])
+                lines.append(f'syncthing_device_connected{{instance="{rname}",device="{name}"}} {1 if c["connected"] else 0}')
+            for f in api(rurl, rkey, "/rest/config/folders"):
+                st = api(rurl, rkey, f"/rest/db/status?folder={f['id']}")
+                lines.append(f'syncthing_folder_need_items{{instance="{rname}",folder="{f['id']}"}} {st.get("needTotalItems", 0)}')
+            lines.append(f'syncthing_up{{instance="{rname}"}} 1')
+        except Exception:
+            lines.append(f'syncthing_up{{instance="{rname}"}} 0')
 
     with open(OUT + ".tmp", "w") as fh:
         fh.write("\n".join(lines) + "\n")

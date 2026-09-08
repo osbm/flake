@@ -106,6 +106,8 @@ in
             }
           ];
           scrape_interval = "15s";
+          # keep explicit instance labels from textfile metrics (remote syncthing polling)
+          honor_labels = true;
           # short hostnames as instance ("apollo" not "apollo.curl-boga.ts.net:9100")
           relabel_configs = [
             {
