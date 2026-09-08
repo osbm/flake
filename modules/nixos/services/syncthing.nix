@@ -45,6 +45,8 @@ let
         ".git"
         ".obsidian/workspace.json"
         ".obsidian/workspace-mobile.json"
+        # dangling symlink to /var/lib/hledger-web, meaningless off-apollo
+        "hermes/finance"
       ];
       versioning = {
         type = "staggered";
@@ -156,6 +158,11 @@ in
         22000
         21027
       ];
+    })
+
+    # apollo: files syncthing writes must stay group-writable for the hermes agent
+    (lib.mkIf (cfg.enable && hostname == "apollo") {
+      systemd.services.syncthing.serviceConfig.UMask = "0002";
     })
 
     (lib.mkIf (cfg.enable && config.osbmModules.hardware.disko.zfs.root.impermanenceRoot) {

@@ -52,7 +52,11 @@
       services.nginx.virtualHosts."${config.services.forgejo.settings.server.DOMAIN}" = {
         forceSSL = true;
         useACMEHost = "osbm.dev";
-        locations."/".proxyPass = "http://localhost:3000";
+        locations."/" = {
+          proxyPass = "http://localhost:3000";
+          # big git pushes (vault merge was 47MB) die on the 10M default
+          extraConfig = "client_max_body_size 512m;";
+        };
         locations."/".proxyWebsockets = true;
       };
     })
