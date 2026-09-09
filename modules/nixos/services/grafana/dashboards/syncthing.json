@@ -240,7 +240,13 @@
         "overrides": []
       },
       "options": {
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "device",
+            "desc": false
+          }
+        ]
       },
       "targets": [
         {
@@ -261,6 +267,17 @@
             "columnField": "device",
             "rowField": "instance",
             "valueField": "Value"
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "by": [
+              {
+                "field": "device",
+                "desc": false
+              }
+            ]
           }
         }
       ]
