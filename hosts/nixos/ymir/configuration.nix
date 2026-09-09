@@ -3,19 +3,11 @@
   inputs,
   ...
 }:
-let
-  hermes-desktop = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.hermes-desktop;
-in
 {
   imports = [
     ./hardware-configuration.nix
     ../../../modules/nixos
   ];
-
-  # hermes desktop GUI (Electron shell), connects in remote mode to the
-  # gateway on apollo (https://hermes.osbm.dev) — no local agent runtime
-  # needed for that. Terminal access to the same agent: `ssh -t apollo hermes`.
-  environment.systemPackages = [ hermes-desktop ];
 
   osbmModules = {
     desktopEnvironment = {
