@@ -18,6 +18,8 @@ switch *args: check-git remove-hm-backup-files
   else
     nh os switch . {{args}} --accept-flake-config
   fi
+  echo "git revision:     $(git rev-parse HEAD)"
+  echo "running revision: $(nixos-version --configuration-revision 2>/dev/null || echo 'n/a')"
 
 [macos]
 switch *args: check-git
