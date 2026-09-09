@@ -14,6 +14,14 @@ let
     ];
     text = builtins.readFile ./wanikani-fetcher.sh;
   };
+  wanikani-hourly = pkgs.writeShellApplication {
+    name = "wanikani-hourly";
+    runtimeInputs = with pkgs; [
+      curl
+      jq
+    ];
+    text = builtins.readFile ./wanikani-hourly.sh;
+  };
 in
 {
   config = lib.mkMerge [
@@ -35,6 +43,24 @@ in
           EnvironmentFile = config.age.secrets.wanikani-env.path;
           Restart = "on-failure";
           RestartSec = 60;
+        };
+      };
+
+      # hour-resolution activity deltas (see wanikani-hourly.sh header);
+      # :15 offset keeps clear of the 02:00 full fetch and :00 vault commits
+      systemd.timers.wanikani-hourly = {
+        description = "WaniKani hourly activity snapshot";
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = "*:15";
+        };
+      };
+      systemd.services.wanikani-hourly = {
+        description = "WaniKani hourly activity snapshot";
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${lib.getExe wanikani-hourly}";
+          EnvironmentFile = config.age.secrets.wanikani-env.path;
         };
       };
     })
