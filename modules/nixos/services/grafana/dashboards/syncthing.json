@@ -243,7 +243,7 @@
         "showHeader": true,
         "sortBy": [
           {
-            "displayName": "device",
+            "displayName": "instance\\device",
             "desc": false
           }
         ]
@@ -262,14 +262,6 @@
           "options": {}
         },
         {
-          "id": "groupingToMatrix",
-          "options": {
-            "columnField": "device",
-            "rowField": "instance",
-            "valueField": "Value"
-          }
-        },
-        {
           "id": "sortBy",
           "options": {
             "by": [
@@ -278,6 +270,14 @@
                 "desc": false
               }
             ]
+          }
+        },
+        {
+          "id": "groupingToMatrix",
+          "options": {
+            "columnField": "device",
+            "rowField": "instance",
+            "valueField": "Value"
           }
         }
       ]
