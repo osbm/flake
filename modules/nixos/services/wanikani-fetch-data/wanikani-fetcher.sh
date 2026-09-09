@@ -10,6 +10,14 @@ if [ -d "/var/lib/wanikani-logs/wanikani_data_$date" ] || [ -f "/var/lib/wanikan
   exit 0
 fi
 
+# vacation mode: the API answers 403 "user is hibernating" and there is no
+# data to fetch anyway (SRS frozen) — succeed quietly instead of retry-looping
+probe=$(curl -s -m 15 -H "Authorization: Bearer $API_TOKEN" "https://api.wanikani.com/v2/user")
+if echo "$probe" | grep -q "hibernating"; then
+  echo "WaniKani account is in vacation mode — nothing to fetch. Exiting."
+  exit 0
+fi
+
 tmp_dir=$(mktemp -d)
 echo "Temporary directory created at $tmp_dir"
 
