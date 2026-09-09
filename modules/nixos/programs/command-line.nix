@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  inputs,
   ...
 }:
 {
@@ -11,8 +12,11 @@
     ];
 
     environment.systemPackages =
-      # on darwin claude-code comes from the native self-updating installer instead
-      lib.optionals (!pkgs.stdenv.hostPlatform.isDarwin) [ pkgs.claude-code ]
+      # claude-code from llm-agents.nix (numtide) — tracks upstream faster than
+      # nixpkgs. On darwin the native self-updating installer is used instead.
+      lib.optionals (!pkgs.stdenv.hostPlatform.isDarwin) [
+        inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.claude-code
+      ]
       ++ (with pkgs; [
         # networking
         wget
