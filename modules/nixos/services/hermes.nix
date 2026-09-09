@@ -170,6 +170,11 @@ in
       # kernel-facing surfaces. Writes stay confined to /var/lib/hermes.
       systemd.services.hermes-agent.serviceConfig = {
         ProtectHome = lib.mkForce true;
+        # the vault merge (2026-09-08) moved the workspace into osbm's home;
+        # punch precise holes through ProtectHome: whole vault read-only,
+        # hermes/ subtree read-write (mirrors the filesystem ACL policy)
+        BindReadOnlyPaths = [ "/home/osbm/Documents/rerouting" ];
+        BindPaths = [ "/home/osbm/Documents/rerouting/hermes" ];
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
@@ -352,6 +357,9 @@ in
           NoNewPrivileges = true;
           ProtectSystem = "strict";
           ProtectHome = true;
+          # same vault holes as hermes-agent (see comment there)
+          BindReadOnlyPaths = [ "/home/osbm/Documents/rerouting" ];
+          BindPaths = [ "/home/osbm/Documents/rerouting/hermes" ];
           ReadWritePaths = [
             "/var/lib/hermes"
             "/var/lib/hermes-webui"
