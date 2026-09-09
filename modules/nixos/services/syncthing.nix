@@ -32,6 +32,15 @@ let
       ignorePatterns = [
         "*.json"
       ];
+      # game saves mutate constantly and machines go offline for months —
+      # a week of undo protects Esma's world from a wrong-direction merge
+      versioning = {
+        type = "staggered";
+        params = {
+          cleanInterval = "3600";
+          maxAge = "604800";
+        };
+      };
     };
     "rerouting" = {
       path = "/home/osbm/Documents/rerouting";
