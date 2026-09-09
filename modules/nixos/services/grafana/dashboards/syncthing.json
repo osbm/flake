@@ -195,7 +195,8 @@
             "cellOptions": {
               "type": "color-background"
             },
-            "align": "center"
+            "align": "center",
+            "minWidth": 100
           },
           "mappings": [
             {
