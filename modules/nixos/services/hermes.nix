@@ -268,7 +268,10 @@ in
 
           NoNewPrivileges = true;
           ProtectSystem = "strict";
-          ProtectHome = true;
+          ProtectHome = "tmpfs"; # "yes" shadows BindPaths under /home
+          # same vault holes as hermes-agent (see comment there)
+          BindReadOnlyPaths = [ "/home/osbm/Documents/rerouting" ];
+          BindPaths = [ "/home/osbm/Documents/rerouting/hermes" ];
           ReadWritePaths = [ "/var/lib/hermes" ];
           PrivateTmp = true;
           ProtectKernelTunables = true;

@@ -55,6 +55,13 @@
         x509.useACMEHost = config.mailserver.fqdn;
 
       };
+
+      # the upstream unit only allows AF_INET/AF_INET6, expecting the unix
+      # socket to arrive via socket activation — but nixos-rebuild switch can
+      # start the service directly (postfix pulls it in, racing the socket
+      # unit), and the daemon then dies creating its own socket. AF_UNIX
+      # makes the direct start work too. (systemd merges the lists.)
+      systemd.services.postfix-tlspol.serviceConfig.RestrictAddressFamilies = [ "AF_UNIX" ];
     })
 
     # Configure ACME certificate via nginx
