@@ -6,60 +6,29 @@
 }:
 let
   cfg = config.osbmModules.services.wanikani-fetch-data;
-  wanikani-fetcher = pkgs.writeShellApplication {
-    name = "wanikani-fetcher";
-    runtimeInputs = with pkgs; [
-      curl
-      jq
-    ];
-    text = builtins.readFile ./wanikani-fetcher.sh;
-  };
-  wanikani-hourly = pkgs.writeShellApplication {
-    name = "wanikani-hourly";
-    runtimeInputs = with pkgs; [
-      curl
-      jq
-    ];
-    text = builtins.readFile ./wanikani-hourly.sh;
-  };
+  wanikani-sync = pkgs.writers.writePython3Bin "wanikani-sync" {
+    flakeIgnore = [ "E501" ];
+  } (builtins.readFile ./wanikani-sync.py);
 in
 {
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
       age.secrets.wanikani-env.file = ../../../../secrets/wanikani-env.age;
 
-      systemd.timers.wanikani-fetch-data = {
-        description = "WaniKani Fetch Data";
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnCalendar = "02:00";
-        };
-      };
-      systemd.services.wanikani-fetch-data = {
-        description = "WaniKani Fetch Data";
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${lib.getExe wanikani-fetcher}";
-          EnvironmentFile = config.age.secrets.wanikani-env.path;
-          Restart = "on-failure";
-          RestartSec = 60;
-        };
-      };
-
-      # hour-resolution activity deltas (see wanikani-hourly.sh header);
-      # :15 offset keeps clear of the 02:00 full fetch and :00 vault commits
-      systemd.timers.wanikani-hourly = {
-        description = "WaniKani hourly activity snapshot";
+      # one hourly job: activity snapshot every run, full daily archive on
+      # the first run of each day; :15 offset keeps clear of :00 vault commits
+      systemd.timers.wanikani-sync = {
+        description = "WaniKani sync";
         wantedBy = [ "timers.target" ];
         timerConfig = {
           OnCalendar = "*:15";
         };
       };
-      systemd.services.wanikani-hourly = {
-        description = "WaniKani hourly activity snapshot";
+      systemd.services.wanikani-sync = {
+        description = "WaniKani sync";
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${lib.getExe wanikani-hourly}";
+          ExecStart = "${lib.getExe wanikani-sync}";
           EnvironmentFile = config.age.secrets.wanikani-env.path;
         };
       };
