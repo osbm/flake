@@ -770,8 +770,10 @@ def build_dashboard(inline_plotly=False):
             f'<div class="chart-container">{c}</div>' for c in html
         )
 
-    charts = render(figures)
+    # render in document order: the first embedded chart carries the
+    # plotly.js include, and the hourly section comes first on the page
     hourly_charts = render(hourly_figures)
+    charts = render(figures)
     if hourly_charts:
         hourly_charts = (
             "<h2>Hourly Sessions</h2>"
