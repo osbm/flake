@@ -39,6 +39,9 @@ in
             serviceConfig = {
               Type = "simple";
               ExecStart = "${lib.getExe wanikani-stats-flask}";
+              # cold start parses the whole snapshot archive (~5s) — request
+              # the page once so monitoring probes never hit a cold cache
+              ExecStartPost = "${pkgs.curl}/bin/curl --retry 30 --retry-connrefused --retry-delay 1 -sf -o /dev/null http://127.0.0.1:${toString cfg.port}/";
               StateDirectory = "/var/lib/wanikani-stats";
               Restart = "on-failure";
               User = "root";
