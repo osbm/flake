@@ -11,6 +11,7 @@ import sys
 import zipfile
 from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 import plotly.graph_objects as go
@@ -170,6 +171,260 @@ def subjects_cache_key():
 
 def parse_ts(value):
     return datetime.fromisoformat(value.replace("Z", "+00:00")) if value else None
+
+
+# --- hourly snapshots (wanikani-sync, since 2026-09) -----------------------
+#
+# hourly/YYYY-MM-DD/HH.json (UTC): a tiny "unchanged" stub for idle hours, a
+# full assignments+review_statistics dump for hours with activity. Diffing
+# two consecutive full snapshots yields exactly what happened in between —
+# per-session data the WK API no longer offers (its reviews endpoint is dead).
+
+LOCAL_TZ = ZoneInfo("Europe/Istanbul")
+
+
+def hourly_files():
+    hourly_dir = DATA_DIR / "hourly"
+    return sorted(hourly_dir.glob("*/*.json")) if hourly_dir.is_dir() else []
+
+
+@functools.lru_cache(maxsize=8)
+def load_hourly_raw(path):
+    with open(path) as f:
+        return json.load(f)
+
+
+@functools.lru_cache(maxsize=None)
+def load_hourly_meta(path):
+    """Per-file facts, small enough to cache forever."""
+    try:
+        d = load_hourly_raw(path)
+    except (json.JSONDecodeError, OSError):
+        return None  # 0-byte / partial leftovers from failed runs
+    summary = d.get("summary") or {}
+    return {
+        "time": parse_ts(d["fetched_at"]).astimezone(LOCAL_TZ),
+        "unchanged": d.get("unchanged", True),
+        "reviews_pending": summary.get("reviews_pending"),
+        "lessons_pending": summary.get("lessons_pending"),
+    }
+
+
+@functools.lru_cache(maxsize=None)
+def hourly_delta(prev_path, cur_path):
+    """What happened between two consecutive full snapshots (cached: the
+    2MB payloads are parsed once per pair, only these counters are kept)."""
+    prev, cur = load_hourly_raw(prev_path), load_hourly_raw(cur_path)
+
+    def answers(d):
+        return {
+            s["data"]["subject_id"]: (
+                s["data"]["meaning_correct"] + s["data"]["reading_correct"],
+                s["data"]["meaning_incorrect"] + s["data"]["reading_incorrect"],
+            )
+            for s in d["review_statistics"]["data"]
+        }
+
+    def stages(d):
+        return {
+            a["data"]["subject_id"]: a["data"]["srs_stage"]
+            for a in d["assignments"]["data"]
+        }
+
+    prev_ans, cur_ans = answers(prev), answers(cur)
+    correct = incorrect = 0
+    for sid, (c, i) in cur_ans.items():
+        pc, pi = prev_ans.get(sid, (0, 0))
+        correct += max(0, c - pc)
+        incorrect += max(0, i - pi)
+
+    prev_st, cur_st = stages(prev), stages(cur)
+    lessons = promoted = demoted = 0
+    for sid, stage in cur_st.items():
+        old = prev_st.get(sid, 0)  # new assignments unlock at stage 0
+        if old == 0:
+            lessons += 1 if stage >= 1 else 0
+        elif stage > old:
+            promoted += 1
+        elif stage < old:
+            demoted += 1
+
+    return {
+        "answers": correct + incorrect,
+        "correct": correct,
+        "incorrect": incorrect,
+        "lessons": lessons,
+        "promoted": promoted,
+        "demoted": demoted,
+    }
+
+
+def get_hourly_data():
+    """(all metas, full-snapshot metas, per-active-hour deltas)."""
+    metas = [
+        (p, m) for p in hourly_files() if (m := load_hourly_meta(p)) is not None
+    ]
+    fulls = [(p, m) for p, m in metas if not m["unchanged"]]
+    # intervening stubs prove nothing happened between two fulls, so the
+    # whole diff belongs to the later snapshot's hour. The first full ever
+    # (and the first after the account un-hibernated) is only a baseline.
+    deltas = [
+        {"time": cur_m["time"], **hourly_delta(prev_p, cur_p)}
+        for (prev_p, _), (cur_p, cur_m) in zip(fulls, fulls[1:])
+    ]
+    return [m for _, m in metas], [m for _, m in fulls], deltas
+
+
+def fig_hourly_heatmap(metas, deltas):
+    if not metas:
+        return None
+    by_slot = {}
+    for m in metas:  # every snapshot (stub or full) proves the hour was idle
+        by_slot[(m["time"].strftime("%Y-%m-%d"), m["time"].hour)] = 0
+    for d in deltas:  # ...unless a delta says otherwise
+        key = (d["time"].strftime("%Y-%m-%d"), d["time"].hour)
+        by_slot[key] = d["answers"] + d["lessons"]
+    days = sorted({day for day, _ in by_slot})
+    z = [[by_slot.get((day, h)) for h in range(24)] for day in days]
+
+    fig = go.Figure(
+        go.Heatmap(
+            x=list(range(24)),
+            y=days,
+            z=z,
+            colorscale=[[0, "#26262e"], [0.25, "#5c2d9e"], [1, "#FF00AA"]],
+            xgap=2,
+            ygap=2,
+            hovertemplate="%{y} %{x}:00 — %{z} items<extra></extra>",
+            colorbar=dict(title="items"),
+        )
+    )
+    fig.update_layout(
+        title="Hourly Activity — when do sessions actually happen?",
+        xaxis_title=f"Hour of day ({LOCAL_TZ.key})",
+        **{**PLOT_LAYOUT, "height": max(280, 120 + 22 * len(days))},
+    )
+    fig.update_xaxes(dtick=1)
+    fig.update_yaxes(autorange="reversed")
+    return fig
+
+
+def fig_hourly_burndown(fulls):
+    points = [m for m in fulls if m["reviews_pending"] is not None]
+    if len(points) < 2:
+        return None
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=[m["time"] for m in points],
+            y=[m["reviews_pending"] for m in points],
+            mode="lines+markers",
+            name="Reviews pending",
+            line=dict(width=2, color="#00AAFF"),
+            marker=dict(size=5),
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=[m["time"] for m in points],
+            y=[m["lessons_pending"] for m in points],
+            mode="lines+markers",
+            name="Lessons pending",
+            line=dict(width=2, color="#FF00AA"),
+            marker=dict(size=5),
+        )
+    )
+    fig.update_layout(
+        title="Backlog Burndown (measured after each active hour)",
+        yaxis_title="Items",
+        **PLOT_LAYOUT,
+    )
+    return fig
+
+
+def fig_hourly_accuracy(deltas):
+    sessions = [d for d in deltas if d["answers"] > 0]
+    if not sessions:
+        return None
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            x=[d["time"] for d in sessions],
+            y=[d["answers"] for d in sessions],
+            name="Answers",
+            marker_color="#294DDB",
+            width=3600 * 1000 * 0.8,  # hour-wide bars on a ms date axis
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=[d["time"] for d in sessions],
+            y=[100 * d["correct"] / d["answers"] for d in sessions],
+            mode="lines+markers",
+            name="Accuracy %",
+            yaxis="y2",
+            line=dict(width=2, color="#faaa1e"),
+            marker=dict(size=6),
+        )
+    )
+    fig.update_layout(
+        title="Session Volume and Accuracy per Active Hour",
+        yaxis_title="Answers",
+        yaxis2=dict(
+            title="Accuracy (%)",
+            overlaying="y",
+            side="right",
+            range=[0, 100],
+            showgrid=False,
+        ),
+        **PLOT_LAYOUT,
+    )
+    return fig
+
+
+def fig_hourly_srs_flow(deltas):
+    sessions = [
+        d for d in deltas if d["promoted"] or d["demoted"] or d["lessons"]
+    ]
+    if not sessions:
+        return None
+    x = [d["time"] for d in sessions]
+    bar_width = 3600 * 1000 * 0.8
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            x=x,
+            y=[d["promoted"] for d in sessions],
+            name="Promoted",
+            marker_color="#0093DD",
+            width=bar_width,
+        )
+    )
+    fig.add_trace(
+        go.Bar(
+            x=x,
+            y=[d["lessons"] for d in sessions],
+            name="New lessons",
+            marker_color="#faaa1e",
+            width=bar_width,
+        )
+    )
+    fig.add_trace(
+        go.Bar(
+            x=x,
+            y=[-d["demoted"] for d in sessions],
+            name="Demoted",
+            marker_color="#DD0093",
+            width=bar_width,
+        )
+    )
+    fig.update_layout(
+        title="SRS Flow per Session — demotions below zero are leech pressure",
+        yaxis_title="Items",
+        barmode="relative",
+        **PLOT_LAYOUT,
+    )
+    return fig
 
 
 def get_dataframe():
@@ -476,6 +731,7 @@ def summary_cards_html(df, details):
 def build_dashboard(inline_plotly=False):
     df = get_dataframe()
     details = load_details(get_snapshots()[-1])
+    metas, fulls, deltas = get_hourly_data()
 
     figures = [
         fig_srs_composition(df),
@@ -486,25 +742,43 @@ def build_dashboard(inline_plotly=False):
         fig_accuracy(details),
         fig_forecast(details),
     ]
+    hourly_figures = [
+        fig_hourly_heatmap(metas, deltas),
+        fig_hourly_burndown(fulls),
+        fig_hourly_accuracy(deltas),
+        fig_hourly_srs_flow(deltas),
+    ]
 
-    chart_html = []
     plotly_js = True if inline_plotly else "cdn"
-    for fig in figures:
-        if fig is None:
-            continue
-        chart_html.append(
-            fig.to_html(
-                full_html=False,
-                include_plotlyjs=plotly_js,  # only the first embed carries plotly.js
-                default_width="100%",
-                config={"displayModeBar": False, "responsive": True},
-            )
-        )
-        plotly_js = False
 
-    charts = "".join(
-        f'<div class="chart-container">{c}</div>' for c in chart_html
-    )
+    def render(figs):
+        nonlocal plotly_js
+        html = []
+        for fig in figs:
+            if fig is None:
+                continue
+            html.append(
+                fig.to_html(
+                    full_html=False,
+                    include_plotlyjs=plotly_js,  # only the first embed carries plotly.js
+                    default_width="100%",
+                    config={"displayModeBar": False, "responsive": True},
+                )
+            )
+            plotly_js = False
+        return "".join(
+            f'<div class="chart-container">{c}</div>' for c in html
+        )
+
+    charts = render(figures)
+    hourly_charts = render(hourly_figures)
+    if hourly_charts:
+        hourly_charts = (
+            "<h2>Hourly Sessions</h2>"
+            '<div class="dashboard-info">from the hourly snapshots '
+            "(since 2026-09-10) · updates every hour with activity</div>"
+            + hourly_charts
+        )
     snapshot_date = df.iloc[-1]["date"]
 
     return f"""<!DOCTYPE html>
@@ -549,6 +823,7 @@ def build_dashboard(inline_plotly=False):
     <h1>WaniKani Statistics</h1>
     <div class="dashboard-info">snapshot {snapshot_date} · updates daily at 02:00</div>
     <div class="cards">{summary_cards_html(df, details)}</div>
+    {hourly_charts}
     {charts}
     {leech_table_html(details)}
 </body>
