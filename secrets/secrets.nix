@@ -55,6 +55,10 @@ in
     apollo
     osbm
   ];
+  "attic-env.age".publicKeys = [
+    pochita
+    osbm
+  ];
   "anki-sync-password.age".publicKeys = [
     apollo
     osbm

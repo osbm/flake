@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   inputs,
   ...
@@ -28,6 +29,12 @@
       };
       loki.enable = true;
       grafana.enable = true;
+      # private nix binary cache (ymir + github ci), public url is proxied by apollo
+      atticd = {
+        enable = true;
+        domain = "attic-pochita.osbm.dev";
+        environmentFile = config.age.secrets.attic-env.path;
+      };
       # Backup client - pulls full backup from apollo
       backup-client = {
         enable = true;
@@ -52,6 +59,8 @@
     "nls_cp437"
     "nls_iso8859-1"
   ];
+
+  age.secrets.attic-env.file = ../../../secrets/attic-env.age;
 
   zramSwap.enable = true;
 

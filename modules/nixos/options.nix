@@ -195,7 +195,19 @@
       ollama.enable = lib.mkEnableOption "ollama";
       hermes.enable = lib.mkEnableOption "hermes-agent personal AI agent";
       forgejo.enable = lib.mkEnableOption "forgejo";
-      atticd.enable = lib.mkEnableOption "atticd";
+      atticd = {
+        enable = lib.mkEnableOption "atticd";
+        domain = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Public domain atticd is reached at (proxied by nginx on apollo)";
+        };
+        environmentFile = lib.mkOption {
+          type = lib.types.path;
+          default = "/persist/attic.env";
+          description = "Env file containing ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64";
+        };
+      };
       glance.enable = lib.mkEnableOption "glance";
       hydra.enable = lib.mkEnableOption "hydra";
       immich.enable = lib.mkEnableOption "immich";
