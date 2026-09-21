@@ -90,7 +90,12 @@
   # log of shame: osbm blamed nix when he wrote "hostname" instead of "hostName"
 
   environment.systemPackages = [
-    pkgs.raspberrypi-eeprom
+    # flashrom 1.8.0 fails its cmocka tests on aarch64 (leak check in
+    # write_chip tests), hydra has no build of it either. drop the override
+    # once cache.nixos.org serves flashrom again.
+    (pkgs.raspberrypi-eeprom.override {
+      flashrom = pkgs.flashrom.overrideAttrs { doCheck = false; };
+    })
   ];
 
   # The board and wanted kernel version
