@@ -25,7 +25,7 @@ I may have some tendency on naming my hosts after mythological figures...
 | | dji osmo action 4 | |
 | puck | trimui brick | |
 | | snowsky echo mini | |
-| | hifi walker h2 | |
+| orpheus | hifi walker h2 | mipsel |
 | | esp32-cam | |
 | mergen | kindle | |
 | | router  | |
