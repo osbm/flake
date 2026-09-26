@@ -29,8 +29,15 @@ in
           # };
         }
         // lib.optionalAttrs (cfg.domain != null) {
-          # public url, proxied by nginx on apollo (see nginx.nix)
-          api-endpoint = "https://${cfg.domain}/";
+          # the server hands api-endpoint to every client and `attic push`
+          # switches to it for uploads regardless of the endpoint it logged in
+          # with. keep that the direct tailnet address, otherwise a push from
+          # the same LAN (or from a github runner whose ACL only reaches this
+          # port) detours through nginx on apollo.
+          api-endpoint = "http://${config.networking.hostName}.curl-boga.ts.net:${toString atticdPort}/";
+          # what `attic use` writes as the nix substituter: the public https
+          # url, proxied by nginx on apollo (see nginx.nix)
+          substituter-endpoint = "https://${cfg.domain}/";
           allowed-hosts = [
             cfg.domain
             # direct access over tailscale, skips the apollo round trip
