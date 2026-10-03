@@ -17,7 +17,18 @@ in
         displayManager.sddm.wayland.enable = true;
         desktopManager.plasma6.enable = true;
         printing.enable = true;
+        printing.drivers = [ pkgs.epson-escpr2 ];
       };
+
+      # Scanner support (Epson L3250)
+      hardware.sane = {
+        enable = true;
+        extraBackends = [ pkgs.epsonscan2 ];
+      };
+      users.users.${config.osbmModules.defaultUser}.extraGroups = [
+        "scanner"
+        "lp"
+      ];
 
       environment = {
         plasma6.excludePackages = with pkgs.kdePackages; [
@@ -33,6 +44,7 @@ in
           kitty
           qbittorrent
           anki
+          kdePackages.skanpage # scanner app
           # element-desktop # TODO: add another matrix client
         ];
         sessionVariables.NIXOS_OZONE_WL = "1";
