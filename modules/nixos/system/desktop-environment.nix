@@ -17,7 +17,11 @@ in
         displayManager.sddm.wayland.enable = true;
         desktopManager.plasma6.enable = true;
         printing.enable = true;
-        printing.drivers = [ pkgs.epson-escpr2 ];
+        printing.drivers = [
+          # L3250 is ESC/P-R v1; escpr2 ships no PPD for it
+          pkgs.epson-escpr
+          pkgs.epson-escpr2
+        ];
       };
 
       # Scanner support (Epson L3250)
