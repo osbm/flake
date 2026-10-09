@@ -136,6 +136,9 @@
         specialArgs = { inherit inputs outputs; };
       };
       lib = import ./lib { inherit (nixpkgs) lib; };
+      packages = forAllSystems (system: {
+        xteink-sleep = (makePkgs system).callPackage ./pkgs/xteink-sleep { };
+      });
       formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
       checks = forAllSystems (system: {
         formatting = treefmtEval.${system}.config.build.check self;

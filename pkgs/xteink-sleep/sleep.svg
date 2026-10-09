@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="800" viewBox="0 0 480 800">
+  <!-- xteink x4 sleep screen; 4 e-ink gray levels only: #000 #555 #aaa #fff -->
+  <rect width="480" height="800" fill="#fff"/>
+
+  <rect width="480" height="440" fill="#000"/>
+  <text x="240" y="318" text-anchor="middle" font-family="Noto Sans CJK JP" font-weight="700" font-size="290" fill="#fff">魂</text>
+  <text x="240" y="405" text-anchor="middle" font-family="Cascadia Code" font-size="22" fill="#aaa">tamashii</text>
+
+  <g font-family="Cascadia Code">
+    <text x="40" y="522" font-size="64" font-weight="700" fill="#000">osbm</text>
+    <rect x="40" y="545" width="400" height="3" fill="#555"/>
+
+    <g font-size="18" fill="#555">
+      <text x="40" y="590">web</text>
+      <text x="40" y="628">mail</text>
+      <text x="40" y="666">git</text>
+      <text x="40" y="704">fedi</text>
+      <text x="40" y="742">bsky</text>
+    </g>
+    <g font-size="22" font-weight="600" fill="#000">
+      <text x="110" y="590">osbm.dev</text>
+      <text x="110" y="628">osbm@osbm.dev</text>
+      <text x="110" y="666">github.com/osbm</text>
+      <text x="110" y="704">@osbm@fosstodon.org</text>
+      <text x="110" y="742">@osbm.dev</text>
+    </g>
+
+    <text x="40" y="782" font-size="16" fill="#555">zzz… if found, please return</text>
+  </g>
+</svg>
