@@ -32,4 +32,6 @@ I may have some tendency on naming my hosts after mythological figures...
 | | ONT | |
 | hermes | anker soundcore earphones | |
 | chronos | Casio watch | |
+| mimir | Casio EX-word XD-Z8500 dictionary | |
+| algernon | Xteink X4 Pro e-reader (Matcha) | xtensa |
 
