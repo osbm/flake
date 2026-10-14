@@ -21,15 +21,15 @@ I may have some tendency on naming my hosts after mythological figures...
 | ares | Valve Steam Deck | x86_64-linux |
 | apollo | netcup VPS | x86_64-linux |
 | hecatoncheires | corne v2 | |
-| | corne v4 | |
-| | dji osmo action 4 | |
+| musashi | corne v4 | |
+| heimdall | dji osmo action 4 | |
 | puck | trimui brick | |
-| | snowsky echo mini | |
+| echo | snowsky echo mini | |
 | orpheus | hifi walker h2 | mipsel |
-| | esp32-cam | |
+| argus | esp32-cam | |
 | mergen | kindle | |
-| | router  | |
-| | ONT | |
+| janus | router | |
+| charon | ONT | |
 | hermes | anker soundcore earphones | |
 | chronos | Casio watch | |
 | mimir | Casio EX-word XD-Z8500 dictionary | |
