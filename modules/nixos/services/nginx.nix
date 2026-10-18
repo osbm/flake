@@ -96,6 +96,7 @@
       security.acme = {
         acceptTerms = true;
         defaults.email = "osbm@osbm.dev";
+        defaults.dnsResolver = "1.1.1.1:53";
         certs."sync.osbm.dev" = {
           domain = "*.sync.osbm.dev";
           dnsProvider = "cloudflare";
