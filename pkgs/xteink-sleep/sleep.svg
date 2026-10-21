@@ -4,7 +4,6 @@
 
   <rect width="480" height="440" fill="#000"/>
   <text x="240" y="318" text-anchor="middle" font-family="Noto Sans CJK JP" font-weight="700" font-size="290" fill="#fff">魂</text>
-  <text x="240" y="405" text-anchor="middle" font-family="Cascadia Code" font-size="22" fill="#aaa">tamashii</text>
 
   <g font-family="Cascadia Code">
     <text x="40" y="535" font-size="72" font-weight="700" fill="#000">osbm</text>
