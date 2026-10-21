@@ -25,10 +25,13 @@ let
         mode = "0700";
       }
       ".local/share/direnv"
+      # claude code: sessions, memory, settings
+      ".claude"
     ];
-    # files = [
-    #   ".screenrc"
-    # ];
+    files = [
+      # claude code: onboarding state, oauth account, project trust
+      ".claude.json"
+    ];
   });
 in
 {
