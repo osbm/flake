@@ -16,6 +16,5 @@
   </g>
 
   <rect x="40" y="712" width="400" height="1" fill="#aaa"/>
-  <text x="40" y="748" font-family="Noto Sans CJK JP" font-size="19" fill="#555">拾った方はご連絡ください</text>
-  <text x="40" y="776" font-family="Cascadia Code" font-size="15" fill="#555">zzz… if found, please return</text>
+  <text x="40" y="758" font-family="Noto Sans CJK JP" font-size="26" font-weight="400" fill="#555">拾った方はご連絡ください</text>
 </svg>
