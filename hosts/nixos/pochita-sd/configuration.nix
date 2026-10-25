@@ -24,9 +24,6 @@
   # also doesn't expose. "Image" is the aarch64 value the old default used.
   system.boot.loader.kernelFile = "Image";
 
-  # systemd-in-initrd hangs on Pi 5; legacy script initrd works
-  boot.initrd.systemd.enable = false;
-
   # RPi kernel doesn't have tpm-crb module
   boot.initrd.systemd.tpm2.enable = false;
 
