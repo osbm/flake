@@ -50,6 +50,7 @@ in
           anki
           kdePackages.skanpage # scanner app
           # element-desktop # TODO: add another matrix client
+          teams-for-linux
         ];
         sessionVariables.NIXOS_OZONE_WL = "1";
       };
