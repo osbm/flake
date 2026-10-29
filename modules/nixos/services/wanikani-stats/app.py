@@ -11,8 +11,6 @@ import sys
 import zipfile
 from datetime import datetime
 from pathlib import Path
-from zoneinfo import ZoneInfo
-
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as pio
@@ -180,7 +178,9 @@ def parse_ts(value):
 # two consecutive full snapshots yields exactly what happened in between —
 # per-session data the WK API no longer offers (its reviews endpoint is dead).
 
-LOCAL_TZ = ZoneInfo("Europe/Istanbul")
+# host time zone (apollo is on Europe/Berlin); .astimezone() with no
+# argument converts per timestamp, so DST is handled for old snapshots too
+LOCAL_TZ_NAME = datetime.now().astimezone().tzname()
 
 
 def hourly_files():
@@ -203,7 +203,7 @@ def load_hourly_meta(path):
         return None  # 0-byte / partial leftovers from failed runs
     summary = d.get("summary") or {}
     return {
-        "time": parse_ts(d["fetched_at"]).astimezone(LOCAL_TZ),
+        "time": parse_ts(d["fetched_at"]).astimezone(),
         "unchanged": d.get("unchanged", True),
         "reviews_pending": summary.get("reviews_pending"),
         "lessons_pending": summary.get("lessons_pending"),
@@ -231,12 +231,20 @@ def hourly_delta(prev_path, cur_path):
             for a in d["assignments"]["data"]
         }
 
+    # review_statistics count *answers*: meaning and reading separately,
+    # plus every retry. A kanji reviewed once contributes 2 correct answers
+    # (and 1+ incorrect if missed first), so summed answers run at 2-3x the
+    # number of items WaniKani shows for the session. Count items too.
     prev_ans, cur_ans = answers(prev), answers(cur)
-    correct = incorrect = 0
+    correct = incorrect = items = items_clean = 0
     for sid, (c, i) in cur_ans.items():
         pc, pi = prev_ans.get(sid, (0, 0))
-        correct += max(0, c - pc)
-        incorrect += max(0, i - pi)
+        dc, di = max(0, c - pc), max(0, i - pi)
+        correct += dc
+        incorrect += di
+        if dc or di:
+            items += 1
+            items_clean += 1 if di == 0 else 0
 
     prev_st, cur_st = stages(prev), stages(cur)
     lessons = promoted = demoted = 0
@@ -250,6 +258,8 @@ def hourly_delta(prev_path, cur_path):
             demoted += 1
 
     return {
+        "items": items,  # subjects reviewed (what WK calls "reviews")
+        "items_clean": items_clean,  # ...answered right first time
         "answers": correct + incorrect,
         "correct": correct,
         "incorrect": incorrect,
@@ -283,7 +293,7 @@ def fig_hourly_heatmap(metas, deltas):
         by_slot[(m["time"].strftime("%Y-%m-%d"), m["time"].hour)] = 0
     for d in deltas:  # ...unless a delta says otherwise
         key = (d["time"].strftime("%Y-%m-%d"), d["time"].hour)
-        by_slot[key] = d["answers"] + d["lessons"]
+        by_slot[key] = d["items"] + d["lessons"]
     days = sorted({day for day, _ in by_slot})
     z = [[by_slot.get((day, h)) for h in range(24)] for day in days]
 
@@ -301,7 +311,7 @@ def fig_hourly_heatmap(metas, deltas):
     )
     fig.update_layout(
         title="Hourly Activity — when do sessions actually happen?",
-        xaxis_title=f"Hour of day ({LOCAL_TZ.key})",
+        xaxis_title=f"Hour of day ({LOCAL_TZ_NAME})",
         **{**PLOT_LAYOUT, "height": max(280, 120 + 22 * len(days))},
     )
     fig.update_xaxes(dtick=1)
@@ -343,25 +353,28 @@ def fig_hourly_burndown(fulls):
 
 
 def fig_hourly_accuracy(deltas):
-    sessions = [d for d in deltas if d["answers"] > 0]
+    sessions = [d for d in deltas if d["items"] > 0]
     if not sessions:
         return None
     fig = go.Figure()
     fig.add_trace(
         go.Bar(
             x=[d["time"] for d in sessions],
-            y=[d["answers"] for d in sessions],
-            name="Answers",
+            y=[d["items"] for d in sessions],
+            name="Reviews",
             marker_color="#294DDB",
             width=3600 * 1000 * 0.8,  # hour-wide bars on a ms date axis
+            customdata=[[d["answers"], d["incorrect"]] for d in sessions],
+            hovertemplate="%{y} reviews<br>%{customdata[0]} answers, "
+            "%{customdata[1]} wrong<extra></extra>",
         )
     )
     fig.add_trace(
         go.Scatter(
             x=[d["time"] for d in sessions],
-            y=[100 * d["correct"] / d["answers"] for d in sessions],
+            y=[100 * d["items_clean"] / d["items"] for d in sessions],
             mode="lines+markers",
-            name="Accuracy %",
+            name="Accuracy % (items right first try)",
             yaxis="y2",
             line=dict(width=2, color="#faaa1e"),
             marker=dict(size=6),
@@ -369,7 +382,7 @@ def fig_hourly_accuracy(deltas):
     )
     fig.update_layout(
         title="Session Volume and Accuracy per Active Hour",
-        yaxis_title="Answers",
+        yaxis_title="Reviews (items)",
         yaxis2=dict(
             title="Accuracy (%)",
             overlaying="y",
