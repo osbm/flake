@@ -125,6 +125,11 @@
                           url = "https://hledger.osbm.dev";
                         }
                         {
+                          icon = "sh:open-webui";
+                          title = "Open WebUI";
+                          url = "https://openwebui.osbm.dev";
+                        }
+                        {
                           icon = "sh:activitywatch";
                           title = "ActivityWatch";
                           url = "https://aw.osbm.dev";

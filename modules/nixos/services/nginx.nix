@@ -34,6 +34,36 @@
           };
         };
 
+        # Open WebUI runs on ymir (the GPU box, next to ollama); same
+        # cross-tailnet hop as grafana above. tailnet-only like hledger:
+        # auth is disabled in the container, so the public IP must never
+        # reach it even with a matching SNI
+        virtualHosts."openwebui.osbm.dev" = {
+          useACMEHost = "osbm.dev";
+          forceSSL = true;
+          locations."/" = {
+            proxyWebsockets = true;
+            extraConfig = ''
+              allow 100.64.0.0/10;
+              allow fd7a:115c:a1e0::/48;
+              deny all;
+
+              resolver 100.100.100.100;
+              set $openwebui http://ymir.curl-boga.ts.net:7070;
+              proxy_pass $openwebui;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+
+              # document/image uploads and slow streamed completions
+              client_max_body_size 0;
+              proxy_buffering off;
+              proxy_read_timeout 600s;
+            '';
+          };
+        };
+
         # nix binary cache, atticd runs on pochita. access control is atticd's
         # job (private cache + tokens), nginx only forwards.
         virtualHosts."attic-pochita.osbm.dev" = {
