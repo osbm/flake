@@ -9,8 +9,9 @@ import json
 import os
 import sys
 import zipfile
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
+from zoneinfo import ZoneInfo
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as pio
@@ -178,9 +179,8 @@ def parse_ts(value):
 # two consecutive full snapshots yields exactly what happened in between —
 # per-session data the WK API no longer offers (its reviews endpoint is dead).
 
-# host time zone (apollo is on Europe/Berlin); .astimezone() with no
-# argument converts per timestamp, so DST is handled for old snapshots too
-LOCAL_TZ_NAME = datetime.now().astimezone().tzname()
+# osbm's clock, not the host's (apollo runs on Europe/Berlin)
+LOCAL_TZ = ZoneInfo("Europe/Istanbul")
 
 
 def hourly_files():
@@ -202,8 +202,13 @@ def load_hourly_meta(path):
     except (json.JSONDecodeError, OSError):
         return None  # 0-byte / partial leftovers from failed runs
     summary = d.get("summary") or {}
+    time = parse_ts(d["fetched_at"]).astimezone(LOCAL_TZ)
     return {
-        "time": parse_ts(d["fetched_at"]).astimezone(),
+        "time": time,
+        # the timer fires at HH:15, so this snapshot describes what happened
+        # between (HH-1):15 and HH:15 — bucket it as hour HH-1, the one it
+        # mostly covers (and the one you'd name if asked "when did I review")
+        "slot": (time - timedelta(hours=1)).replace(minute=0, second=0, microsecond=0),
         "unchanged": d.get("unchanged", True),
         "reviews_pending": summary.get("reviews_pending"),
         "lessons_pending": summary.get("lessons_pending"),
@@ -279,7 +284,7 @@ def get_hourly_data():
     # whole diff belongs to the later snapshot's hour. The first full ever
     # (and the first after the account un-hibernated) is only a baseline.
     deltas = [
-        {"time": cur_m["time"], **hourly_delta(prev_p, cur_p)}
+        {"time": cur_m["time"], "slot": cur_m["slot"], **hourly_delta(prev_p, cur_p)}
         for (prev_p, _), (cur_p, cur_m) in zip(fulls, fulls[1:])
     ]
     return [m for _, m in metas], [m for _, m in fulls], deltas
@@ -290,9 +295,9 @@ def fig_hourly_heatmap(metas, deltas):
         return None
     by_slot = {}
     for m in metas:  # every snapshot (stub or full) proves the hour was idle
-        by_slot[(m["time"].strftime("%Y-%m-%d"), m["time"].hour)] = 0
+        by_slot[(m["slot"].strftime("%Y-%m-%d"), m["slot"].hour)] = 0
     for d in deltas:  # ...unless a delta says otherwise
-        key = (d["time"].strftime("%Y-%m-%d"), d["time"].hour)
+        key = (d["slot"].strftime("%Y-%m-%d"), d["slot"].hour)
         by_slot[key] = d["items"] + d["lessons"]
     days = sorted({day for day, _ in by_slot})
     z = [[by_slot.get((day, h)) for h in range(24)] for day in days]
@@ -311,7 +316,7 @@ def fig_hourly_heatmap(metas, deltas):
     )
     fig.update_layout(
         title="Hourly Activity — when do sessions actually happen?",
-        xaxis_title=f"Hour of day ({LOCAL_TZ_NAME})",
+        xaxis_title=f"Hour of day ({LOCAL_TZ.key})",
         **{**PLOT_LAYOUT, "height": max(280, 120 + 22 * len(days))},
     )
     fig.update_xaxes(dtick=1)
@@ -356,10 +361,11 @@ def fig_hourly_accuracy(deltas):
     sessions = [d for d in deltas if d["items"] > 0]
     if not sessions:
         return None
+    x = [d["slot"] + timedelta(minutes=30) for d in sessions]
     fig = go.Figure()
     fig.add_trace(
         go.Bar(
-            x=[d["time"] for d in sessions],
+            x=x,
             y=[d["items"] for d in sessions],
             name="Reviews",
             marker_color="#294DDB",
@@ -371,7 +377,7 @@ def fig_hourly_accuracy(deltas):
     )
     fig.add_trace(
         go.Scatter(
-            x=[d["time"] for d in sessions],
+            x=x,
             y=[100 * d["items_clean"] / d["items"] for d in sessions],
             mode="lines+markers",
             name="Accuracy % (items right first try)",
@@ -401,7 +407,7 @@ def fig_hourly_srs_flow(deltas):
     ]
     if not sessions:
         return None
-    x = [d["time"] for d in sessions]
+    x = [d["slot"] + timedelta(minutes=30) for d in sessions]
     bar_width = 3600 * 1000 * 0.8
     fig = go.Figure()
     fig.add_trace(
