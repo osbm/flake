@@ -1,17 +1,21 @@
-"""WaniKani statistics dashboard.
+"""WaniKani statistics dashboard — strictly read-only.
 
-Reads the daily archive zips produced by wanikani-fetch-data plus the
-standalone subjects.json and serves an interactive plotly dashboard.
+Reads the daily archives and hourly snapshots produced by wanikani-sync and
+serves a plotly dashboard in three sections: Now (what to do today), Habit
+(when and how consistently you study), Progress (level pace against the
+December targets, SRS health, leeches). Nothing here writes anywhere.
 """
 
 import functools
 import json
 import os
+import statistics
 import sys
 import zipfile
 from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
+
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as pio
@@ -21,6 +25,16 @@ pio.templates.default = "plotly_dark"
 
 app = Flask(__name__)
 DATA_DIR = Path(os.environ.get("WANIKANI_LOG_DIR", "/var/lib/wanikani-logs"))
+
+# osbm's clock, not the host's (apollo runs on Europe/Berlin)
+LOCAL_TZ = ZoneInfo("Europe/Istanbul")
+
+# the goals this page is measured against
+JLPT_DATE = datetime(2026, 12, 6, tzinfo=LOCAL_TZ)  # JLPT N3, December 2026
+YEAR_END = datetime(2026, 12, 31, tzinfo=LOCAL_TZ)
+TARGET_LEVELS = (28, 30)  # stretch target set July 2026
+LEVEL_FLOOR_DAYS = 7  # fastest the SRS allows past level 2
+APPRENTICE_BANDS = (100, 150)  # green below, amber between, red above
 
 # WaniKani palette
 TYPE_COLORS = {
@@ -36,7 +50,12 @@ STAGE_COLORS = {
     "Enlightened": "#0093DD",
     "Burned": "#faaa1e",
 }
-APPRENTICE_SHADES = ["#ff8ac2", "#f45cab", "#dd0093", "#a80070"]
+STAGE_GROUPS = [  # srs_stage ranges
+    ("Apprentice", 1, 4),
+    ("Guru", 5, 6),
+    ("Master", 7, 7),
+    ("Enlightened", 8, 8),
+]
 SRS_STAGE_NAMES = [
     "Unlocked",
     "Apprentice I",
@@ -49,19 +68,45 @@ SRS_STAGE_NAMES = [
     "Enlightened",
     "Burned",
 ]
+WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 BG = "#151519"
 CARD_BG = "#1a1a1f"
 BORDER = "#26262e"
+MUTED = "#77778a"
+GOOD = "#3ddc84"
+BAD = "#ff5c7a"
+WARN = "#f5b942"
+ACTIVITY_SCALE = [[0, "#26262e"], [0.25, "#5c2d9e"], [1, "#FF00AA"]]
 
 PLOT_LAYOUT = dict(
     template="plotly_dark",
     plot_bgcolor=CARD_BG,
     paper_bgcolor=CARD_BG,
-    height=420,
-    margin=dict(l=50, r=30, t=60, b=50),
+    height=400,
+    margin=dict(l=50, r=30, t=70, b=50),
     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    hoverlabel=dict(bgcolor="#2a2a33"),
 )
+SMALL = 320
+
+
+def now_local():
+    return datetime.now(LOCAL_TZ)
+
+
+def parse_ts(value):
+    return datetime.fromisoformat(value.replace("Z", "+00:00")) if value else None
+
+
+def stage_group(stage):
+    for name, lo, hi in STAGE_GROUPS:
+        if lo <= stage <= hi:
+            return name
+    return None
+
+
+# --- daily archives ---------------------------------------------------------
 
 
 def get_snapshots():
@@ -91,6 +136,17 @@ def read_json(snapshot, name):
             return json.load(f)
 
 
+def is_leech(stat, stage):
+    """An item that keeps failing and is still in rotation."""
+    wrong = stat["meaning_incorrect"] + stat["reading_incorrect"]
+    return (
+        wrong >= 2
+        and stat["percentage_correct"] < 75
+        and 1 <= stage <= 8
+        and not stat.get("hidden")
+    )
+
+
 @functools.lru_cache(maxsize=None)
 def load_snapshot_timeseries(snapshot):
     """Per-day numbers used by the time-series charts (cached per snapshot)."""
@@ -102,11 +158,24 @@ def load_snapshot_timeseries(snapshot):
 
     assignments = read_json(snapshot, "assignments.json")
     srs_stages = [0] * 10
+    stage_of = {}
     for assignment in assignments["data"]:
-        srs_stages[assignment["data"]["srs_stage"]] += 1
+        stage = assignment["data"]["srs_stage"]
+        srs_stages[stage] += 1
+        stage_of[assignment["data"]["subject_id"]] = stage
     for i, count in enumerate(srs_stages):
         data[f"srs_stage_{i}"] = count
 
+    stats = read_json(snapshot, "review_statistics.json")
+    data["leeches"] = (
+        sum(
+            1
+            for s in stats["data"]
+            if is_leech(s["data"], stage_of.get(s["data"]["subject_id"], 0))
+        )
+        if stats
+        else None
+    )
     return data
 
 
@@ -124,11 +193,7 @@ def load_details(snapshot):
 
 @functools.lru_cache(maxsize=2)
 def load_subjects(cache_key):
-    """subject_id -> {characters, level, type}. cache_key busts on file change.
-
-    Prefers the standalone subjects.json; falls back to the newest zip that
-    still contains one (pre-refactor archives).
-    """
+    """subject_id -> {characters, level, type}. cache_key busts on file change."""
     standalone = DATA_DIR / "subjects.json"
     subjects = None
     if standalone.is_file():
@@ -139,25 +204,18 @@ def load_subjects(cache_key):
             subjects = read_json(snapshot, "subjects.json")
             if subjects is not None:
                 break
-
     if subjects is None:
-        return {}, 0
+        return {}
 
     id_map = {}
-    active = 0
     for subj in subjects["data"]:
-        hidden = subj["data"].get("hidden_at")
-        if not hidden:
-            active += 1
         id_map[subj["id"]] = {
             "characters": subj["data"].get("characters") or subj["data"].get("slug"),
             "level": subj["data"]["level"],
             "type": subj["object"],
-            # official wanikani permalink, e.g. .../vocabulary/茶の湯
             "url": subj["data"].get("document_url"),
-            "hidden": bool(hidden),
         }
-    return id_map, active
+    return id_map
 
 
 def subjects_cache_key():
@@ -168,8 +226,15 @@ def subjects_cache_key():
     return f"zip:{files[-1].name}" if files else "none"
 
 
-def parse_ts(value):
-    return datetime.fromisoformat(value.replace("Z", "+00:00")) if value else None
+def get_dataframe():
+    df = pd.DataFrame(load_snapshot_timeseries(p) for p in get_snapshots())
+    df.sort_values(by="date", inplace=True)
+    df["apprentice"] = sum(df[f"srs_stage_{i}"] for i in range(1, 5))
+    df["guru"] = df["srs_stage_5"] + df["srs_stage_6"]
+    df["master"] = df["srs_stage_7"]
+    df["enlightened"] = df["srs_stage_8"]
+    df["burned"] = df["srs_stage_9"]
+    return df
 
 
 # --- hourly snapshots (wanikani-sync, since 2026-09) -----------------------
@@ -178,9 +243,6 @@ def parse_ts(value):
 # full assignments+review_statistics dump for hours with activity. Diffing
 # two consecutive full snapshots yields exactly what happened in between —
 # per-session data the WK API no longer offers (its reviews endpoint is dead).
-
-# osbm's clock, not the host's (apollo runs on Europe/Berlin)
-LOCAL_TZ = ZoneInfo("Europe/Istanbul")
 
 
 def hourly_files():
@@ -236,12 +298,16 @@ def hourly_delta(prev_path, cur_path):
             for a in d["assignments"]["data"]
         }
 
+    prev_st, cur_st = stages(prev), stages(cur)
+
     # review_statistics count *answers*: meaning and reading separately,
     # plus every retry. A kanji reviewed once contributes 2 correct answers
     # (and 1+ incorrect if missed first), so summed answers run at 2-3x the
-    # number of items WaniKani shows for the session. Count items too.
+    # number of items WaniKani shows for the session. Count items too, and
+    # bucket first-try success by the SRS stage the item was reviewed at.
     prev_ans, cur_ans = answers(prev), answers(cur)
     correct = incorrect = items = items_clean = 0
+    by_stage = {name: [0, 0] for name, _, _ in STAGE_GROUPS}  # [items, clean]
     for sid, (c, i) in cur_ans.items():
         pc, pi = prev_ans.get(sid, (0, 0))
         dc, di = max(0, c - pc), max(0, i - pi)
@@ -250,8 +316,11 @@ def hourly_delta(prev_path, cur_path):
         if dc or di:
             items += 1
             items_clean += 1 if di == 0 else 0
+            group = stage_group(prev_st.get(sid, 0))
+            if group:
+                by_stage[group][0] += 1
+                by_stage[group][1] += 1 if di == 0 else 0
 
-    prev_st, cur_st = stages(prev), stages(cur)
     lessons = promoted = demoted = 0
     for sid, stage in cur_st.items():
         old = prev_st.get(sid, 0)  # new assignments unlock at stage 0
@@ -271,6 +340,7 @@ def hourly_delta(prev_path, cur_path):
         "lessons": lessons,
         "promoted": promoted,
         "demoted": demoted,
+        "by_stage": by_stage,
     }
 
 
@@ -290,41 +360,158 @@ def get_hourly_data():
     return [m for _, m in metas], [m for _, m in fulls], deltas
 
 
-def fig_hourly_heatmap(metas, deltas):
-    if not metas:
+# --- analysis ---------------------------------------------------------------
+
+
+def day_activity(metas, deltas):
+    """date -> items+lessons that day; days covered by any snapshot count
+    as 0, days before the hourly archive started are absent (unknown)."""
+    days = {m["slot"].date(): 0 for m in metas}
+    for d in deltas:
+        days[d["slot"].date()] = days.get(d["slot"].date(), 0) + d["items"] + d["lessons"]
+    return days
+
+
+def streaks(days, today):
+    active = {d for d, n in days.items() if n > 0}
+    start = today if today in active else today - timedelta(days=1)
+    streak = 0
+    while start - timedelta(days=streak) in active:
+        streak += 1
+    last30 = sum(1 for i in range(30) if today - timedelta(days=i) in active)
+    return streak, last30
+
+
+def window_accuracy(deltas, start, end):
+    """(items, first-try %) for sessions whose slot falls in [start, end)."""
+    items = clean = 0
+    for d in deltas:
+        if start <= d["slot"] < end:
+            items += d["items"]
+            clean += d["items_clean"]
+    return items, (100 * clean / items if items else None)
+
+
+def backlog_projection(fulls, now, days=14):
+    """Linear trend of reviews pending (measured after each active hour)
+    over the last `days`; where it hits zero if it is falling."""
+    points = [
+        (m["time"], m["reviews_pending"])
+        for m in fulls
+        if m["reviews_pending"] is not None and m["time"] >= now - timedelta(days=days)
+    ]
+    if len(points) < 4:
         return None
-    by_slot = {}
-    for m in metas:  # every snapshot (stub or full) proves the hour was idle
-        by_slot[(m["slot"].strftime("%Y-%m-%d"), m["slot"].hour)] = 0
-    for d in deltas:  # ...unless a delta says otherwise
-        key = (d["slot"].strftime("%Y-%m-%d"), d["slot"].hour)
-        by_slot[key] = d["items"] + d["lessons"]
-    days = sorted({day for day, _ in by_slot})
-    z = [[by_slot.get((day, h)) for h in range(24)] for day in days]
+    t0 = points[0][0]
+    xs = [(t - t0).total_seconds() / 86400 for t, _ in points]
+    ys = [y for _, y in points]
+    mx, my = sum(xs) / len(xs), sum(ys) / len(ys)
+    var = sum((x - mx) ** 2 for x in xs)
+    if var == 0:
+        return None
+    slope = sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / var  # per day
+    current = points[-1][1]
+    clear_at = None
+    if slope < -0.5 and current > 0:
+        clear_at = points[-1][0] + timedelta(days=current / -slope)
+    return {"slope": slope, "current": current, "clear_at": clear_at, "start": t0}
 
-    fig = go.Figure(
-        go.Heatmap(
-            x=list(range(24)),
-            y=days,
-            z=z,
-            colorscale=[[0, "#26262e"], [0.25, "#5c2d9e"], [1, "#FF00AA"]],
-            xgap=2,
-            ygap=2,
-            hovertemplate="%{y} %{x}:00 — %{z} items<extra></extra>",
-            colorbar=dict(title="items"),
+
+def level_history(details, now):
+    rows = []
+    for lp in details["level_progressions"]["data"]:
+        d = lp["data"]
+        unlocked = parse_ts(d.get("unlocked_at"))
+        if unlocked is None:
+            continue
+        rows.append(
+            {
+                "level": d["level"],
+                "unlocked": unlocked.astimezone(LOCAL_TZ),
+                "passed": (parse_ts(d["passed_at"]).astimezone(LOCAL_TZ) if d.get("passed_at") else None),
+                "abandoned": bool(d.get("abandoned_at")),
+            }
         )
+    rows.sort(key=lambda r: r["unlocked"])
+    for r in rows:
+        end = r["passed"] or (None if r["abandoned"] else now)
+        r["days"] = (end - r["unlocked"]).total_seconds() / 86400 if end else None
+    return rows
+
+
+def level_projection(rows, now):
+    current = next((r for r in reversed(rows) if r["passed"] is None and not r["abandoned"]), None)
+    completed = [r["days"] for r in rows if r["passed"] is not None and not r["abandoned"]]
+    if current is None or not completed:
+        return None
+    pace = statistics.median(completed[-5:])
+    days_on_level = current["days"]
+
+    def project(per_level, target):
+        horizon = (target - now).total_seconds() / 86400
+        if horizon <= 0:
+            return current["level"]
+        first = max(per_level - days_on_level, 0)  # rest of the current level
+        if horizon < first:
+            return current["level"]
+        return current["level"] + 1 + int((horizon - first) // per_level)
+
+    return {
+        "level": current["level"],
+        "unlocked": current["unlocked"],
+        "days_on_level": days_on_level,
+        "pace": pace,
+        "jlpt_pace": project(pace, JLPT_DATE),
+        "jlpt_floor": project(LEVEL_FLOOR_DAYS, JLPT_DATE),
+        "year_pace": project(pace, YEAR_END),
+        "year_floor": project(LEVEL_FLOOR_DAYS, YEAR_END),
+    }
+
+
+# --- figures ----------------------------------------------------------------
+
+
+def date_axis(fig, end=None, default_days=None):
+    """Range buttons on a date axis, optionally zoomed to the last N days."""
+    fig.update_xaxes(
+        type="date",
+        rangeselector=dict(
+            buttons=[
+                dict(count=7, label="7d", step="day", stepmode="backward"),
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(count=3, label="3m", step="month", stepmode="backward"),
+                dict(count=1, label="1y", step="year", stepmode="backward"),
+                dict(step="all", label="all"),
+            ],
+            bgcolor=BORDER,
+            activecolor="#3a3a48",
+            font=dict(color="#ddd", size=11),
+            x=0,
+            y=1.02,
+            yanchor="bottom",
+        ),
     )
+    # the buttons sit where the legend normally goes: legend moves below
     fig.update_layout(
-        title="Hourly Activity — when do sessions actually happen?",
-        xaxis_title=f"Hour of day ({LOCAL_TZ.key})",
-        **{**PLOT_LAYOUT, "height": max(280, 120 + 22 * len(days))},
+        legend=dict(y=-0.18, yanchor="top", x=0, xanchor="left"),
+        margin=dict(b=85),
     )
-    fig.update_xaxes(dtick=1)
-    fig.update_yaxes(autorange="reversed")
-    return fig
+    if end is not None and default_days:
+        fig.update_xaxes(range=[end - timedelta(days=default_days), end])
 
 
-def fig_hourly_burndown(fulls):
+def vline(fig, x, label, color=MUTED):
+    fig.add_shape(
+        type="line", x0=x, x1=x, y0=0, y1=1, yref="paper",
+        line=dict(color=color, width=1, dash="dot"),
+    )
+    fig.add_annotation(
+        x=x, y=1, yref="paper", text=label, showarrow=False,
+        yanchor="bottom", font=dict(size=11, color=color),
+    )
+
+
+def fig_backlog(fulls, proj, now):
     points = [m for m in fulls if m["reviews_pending"] is not None]
     if len(points) < 2:
         return None
@@ -336,28 +523,143 @@ def fig_hourly_burndown(fulls):
             mode="lines+markers",
             name="Reviews pending",
             line=dict(width=2, color="#00AAFF"),
-            marker=dict(size=5),
+            marker=dict(size=4),
         )
     )
     fig.add_trace(
         go.Scatter(
             x=[m["time"] for m in points],
             y=[m["lessons_pending"] for m in points],
-            mode="lines+markers",
+            mode="lines",
             name="Lessons pending",
-            line=dict(width=2, color="#FF00AA"),
-            marker=dict(size=5),
+            line=dict(width=1.5, color="#FF00AA"),
         )
     )
-    fig.update_layout(
-        title="Backlog Burndown (measured after each active hour)",
-        yaxis_title="Items",
-        **PLOT_LAYOUT,
-    )
+    title = "Backlog"
+    if proj:
+        last = points[-1]
+        horizon = proj["clear_at"] or now + timedelta(days=30)
+        horizon = min(horizon, now + timedelta(days=60))
+        days_ahead = (horizon - last["time"]).total_seconds() / 86400
+        fig.add_trace(
+            go.Scatter(
+                x=[last["time"], horizon],
+                y=[last["reviews_pending"], max(0, last["reviews_pending"] + proj["slope"] * days_ahead)],
+                mode="lines",
+                name="14-day trend",
+                line=dict(width=1.5, color="#faaa1e", dash="dash"),
+            )
+        )
+        if proj["clear_at"]:
+            title = f"Backlog — clears around {proj['clear_at']:%b %d} at this pace ({proj['slope']:+.0f}/day)"
+        elif proj["slope"] > 0.5:
+            title = f"Backlog — growing {proj['slope']:+.0f}/day over the last 14 days"
+        else:
+            title = "Backlog — flat over the last 14 days"
+    fig.update_layout(title=title, yaxis_title="Items", **{**PLOT_LAYOUT, "height": SMALL + 40})
+    date_axis(fig, end=now + timedelta(days=3), default_days=30)
     return fig
 
 
-def fig_hourly_accuracy(deltas):
+def fig_forecast(details):
+    buckets = details["summary"]["data"]["reviews"][1:]
+    if not buckets:
+        return None
+    times = [parse_ts(b["available_at"]).astimezone(LOCAL_TZ) for b in buckets]
+    fig = go.Figure(
+        go.Bar(
+            x=times,
+            y=[len(b["subject_ids"]) for b in buckets],
+            marker_color="#00AAFF",
+            width=3600 * 1000 * 0.8,
+            hovertemplate="%{x|%a %H:%M} — %{y} unlock<extra></extra>",
+        )
+    )
+    total = sum(len(b["subject_ids"]) for b in buckets)
+    fig.update_layout(
+        title=f"Unlocking in the next 24h — {total} items (from the nightly archive)",
+        yaxis_title="Reviews",
+        **{**PLOT_LAYOUT, "height": SMALL + 40},
+    )
+    fig.update_xaxes(type="date", tickformat="%H:%M")
+    return fig
+
+
+def fig_calendar(days, today, weeks=12):
+    """GitHub-style: one cell per day, last `weeks` weeks, Monday rows."""
+    monday = today - timedelta(days=today.weekday())
+    first = monday - timedelta(weeks=weeks - 1)
+    z, text = [], []
+    for wd in range(7):
+        row, trow = [], []
+        for w in range(weeks):
+            day = first + timedelta(weeks=w, days=wd)
+            if day > today or day not in days:
+                row.append(None)
+                trow.append("")
+            else:
+                row.append(days[day])
+                trow.append(f"{day:%a %b %d} — {days[day]} items")
+        z.append(row)
+        text.append(trow)
+    x = [(first + timedelta(weeks=w)).strftime("%b %d") for w in range(weeks)]
+    fig = go.Figure(
+        go.Heatmap(
+            x=x,
+            y=WEEKDAYS,
+            z=z,
+            text=text,
+            hovertemplate="%{text}<extra></extra>",
+            colorscale=ACTIVITY_SCALE,
+            xgap=3,
+            ygap=3,
+            showscale=False,
+            zmin=0,
+        )
+    )
+    fig.update_layout(
+        title=f"Consistency — reviews + lessons per day, last {weeks} weeks",
+        **{**PLOT_LAYOUT, "height": 290, "margin": dict(l=50, r=30, t=60, b=40)},
+    )
+    fig.update_xaxes(side="bottom", tickangle=0, title="week of")
+    fig.update_yaxes(autorange="reversed")
+    return fig
+
+
+def fig_profile(deltas, today, weeks=8):
+    """Weekday x hour: average items per week in each slot."""
+    start = today - timedelta(weeks=weeks)
+    grid = [[0] * 24 for _ in range(7)]
+    for d in deltas:
+        if d["slot"].date() >= start:
+            grid[d["slot"].weekday()][d["slot"].hour] += d["items"] + d["lessons"]
+    if not any(any(row) for row in grid):
+        return None
+    z = [[round(v / weeks, 1) for v in row] for row in grid]
+    fig = go.Figure(
+        go.Heatmap(
+            x=list(range(24)),
+            y=WEEKDAYS,
+            z=z,
+            colorscale=ACTIVITY_SCALE,
+            xgap=2,
+            ygap=2,
+            hovertemplate="%{y} %{x}:00 — %{z} items/week<extra></extra>",
+            colorbar=dict(title="items/wk", thickness=12),
+            zmin=0,
+        )
+    )
+    fig.update_layout(
+        title=f"When you actually study — average items per hour slot, last {weeks} weeks",
+        xaxis_title=f"Hour of day ({LOCAL_TZ.key})",
+        **{**PLOT_LAYOUT, "height": 300, "margin": dict(l=50, r=30, t=60, b=50)},
+    )
+    fig.update_xaxes(dtick=1)
+    fig.update_yaxes(autorange="reversed")
+    return fig
+
+
+def fig_sessions(deltas, now):
     sessions = [d for d in deltas if d["items"] > 0]
     if not sessions:
         return None
@@ -379,96 +681,135 @@ def fig_hourly_accuracy(deltas):
         go.Scatter(
             x=x,
             y=[100 * d["items_clean"] / d["items"] for d in sessions],
-            mode="lines+markers",
-            name="Accuracy % (items right first try)",
+            mode="markers",
+            name="Right first try %",
             yaxis="y2",
             line=dict(width=2, color="#faaa1e"),
             marker=dict(size=6),
         )
     )
     fig.update_layout(
-        title="Session Volume and Accuracy per Active Hour",
+        title="Sessions — volume and first-try accuracy per active hour",
         yaxis_title="Reviews (items)",
-        yaxis2=dict(
-            title="Accuracy (%)",
-            overlaying="y",
-            side="right",
-            range=[0, 100],
-            showgrid=False,
-        ),
+        yaxis2=dict(title="Accuracy (%)", overlaying="y", side="right", range=[0, 100], showgrid=False),
         **PLOT_LAYOUT,
     )
+    date_axis(fig, end=now + timedelta(hours=6), default_days=14)
     return fig
 
 
-def fig_hourly_srs_flow(deltas):
-    sessions = [
-        d for d in deltas if d["promoted"] or d["demoted"] or d["lessons"]
-    ]
+def fig_srs_flow(deltas, now):
+    sessions = [d for d in deltas if d["promoted"] or d["demoted"] or d["lessons"]]
     if not sessions:
         return None
     x = [d["slot"] + timedelta(minutes=30) for d in sessions]
     bar_width = 3600 * 1000 * 0.8
     fig = go.Figure()
-    fig.add_trace(
-        go.Bar(
-            x=x,
-            y=[d["promoted"] for d in sessions],
-            name="Promoted",
-            marker_color="#0093DD",
-            width=bar_width,
+    for key, name, color, sign in [
+        ("promoted", "Promoted", "#0093DD", 1),
+        ("lessons", "New lessons", "#faaa1e", 1),
+        ("demoted", "Demoted", "#DD0093", -1),
+    ]:
+        fig.add_trace(
+            go.Bar(x=x, y=[sign * d[key] for d in sessions], name=name, marker_color=color, width=bar_width)
         )
-    )
-    fig.add_trace(
-        go.Bar(
-            x=x,
-            y=[d["lessons"] for d in sessions],
-            name="New lessons",
-            marker_color="#faaa1e",
-            width=bar_width,
-        )
-    )
-    fig.add_trace(
-        go.Bar(
-            x=x,
-            y=[-d["demoted"] for d in sessions],
-            name="Demoted",
-            marker_color="#DD0093",
-            width=bar_width,
-        )
-    )
     fig.update_layout(
-        title="SRS Flow per Session — demotions below zero are leech pressure",
+        title="SRS flow per session — demotions below zero are leech pressure",
         yaxis_title="Items",
         barmode="relative",
         **PLOT_LAYOUT,
     )
+    date_axis(fig, end=now + timedelta(hours=6), default_days=14)
     return fig
 
 
-def get_dataframe():
-    df = pd.DataFrame(load_snapshot_timeseries(p) for p in get_snapshots())
-    df.sort_values(by="date", inplace=True)
-
-    _, total_subjects = load_subjects(subjects_cache_key())
-    if not total_subjects:
-        total_subjects = 9300  # last resort if no subjects source exists
-
-    df["progression"] = df.apply(
-        lambda row: sum(row[f"srs_stage_{i}"] * (i + 1) for i in range(10))
-        / (total_subjects * 10)
-        * 100,
-        axis=1,
+def fig_level_path(rows, proj, now):
+    if not rows:
+        return None
+    x, y = [], []
+    for r in rows:
+        x.append(r["unlocked"])
+        y.append(r["level"])
+    x.append(now)
+    y.append(y[-1])
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(x=x, y=y, mode="lines", name="Level", line=dict(shape="hv", width=2.5, color="#882D9E"))
     )
-    df["apprentice"] = sum(df[f"srs_stage_{i}"] for i in range(1, 5))
-    df["guru"] = df["srs_stage_5"] + df["srs_stage_6"]
-    df["master"] = df["srs_stage_7"]
-    df["enlightened"] = df["srs_stage_8"]
-    df["burned"] = df["srs_stage_9"]
-    return df
+    title = "Level over time"
+    if proj:
+        for per_level, name, color in [
+            (proj["pace"], f"your pace ({proj['pace']:.0f} d/level)", "#faaa1e"),
+            (LEVEL_FLOOR_DAYS, f"SRS floor ({LEVEL_FLOOR_DAYS} d/level)", "#3ddc84"),
+        ]:
+            px, py = [now], [proj["level"]]
+            t = now + timedelta(days=max(per_level - proj["days_on_level"], 0))
+            level = proj["level"]
+            while t <= YEAR_END + timedelta(days=1):
+                level += 1
+                px.append(t)
+                py.append(level)
+                t += timedelta(days=per_level)
+            px.append(YEAR_END)
+            py.append(py[-1])
+            fig.add_trace(
+                go.Scatter(x=px, y=py, mode="lines", name=name, line=dict(shape="hv", width=1.5, dash="dash", color=color))
+            )
+        fig.add_shape(
+            type="rect", xref="paper", x0=0, x1=1, y0=TARGET_LEVELS[0], y1=TARGET_LEVELS[1],
+            fillcolor="rgba(61, 220, 132, 0.10)", line=dict(width=0), layer="below",
+        )
+        fig.add_annotation(
+            xref="paper", x=0.01, y=TARGET_LEVELS[1], text=f"target {TARGET_LEVELS[0]}–{TARGET_LEVELS[1]} (set July)",
+            showarrow=False, yanchor="bottom", xanchor="left", font=dict(size=11, color="#3ddc84"),
+        )
+        title = (
+            f"Level {proj['level']} → ~{proj['jlpt_pace']} by the JLPT at your pace "
+            f"({proj['jlpt_floor']} at the floor) · ~{proj['year_pace']} by year end ({proj['year_floor']} at the floor)"
+        )
+    vline(fig, JLPT_DATE, "JLPT")
+    vline(fig, YEAR_END, "2026")
+    fig.update_layout(title=title, yaxis_title="Level", **PLOT_LAYOUT)
+    date_axis(fig, end=YEAR_END + timedelta(days=10), default_days=365)
+    return fig
 
 
-def fig_srs_composition(df):
+def fig_level_days(rows, proj):
+    rows = [r for r in rows if r["days"] is not None]
+    if not rows:
+        return None
+    # a level that appears twice (reset) gets the year on both bars
+    seen = {}
+    for r in rows:
+        seen[r["level"]] = seen.get(r["level"], 0) + 1
+    dupes = {lvl for lvl, n in seen.items() if n > 1}
+    labels = [
+        f"{r['level']} ('{r['unlocked']:%y})" if r["level"] in dupes else str(r["level"]) for r in rows
+    ]
+    fig = go.Figure(
+        go.Bar(
+            x=labels,
+            y=[r["days"] for r in rows],
+            marker_color=["#4a4a55" if r["passed"] is None else "#882D9E" for r in rows],
+            hovertemplate="level %{x}: %{y:.0f} days<extra></extra>",
+        )
+    )
+    if proj:
+        fig.add_hline(y=proj["pace"], line=dict(color="#faaa1e", width=1, dash="dash"),
+                      annotation_text=f"median of last 5: {proj['pace']:.0f} d", annotation_position="top left",
+                      annotation_font=dict(size=11, color="#faaa1e"))
+    fig.add_hline(y=LEVEL_FLOOR_DAYS, line=dict(color="#3ddc84", width=1, dash="dot"))
+    fig.update_layout(
+        title="Days per level (grey = current, still in progress)",
+        xaxis_title="Level",
+        yaxis_title="Days",
+        **{**PLOT_LAYOUT, "height": SMALL + 40},
+    )
+    fig.update_xaxes(type="category")
+    return fig
+
+
+def fig_srs_composition(df, now):
     fig = go.Figure()
     for column, name in [
         ("apprentice", "Apprentice"),
@@ -479,208 +820,119 @@ def fig_srs_composition(df):
     ]:
         fig.add_trace(
             go.Scatter(
-                x=df["date"],
-                y=df[column],
-                mode="lines",
-                name=name,
-                stackgroup="one",
+                x=df["date"], y=df[column], mode="lines", name=name, stackgroup="one",
                 line=dict(width=0.5, color=STAGE_COLORS[name]),
+                hovertemplate="%{y} " + name.lower() + "<extra></extra>",
             )
         )
-    fig.update_layout(
-        title="SRS Stage Composition Over Time",
-        yaxis_title="Items",
-        **PLOT_LAYOUT,
-    )
-    fig.update_xaxes(type="date")
+    fig.update_layout(title="SRS stage composition", yaxis_title="Items", hovermode="x unified", **PLOT_LAYOUT)
+    date_axis(fig, end=now, default_days=365)
     return fig
 
 
-def fig_daily_activity(df):
+def fig_stage_accuracy(deltas, now, days=30):
+    """First-try accuracy by the stage an item was reviewed at: last 30 days
+    vs the 30 before. Low Guru = lessons too fast; low Master = structural."""
+    windows = [
+        (f"last {days} days", now - timedelta(days=days), now, "#faaa1e"),
+        (f"{days} days before", now - timedelta(days=2 * days), now - timedelta(days=days), "#4a4a55"),
+    ]
     fig = go.Figure()
-    fig.add_trace(
-        go.Scatter(
-            x=df["date"],
-            y=df["num_reviews"],
-            mode="lines+markers",
-            name="Reviews in queue",
-            line=dict(width=2, color="#00AAFF"),
-            marker=dict(size=5),
-        )
-    )
-    fig.add_trace(
-        go.Scatter(
-            x=df["date"],
-            y=df["num_lessons"],
-            mode="lines+markers",
-            name="Lessons available",
-            line=dict(width=2, color="#FF00AA"),
-            marker=dict(size=5),
-        )
-    )
-    fig.update_layout(
-        title="Daily Queue at Snapshot Time (02:00)",
-        yaxis_title="Items",
-        **PLOT_LAYOUT,
-    )
-    fig.update_xaxes(type="date")
-    return fig
-
-
-def fig_progression(df):
-    fig = go.Figure()
-    fig.add_trace(
-        go.Scatter(
-            x=df["date"],
-            y=df["progression"],
-            mode="lines",
-            name="Progression",
-            line=dict(width=2.5, color="#faaa1e"),
-            fill="tozeroy",
-            fillcolor="rgba(250, 170, 30, 0.15)",
-        )
-    )
-    fig.update_layout(
-        title="Overall SRS Progression",
-        yaxis_title="Progression (%)",
-        **PLOT_LAYOUT,
-    )
-    fig.update_xaxes(type="date")
-    return fig
-
-
-def fig_apprentice_breakdown(df):
-    fig = go.Figure()
-    for i in range(1, 5):
+    any_data = False
+    for name, start, end, color in windows:
+        totals = {g: [0, 0] for g, _, _ in STAGE_GROUPS}
+        for d in deltas:
+            if start <= d["slot"] < end:
+                for g, (n, clean) in d["by_stage"].items():
+                    totals[g][0] += n
+                    totals[g][1] += clean
+        ys = [100 * c / n if n else None for n, c in totals.values()]
+        any_data = any_data or any(y is not None for y in ys)
         fig.add_trace(
-            go.Scatter(
-                x=df["date"],
-                y=df[f"srs_stage_{i}"],
-                mode="lines",
-                name=f"Apprentice {'I' * i if i < 4 else 'IV'}",
-                stackgroup="one",
-                line=dict(width=0.5, color=APPRENTICE_SHADES[i - 1]),
+            go.Bar(
+                x=list(totals),
+                y=ys,
+                name=name,
+                marker_color=color,
+                customdata=[n for n, _ in totals.values()],
+                hovertemplate="%{x}: %{y:.0f}% right first try<br>%{customdata} reviews<extra></extra>",
+                text=[f"{y:.0f}%" if y is not None else "" for y in ys],
+                textposition="outside",
             )
         )
-    fig.update_layout(
-        title="Apprentice Stage Breakdown",
-        yaxis_title="Items",
-        **PLOT_LAYOUT,
-    )
-    fig.update_xaxes(type="date")
-    return fig
-
-
-def fig_level_speed(details):
-    now = datetime.now().astimezone()
-    rows = []
-    for lp in details["level_progressions"]["data"]:
-        d = lp["data"]
-        unlocked = parse_ts(d.get("unlocked_at"))
-        passed = parse_ts(d.get("passed_at"))
-        if unlocked is None or d.get("abandoned_at"):
-            continue
-        end = passed or now
-        rows.append(
-            {
-                "level": d["level"],
-                "days": (end - unlocked).total_seconds() / 86400,
-                "in_progress": passed is None,
-            }
-        )
-    if not rows:
+    if not any_data:
         return None
-
-    fig = go.Figure()
-    fig.add_trace(
-        go.Bar(
-            x=[r["level"] for r in rows],
-            y=[r["days"] for r in rows],
-            marker_color=[
-                "#4a4a55" if r["in_progress"] else "#882D9E" for r in rows
-            ],
-        )
-    )
     fig.update_layout(
-        title="Days per Level (grey = current, still in progress)",
-        xaxis_title="Level",
-        yaxis_title="Days",
-        **PLOT_LAYOUT,
+        title="First-try accuracy by SRS stage",
+        yaxis_title="Right first try (%)",
+        yaxis_range=[0, 118],
+        barmode="group",
+        **{**PLOT_LAYOUT, "height": SMALL + 40},
     )
     return fig
 
 
-def fig_accuracy(details):
+def fig_leech_trend(df, now):
+    series = df.dropna(subset=["leeches"])
+    if series.empty:
+        return None
+    fig = go.Figure(
+        go.Scatter(
+            x=series["date"], y=series["leeches"], mode="lines", name="Leeches",
+            line=dict(width=2, color="#DD0093"), fill="tozeroy", fillcolor="rgba(221, 0, 147, 0.12)",
+        )
+    )
+    fig.update_layout(
+        title="Leeches — items under 75% accuracy with 2+ misses, not burned",
+        yaxis_title="Items",
+        **{**PLOT_LAYOUT, "height": SMALL + 40},
+    )
+    date_axis(fig, end=now, default_days=180)
+    return fig
+
+
+def fig_accuracy_hist(details):
     stats = details["review_statistics"]["data"]
     fig = go.Figure()
     for subject_type in ["radical", "kanji", "vocabulary"]:
         values = [
             s["data"]["percentage_correct"]
             for s in stats
-            if s["data"]["subject_type"].startswith(subject_type)
-            and not s["data"].get("hidden")
+            if s["data"]["subject_type"].startswith(subject_type) and not s["data"].get("hidden")
         ]
-        if not values:
-            continue
-        fig.add_trace(
-            go.Histogram(
-                x=values,
-                name=subject_type,
-                xbins=dict(start=0, end=101, size=5),
-                marker_color=TYPE_COLORS[subject_type],
-                opacity=0.85,
+        if values:
+            fig.add_trace(
+                go.Histogram(
+                    x=values, name=subject_type, xbins=dict(start=0, end=101, size=5),
+                    marker_color=TYPE_COLORS[subject_type], opacity=0.85,
+                )
             )
-        )
     fig.update_layout(
-        title="Review Accuracy Distribution",
+        title="Lifetime accuracy distribution",
         xaxis_title="Percentage correct",
         yaxis_title="Items",
         barmode="stack",
-        **PLOT_LAYOUT,
+        **{**PLOT_LAYOUT, "height": SMALL + 40},
     )
     return fig
 
 
-def fig_forecast(details):
-    buckets = details["summary"]["data"]["reviews"][1:]
-    if not buckets:
-        return None
-    fig = go.Figure()
-    fig.add_trace(
-        go.Bar(
-            x=[parse_ts(b["available_at"]).strftime("%H:%M") for b in buckets],
-            y=[len(b["subject_ids"]) for b in buckets],
-            marker_color="#00AAFF",
-        )
-    )
-    fig.update_layout(
-        title="Review Forecast, 24h From Snapshot",
-        xaxis_title="Hour",
-        yaxis_title="Reviews unlocking",
-        **PLOT_LAYOUT,
-    )
-    return fig
+# --- html pieces ------------------------------------------------------------
 
 
 def leech_table_html(details):
-    id_map, _ = load_subjects(subjects_cache_key())
+    id_map = load_subjects(subjects_cache_key())
     if not id_map:
         return "<p>subjects.json not available yet — leech table needs it.</p>"
 
-    srs_by_subject = {
-        a["data"]["subject_id"]: a["data"]["srs_stage"]
-        for a in details["assignments"]["data"]
-    }
-
+    srs_by_subject = {a["data"]["subject_id"]: a["data"]["srs_stage"] for a in details["assignments"]["data"]}
     leeches = []
     for s in details["review_statistics"]["data"]:
         d = s["data"]
         wrong = d["meaning_incorrect"] + d["reading_incorrect"]
         stage = srs_by_subject.get(d["subject_id"], 0)
-        if wrong < 2 or d.get("hidden") or stage == 9:
-            continue
         subj = id_map.get(d["subject_id"])
-        if subj is None:
+        if wrong < 2 or d.get("hidden") or stage == 9 or subj is None:
             continue
         leeches.append(
             {
@@ -693,7 +945,6 @@ def leech_table_html(details):
                 "url": subj.get("url") or "#",
             }
         )
-
     leeches.sort(key=lambda x: (x["accuracy"], -x["wrong"]))
     rows = "".join(
         f"""<tr>
@@ -709,7 +960,7 @@ def leech_table_html(details):
         for l in leeches[:20]
     )
     return f"""
-    <h2>Leeches — your 20 most-missed items</h2>
+    <h3>Your 20 most-missed items</h3>
     <table>
         <thead><tr>
             <th>Item</th><th>Type</th><th>Level</th><th>SRS stage</th>
@@ -720,87 +971,142 @@ def leech_table_html(details):
     """
 
 
-def summary_cards_html(df, details):
-    user = details["user"]["data"]
-    stats = details["review_statistics"]["data"]
-    correct = sum(
-        s["data"]["meaning_correct"] + s["data"]["reading_correct"] for s in stats
+def card_html(value, label, delta=None, good=None, note=None, band=None, fmt="{:+d}"):
+    """good: 'up' or 'down' — which direction of the delta is progress."""
+    sub = ""
+    if delta is not None:
+        if delta == 0 or good is None:
+            color = MUTED
+        else:
+            improving = (delta > 0) == (good == "up")
+            color = GOOD if improving else BAD
+        sub = f'<div class="card-delta" style="color:{color}">{fmt.format(delta)} vs 7d ago</div>'
+    elif note:
+        sub = f'<div class="card-delta">{note}</div>'
+    style = f' style="border-left: 3px solid {band}"' if band else ""
+    return (
+        f'<div class="card"{style}><div class="card-value">{value}</div>'
+        f'<div class="card-label">{label}</div>{sub}</div>'
     )
-    incorrect = sum(
-        s["data"]["meaning_incorrect"] + s["data"]["reading_incorrect"] for s in stats
-    )
-    accuracy = 100 * correct / (correct + incorrect) if correct + incorrect else 0
+
+
+def build_cards(df, details, fulls, deltas, days, now):
+    today = now.date()
     latest = df.iloc[-1]
+    week_ago_rows = df[df["date"] <= (today - timedelta(days=7)).isoformat()]
+    week_ago = week_ago_rows.iloc[-1] if not week_ago_rows.empty else None
+
+    def daily_delta(col):
+        return int(latest[col] - week_ago[col]) if week_ago is not None else None
+
+    user = details["user"]["data"]
+    rows = level_history(details, now)
+    proj = level_projection(rows, now)
+
+    pending = [m for m in fulls if m["reviews_pending"] is not None]
+    cur = pending[-1] if pending else None
+    old = next((m for m in reversed(pending) if m["time"] <= now - timedelta(days=7)), None)
+
+    items7, acc7 = window_accuracy(deltas, now - timedelta(days=7), now)
+    items14, acc14 = window_accuracy(deltas, now - timedelta(days=14), now - timedelta(days=7))
+    streak, last30 = streaks(days, today)
+
+    apprentice = int(latest["apprentice"])
+    band = GOOD if apprentice < APPRENTICE_BANDS[0] else WARN if apprentice <= APPRENTICE_BANDS[1] else BAD
 
     cards = [
-        (f"Level {user['level']}", user["username"]),
-        (f"{len(df)}", "days tracked"),
-        (f"{int(latest['burned'])}", "burned"),
-        (f"{int(latest['apprentice'])}", "apprentice"),
-        (f"{int(latest['guru'])}", "guru"),
-        (f"{accuracy:.1f}%", "review accuracy"),
+        card_html(
+            f"Level {user['level']}",
+            user["username"],
+            note=f"day {proj['days_on_level']:.0f} on this level" if proj else None,
+        ),
+        card_html(
+            cur["reviews_pending"] if cur else int(latest["num_reviews"]),
+            "reviews pending",
+            delta=(cur["reviews_pending"] - old["reviews_pending"]) if cur and old else None,
+            good="down",
+        ),
+        card_html(
+            cur["lessons_pending"] if cur else int(latest["num_lessons"]),
+            "lessons pending",
+            delta=(cur["lessons_pending"] - old["lessons_pending"]) if cur and old else None,
+            good="down",
+        ),
+        card_html(apprentice, "apprentice", delta=daily_delta("apprentice"), good="down", band=band),
+        card_html(int(latest["guru"]), "guru", delta=daily_delta("guru"), good="up"),
+        card_html(int(latest["burned"]), "burned", delta=daily_delta("burned"), good="up"),
+        card_html(
+            f"{acc7:.0f}%" if acc7 is not None else "—",
+            f"first-try accuracy, 7d ({items7} reviews)",
+            delta=(acc7 - acc14) if acc7 is not None and acc14 is not None else None,
+            good="up",
+            fmt="{:+.0f} pts",
+        ),
+        card_html(f"{streak} d", "streak", note=f"{last30} of the last 30 days active"),
     ]
-    return "".join(
-        f'<div class="card"><div class="card-value">{value}</div>'
-        f'<div class="card-label">{label}</div></div>'
-        for value, label in cards
-    )
+    return "".join(cards), proj, rows
+
+
+class Renderer:
+    """Embeds plotly.js once, with the first chart, whatever the order."""
+
+    def __init__(self, inline):
+        self.js = True if inline else "cdn"
+
+    def chart(self, fig):
+        if fig is None:
+            return ""
+        html = fig.to_html(
+            full_html=False,
+            include_plotlyjs=self.js,
+            default_width="100%",
+            config={"displayModeBar": False, "responsive": True},
+        )
+        self.js = False
+        return f'<div class="chart">{html}</div>'
+
+
+CSS = f"""
+    body {{
+        background-color: {BG}; color: #b9b9c7;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+            'Hiragino Sans', 'Noto Sans JP', sans-serif;
+        margin: 0 auto; padding: 24px; max-width: 1300px; line-height: 1.6;
+    }}
+    h1 {{ text-align: center; color: #fff; font-weight: 300; margin-bottom: 4px; }}
+    h2 {{ color: #fff; font-weight: 400; margin: 44px 0 2px; }}
+    h3 {{ color: #ddd; font-weight: 400; margin: 28px 0 10px; }}
+    .sub {{ text-align: center; color: {MUTED}; margin-bottom: 28px; }}
+    .section-sub {{ color: {MUTED}; margin-bottom: 16px; font-size: 0.95em; }}
+    .cards {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 18px; }}
+    .card {{ background: {CARD_BG}; border: 1px solid {BORDER}; border-radius: 10px; padding: 12px 14px; }}
+    .card-value {{ font-size: 1.45em; white-space: nowrap; color: #fff; font-weight: 600; line-height: 1.2; }}
+    .card-label {{ font-size: 0.75em; color: {MUTED}; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }}
+    .card-delta {{ font-size: 0.8em; color: {MUTED}; margin-top: 4px; }}
+    .grid2 {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(440px, 1fr)); gap: 16px; }}
+    .chart {{ padding: 8px; border-radius: 10px; border: 1px solid {BORDER}; background-color: {CARD_BG}; margin: 16px 0; min-width: 0; }}
+    .grid2 .chart {{ margin: 0; }}
+    table {{ width: 100%; border-collapse: collapse; background: {CARD_BG};
+             border: 1px solid {BORDER}; border-radius: 10px; overflow: hidden; }}
+    th, td {{ padding: 9px 14px; text-align: left; border-bottom: 1px solid {BORDER}; }}
+    th {{ color: {MUTED}; text-transform: uppercase; font-size: 0.75em; letter-spacing: 0.05em; }}
+    td.item {{ font-size: 1.35em; }}
+    footer {{ text-align: center; color: {MUTED}; font-size: 0.8em; margin-top: 40px; }}
+"""
 
 
 def build_dashboard(inline_plotly=False):
+    now = now_local()
     df = get_dataframe()
     details = load_details(get_snapshots()[-1])
     metas, fulls, deltas = get_hourly_data()
+    days = day_activity(metas, deltas)
+    cards, proj, level_rows = build_cards(df, details, fulls, deltas, days, now)
+    backlog = backlog_projection(fulls, now)
 
-    figures = [
-        fig_srs_composition(df),
-        fig_progression(df),
-        fig_daily_activity(df),
-        fig_apprentice_breakdown(df),
-        fig_level_speed(details),
-        fig_accuracy(details),
-        fig_forecast(details),
-    ]
-    hourly_figures = [
-        fig_hourly_heatmap(metas, deltas),
-        fig_hourly_burndown(fulls),
-        fig_hourly_accuracy(deltas),
-        fig_hourly_srs_flow(deltas),
-    ]
-
-    plotly_js = True if inline_plotly else "cdn"
-
-    def render(figs):
-        nonlocal plotly_js
-        html = []
-        for fig in figs:
-            if fig is None:
-                continue
-            html.append(
-                fig.to_html(
-                    full_html=False,
-                    include_plotlyjs=plotly_js,  # only the first embed carries plotly.js
-                    default_width="100%",
-                    config={"displayModeBar": False, "responsive": True},
-                )
-            )
-            plotly_js = False
-        return "".join(
-            f'<div class="chart-container">{c}</div>' for c in html
-        )
-
-    # render in document order: the first embedded chart carries the
-    # plotly.js include, and the hourly section comes first on the page
-    hourly_charts = render(hourly_figures)
-    charts = render(figures)
-    if hourly_charts:
-        hourly_charts = (
-            "<h2>Hourly Sessions</h2>"
-            '<div class="dashboard-info">from the hourly snapshots '
-            "(since 2026-09-10) · updates every hour with activity</div>"
-            + hourly_charts
-        )
-    snapshot_date = df.iloc[-1]["date"]
+    r = Renderer(inline_plotly)
+    latest_snapshot = max([m["time"] for m in metas], default=None)
+    freshness = f"hourly snapshot {latest_snapshot:%b %d %H:%M}" if latest_snapshot else f"archive {df.iloc[-1]['date']}"
 
     return f"""<!DOCTYPE html>
 <html>
@@ -808,63 +1114,76 @@ def build_dashboard(inline_plotly=False):
     <title>WaniKani Stats</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {{
-            background-color: {BG};
-            color: #b9b9c7;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-                'Hiragino Sans', 'Noto Sans JP', sans-serif;
-            margin: 0 auto;
-            padding: 24px;
-            max-width: 1300px;
-            line-height: 1.6;
-        }}
-        h1 {{ text-align: center; color: #fff; font-weight: 300; margin-bottom: 4px; }}
-        h2 {{ color: #fff; font-weight: 400; margin-top: 36px; }}
-        .dashboard-info {{ text-align: center; color: #77778a; margin-bottom: 28px; }}
-        .cards {{ display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-bottom: 28px; }}
-        .card {{
-            background: {CARD_BG}; border: 1px solid {BORDER}; border-radius: 10px;
-            padding: 16px 26px; text-align: center; min-width: 110px;
-        }}
-        .card-value {{ font-size: 1.7em; color: #fff; font-weight: 600; }}
-        .card-label {{ font-size: 0.8em; color: #77778a; text-transform: uppercase; letter-spacing: 0.05em; }}
-        .chart-container {{
-            margin: 18px 0; padding: 12px; border-radius: 10px;
-            border: 1px solid {BORDER}; background-color: {CARD_BG};
-        }}
-        table {{ width: 100%; border-collapse: collapse; background: {CARD_BG};
-                 border: 1px solid {BORDER}; border-radius: 10px; overflow: hidden; }}
-        th, td {{ padding: 9px 14px; text-align: left; border-bottom: 1px solid {BORDER}; }}
-        th {{ color: #77778a; text-transform: uppercase; font-size: 0.75em; letter-spacing: 0.05em; }}
-        td.item {{ font-size: 1.35em; }}
-    </style>
+    <style>{CSS}</style>
 </head>
 <body>
     <h1>WaniKani Statistics</h1>
-    <div class="dashboard-info">snapshot {snapshot_date} · updates daily at 02:00</div>
-    <div class="cards">{summary_cards_html(df, details)}</div>
-    {hourly_charts}
-    {charts}
+    <div class="sub">{freshness} · nightly archive {df.iloc[-1]["date"]} · times in {LOCAL_TZ.key} · read-only</div>
+
+    <h2>Now</h2>
+    <div class="section-sub">Where you stand today. Deltas compare with 7 days ago; green is progress.</div>
+    <div class="cards">{cards}</div>
+    <div class="grid2">
+        {r.chart(fig_backlog(fulls, backlog, now))}
+        {r.chart(fig_forecast(details))}
+    </div>
+
+    <h2>Habit</h2>
+    <div class="section-sub">Consistency is what moves the backlog. From the hourly snapshots since 2026-09-10.</div>
+    {r.chart(fig_calendar(days, now.date()))}
+    {r.chart(fig_profile(deltas, now.date()))}
+    {r.chart(fig_sessions(deltas, now))}
+    {r.chart(fig_srs_flow(deltas, now))}
+
+    <h2>Progress</h2>
+    <div class="section-sub">Level pace against the December targets, SRS health, and what keeps failing.</div>
+    {r.chart(fig_level_path(level_rows, proj, now))}
+    <div class="grid2">
+        {r.chart(fig_level_days(level_rows, proj))}
+        {r.chart(fig_stage_accuracy(deltas, now))}
+    </div>
+    {r.chart(fig_srs_composition(df, now))}
+    <div class="grid2">
+        {r.chart(fig_leech_trend(df, now))}
+        {r.chart(fig_accuracy_hist(details))}
+    </div>
     {leech_table_html(details)}
+
+    <script>window.addEventListener("load", () => window.dispatchEvent(new Event("resize")));</script>
+    <footer>{len(df)} daily archives · {len(deltas)} active hours recorded · <a href="/download" style="color:{MUTED}">standalone copy</a></footer>
 </body>
 </html>"""
 
 
+def build_widget():
+    """Compact read-only view for a Glance extension widget: cards only."""
+    now = now_local()
+    df = get_dataframe()
+    details = load_details(get_snapshots()[-1])
+    metas, fulls, deltas = get_hourly_data()
+    days = day_activity(metas, deltas)
+    cards, _, _ = build_cards(df, details, fulls, deltas, days, now)
+    return f"""<style>{CSS} body {{ padding: 0; }} .cards {{ grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); margin: 0; }}</style>
+<div class="cards">{cards}</div>"""
+
+
 @app.route("/")
 def index():
-    response = Response(build_dashboard(), content_type="text/html")
+    return Response(build_dashboard(), content_type="text/html")
+
+
+@app.route("/widget")
+def widget():
+    response = Response(build_widget(), content_type="text/html")
     response.headers["Widget-Content-Type"] = "html"
-    response.headers["Widget-Title"] = "WaniKani Statistics"
+    response.headers["Widget-Title"] = "WaniKani"
     return response
 
 
 @app.route("/download")
 def download_dashboard():
     response = Response(build_dashboard(inline_plotly=True), content_type="text/html")
-    response.headers["Content-Disposition"] = (
-        "attachment; filename=wanikani_dashboard.html"
-    )
+    response.headers["Content-Disposition"] = "attachment; filename=wanikani_dashboard.html"
     return response
 
 
