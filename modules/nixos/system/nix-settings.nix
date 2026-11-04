@@ -53,8 +53,7 @@
 
       registry = lib.mkIf (inputs ? self && inputs ? nixpkgs) {
         self.flake = inputs.self;
-        # unstable no longer evaluates for x86_64-darwin, so darwin hosts get the pinned branch
-        nixpkgs.flake = if pkgs.stdenv.hostPlatform.isDarwin then inputs.nixpkgs-darwin else inputs.nixpkgs;
+        nixpkgs.flake = inputs.nixpkgs;
         osbm-nvim = lib.mkIf (inputs ? osbm-nvim) {
           flake = inputs.osbm-nvim;
         };

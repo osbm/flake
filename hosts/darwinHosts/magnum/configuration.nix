@@ -9,8 +9,8 @@
     ../../../modules/nixos/programs/command-line.nix
     ../../../modules/nixos/programs/neovim.nix
     ../../../modules/nixos/system/nix-settings.nix
-    inputs.nix-index-database-darwin.darwinModules.nix-index
-    inputs.home-manager-darwin.darwinModules.home-manager
+    inputs.nix-index-database.darwinModules.nix-index
+    inputs.home-manager.darwinModules.home-manager
   ];
 
   osbmModules = {
@@ -58,5 +58,5 @@
     # ollama
   ];
   system.stateVersion = 6;
-  nixpkgs.hostPlatform = "x86_64-darwin";
+  nixpkgs.hostPlatform = "aarch64-darwin";
 }

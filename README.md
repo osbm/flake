@@ -15,7 +15,7 @@ I may have some tendency on naming my hosts after mythological figures...
 | wallfacer | Dell Enterprise server | x86_64-linux |
 | atreus | Work Phone (nix-on-droid) | aarch64-linux |
 | luoji | Personal Phone (nix-on-droid) | aarch64-linux |
-| prometheus | Work Laptop | x86_64-darwin |
+| magnum | Work Laptop (M5 Pro MacBook) | aarch64-darwin |
 | artemis | Oneplus 6 (mobile nixos) | aarch64-linux |
 | harmonica | Raspberry Pi Zero 2 | aarch64-linux |
 | ares | Valve Steam Deck | x86_64-linux |
