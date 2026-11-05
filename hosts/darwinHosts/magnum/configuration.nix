@@ -38,6 +38,9 @@
 
   programs.nix-index-database.comma.enable = true;
   programs.fish.enable = true;
+  programs.fish.shellInit = ''
+    fish_add_path --append /opt/homebrew/bin /opt/homebrew/sbin
+  '';
 
   # osbmModules.setUsers = false;
   users.users.osbm = {
