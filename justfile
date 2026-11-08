@@ -254,3 +254,23 @@ deploy-all:
   just deploy apollo
   just deploy ares
   just deploy wallfacer
+
+# Does the pending config change the NVIDIA driver version vs. the loaded kernel
+# module? If yes, `switch`/`test` will leave userspace and kernel mismatched
+# (nvidia-container-toolkit-cdi-generator fails, CDI GPU containers break) —
+# use `nixos-rebuild boot` and reboot instead. Exit 1 when it changes.
+[linux]
+is-nvidia-changing:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  loaded=$(grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' /proc/driver/nvidia/version 2>/dev/null | head -1 || true)
+  loaded=${loaded:-none}
+  new=$(nix eval --raw ".#nixosConfigurations.$(hostname).config.hardware.nvidia.package.version")
+  echo "loaded kernel module: $loaded"
+  echo "pending config:       $new"
+  if [ "$loaded" = "$new" ]; then
+    echo "OK: nvidia driver unchanged, safe to switch"
+  else
+    echo "CHANGING: use 'nixos-rebuild boot' (or nh os boot .) and reboot instead of switch"
+    exit 1
+  fi
