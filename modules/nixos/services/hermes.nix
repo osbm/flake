@@ -104,7 +104,11 @@ in
       # only auth.json stays 0600, hermes-private. The janitor below keeps it
       # that way at runtime.
       systemd.tmpfiles.rules = [
-        "d /var/lib/hermes/.hermes 2770 hermes hermes -"
+        # 2750, not 2770: hermes >= 2026-10-30 refuses to serve the gateway
+        # control socket when the den itself is group-writable
+        # (gateway_runtime_discovery: unsafe_control_permissions). Group
+        # read+traverse is enough — the shared files live under shared/.
+        "d /var/lib/hermes/.hermes 2750 hermes hermes -"
         "d /var/lib/hermes/shared 2770 hermes hermes -"
         "d /var/lib/hermes/shared/memories 2770 hermes hermes -"
         "d /var/lib/hermes/shared/skills 2770 hermes hermes -"
@@ -134,7 +138,7 @@ in
       systemd.services.hermes-commons-janitor = {
         script = ''
           find /var/lib/hermes/.hermes -maxdepth 0 \
-            ! -perm 2770 -exec chmod 2770 {} + 2>/dev/null || true
+            ! -perm 2750 -exec chmod 2750 {} + 2>/dev/null || true
           find /var/lib/hermes/shared /var/lib/hermes/workspace /var/lib/hermes/.hermes \
             -type f -not -name 'auth.json*' ! -perm -0660 -exec chmod ug+rw {} + 2>/dev/null || true
           find /var/lib/hermes/shared /var/lib/hermes/workspace /var/lib/hermes/.hermes \
