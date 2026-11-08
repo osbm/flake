@@ -205,17 +205,20 @@ def load_subjects(cache_key):
             if subjects is not None:
                 break
     if subjects is None:
-        return {}
+        return {}, 0
 
     id_map = {}
+    active = 0
     for subj in subjects["data"]:
+        if not subj["data"].get("hidden_at"):
+            active += 1
         id_map[subj["id"]] = {
             "characters": subj["data"].get("characters") or subj["data"].get("slug"),
             "level": subj["data"]["level"],
             "type": subj["object"],
             "url": subj["data"].get("document_url"),
         }
-    return id_map
+    return id_map, active
 
 
 def subjects_cache_key():
@@ -234,6 +237,11 @@ def get_dataframe():
     df["master"] = df["srs_stage_7"]
     df["enlightened"] = df["srs_stage_8"]
     df["burned"] = df["srs_stage_9"]
+    _, total_subjects = load_subjects(subjects_cache_key())
+    total_subjects = total_subjects or 9300  # last resort if no subjects source exists
+    df["progression"] = (
+        sum(df[f"srs_stage_{i}"] * (i + 1) for i in range(10)) / (total_subjects * 10) * 100
+    )
     return df
 
 
@@ -626,6 +634,50 @@ def fig_calendar(days, today, weeks=12):
     return fig
 
 
+def fig_hourly_grid(metas, deltas, today, days=28):
+    """Day x hour counter: items per hour slot, last `days` days."""
+    first = today - timedelta(days=days - 1)
+    by_slot = {}
+    for m in metas:  # every snapshot (stub or full) proves the hour was idle
+        if m["slot"].date() >= first:
+            by_slot[(m["slot"].date(), m["slot"].hour)] = 0
+    for d in deltas:  # ...unless a delta says otherwise
+        key = (d["slot"].date(), d["slot"].hour)
+        if key in by_slot:
+            by_slot[key] = d["items"] + d["lessons"]
+    if not by_slot:
+        return None
+    dates = [first + timedelta(days=i) for i in range(days)]
+    z = [[by_slot.get((day, h)) for h in range(24)] for day in dates]
+    totals = [sum(v for v in row if v) for row in z]
+    fig = go.Figure(
+        go.Heatmap(
+            x=list(range(24)),
+            y=[f"{day:%a %b %d}" for day in dates],
+            z=z,
+            colorscale=ACTIVITY_SCALE,
+            xgap=2,
+            ygap=2,
+            hovertemplate="%{y} %{x}:00 — %{z} items<extra></extra>",
+            showscale=False,  # the row totals at right replace the colour bar
+            zmin=0,
+        )
+    )
+    for label, total in zip([f"{day:%a %b %d}" for day in dates], totals):
+        fig.add_annotation(
+            xref="paper", x=1.005, y=label, text=str(total) if total else "",
+            showarrow=False, xanchor="left", font=dict(size=10, color=MUTED),
+        )
+    fig.update_layout(
+        title=f"Hourly counter — items per hour, last {days} days (row total at right)",
+        xaxis_title=f"Hour of day ({LOCAL_TZ.key})",
+        **{**PLOT_LAYOUT, "height": 110 + 19 * days, "margin": dict(l=90, r=70, t=60, b=50)},
+    )
+    fig.update_xaxes(dtick=1)
+    fig.update_yaxes(autorange="reversed", type="category")
+    return fig
+
+
 def fig_profile(deltas, today, weeks=8):
     """Weekday x hour: average items per week in each slot."""
     start = today - timedelta(weeks=weeks)
@@ -830,6 +882,25 @@ def fig_srs_composition(df, now):
     return fig
 
 
+def fig_progression(df, now):
+    latest = df.iloc[-1]["progression"]
+    fig = go.Figure(
+        go.Scatter(
+            x=df["date"], y=df["progression"], mode="lines", name="Progression",
+            line=dict(width=2.5, color="#faaa1e"), fill="tozeroy", fillcolor="rgba(250, 170, 30, 0.15)",
+            hovertemplate="%{y:.2f}%<extra></extra>",
+        )
+    )
+    fig.update_layout(
+        title=f"Overall progression — {latest:.1f}% · 100% when every item is burned",
+        yaxis_title="Progression (%)",
+        showlegend=False,
+        **{**PLOT_LAYOUT, "height": SMALL + 40},
+    )
+    date_axis(fig, end=now, default_days=365)
+    return fig
+
+
 def fig_stage_accuracy(deltas, now, days=30):
     """First-try accuracy by the stage an item was reviewed at: last 30 days
     vs the 30 before. Low Guru = lessons too fast; low Master = structural."""
@@ -921,7 +992,7 @@ def fig_accuracy_hist(details):
 
 
 def leech_table_html(details):
-    id_map = load_subjects(subjects_cache_key())
+    id_map, _ = load_subjects(subjects_cache_key())
     if not id_map:
         return "<p>subjects.json not available yet — leech table needs it.</p>"
 
@@ -1036,6 +1107,13 @@ def build_cards(df, details, fulls, deltas, days, now):
         card_html(int(latest["guru"]), "guru", delta=daily_delta("guru"), good="up"),
         card_html(int(latest["burned"]), "burned", delta=daily_delta("burned"), good="up"),
         card_html(
+            f"{latest['progression']:.1f}%",
+            "progression",
+            delta=(latest["progression"] - week_ago["progression"]) if week_ago is not None else None,
+            good="up",
+            fmt="{:+.2f} pts",
+        ),
+        card_html(
             f"{acc7:.0f}%" if acc7 is not None else "—",
             f"first-try accuracy, 7d ({items7} reviews)",
             delta=(acc7 - acc14) if acc7 is not None and acc14 is not None else None,
@@ -1078,7 +1156,7 @@ CSS = f"""
     h3 {{ color: #ddd; font-weight: 400; margin: 28px 0 10px; }}
     .sub {{ text-align: center; color: {MUTED}; margin-bottom: 28px; }}
     .section-sub {{ color: {MUTED}; margin-bottom: 16px; font-size: 0.95em; }}
-    .cards {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 18px; }}
+    .cards {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 12px; margin-bottom: 18px; }}
     .card {{ background: {CARD_BG}; border: 1px solid {BORDER}; border-radius: 10px; padding: 12px 14px; }}
     .card-value {{ font-size: 1.45em; white-space: nowrap; color: #fff; font-weight: 600; line-height: 1.2; }}
     .card-label {{ font-size: 0.75em; color: {MUTED}; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }}
@@ -1131,6 +1209,7 @@ def build_dashboard(inline_plotly=False):
     <h2>Habit</h2>
     <div class="section-sub">Consistency is what moves the backlog. From the hourly snapshots since 2026-09-10.</div>
     {r.chart(fig_calendar(days, now.date()))}
+    {r.chart(fig_hourly_grid(metas, deltas, now.date()))}
     {r.chart(fig_profile(deltas, now.date()))}
     {r.chart(fig_sessions(deltas, now))}
     {r.chart(fig_srs_flow(deltas, now))}
@@ -1144,9 +1223,10 @@ def build_dashboard(inline_plotly=False):
     </div>
     {r.chart(fig_srs_composition(df, now))}
     <div class="grid2">
+        {r.chart(fig_progression(df, now))}
         {r.chart(fig_leech_trend(df, now))}
-        {r.chart(fig_accuracy_hist(details))}
     </div>
+    {r.chart(fig_accuracy_hist(details))}
     {leech_table_html(details)}
 
     <script>window.addEventListener("load", () => window.dispatchEvent(new Event("resize")));</script>
