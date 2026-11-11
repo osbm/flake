@@ -813,11 +813,11 @@ def fig_level_path(rows, proj, now):
         )
         fig.add_annotation(
             xref="paper", x=0.01, y=TARGET_LEVELS[1], text=f"target {TARGET_LEVELS[0]}–{TARGET_LEVELS[1]} (set July)",
-            showarrow=False, yanchor="bottom", xanchor="left", font=dict(size=11, color="#3ddc84"),
+            showarrow=False, yanchor="bottom", xanchor="left", font=dict(size=11, color=GOOD),
         )
         title = (
             f"Level {proj['level']} → ~{proj['jlpt_pace']} by the JLPT at your pace "
-            f"({proj['jlpt_floor']} at the floor) · ~{proj['year_pace']} by year end ({proj['year_floor']} at the floor)"
+            f"({proj['jlpt_floor']} at the floor), and ~{proj['year_pace']} by year end ({proj['year_floor']} at the floor)"
         )
     vline(fig, JLPT_DATE, "JLPT")
     vline(fig, YEAR_END, "2026")
@@ -892,7 +892,7 @@ def fig_progression(df, now):
         )
     )
     fig.update_layout(
-        title=f"Overall progression — {latest:.1f}% · 100% when every item is burned",
+        title=f"Overall progression — {latest:.1f}% (100% means every item is burned)",
         yaxis_title="Progression (%)",
         showlegend=False,
         **{**PLOT_LAYOUT, "height": SMALL + 40},
@@ -1020,25 +1020,25 @@ def leech_table_html(details):
     rows = "".join(
         f"""<tr>
             <td class="item"><a href="{l["url"]}" target="_blank" rel="noopener"
-                style="color: {TYPE_COLORS.get(l["type"], "#fff")}; text-decoration: none;"
+                style="color: {TYPE_COLORS.get(l["type"], "#fff")}"
                 >{l["characters"]}</a></td>
             <td>{l["type"].replace("_", " ")}</td>
-            <td>{l["level"]}</td>
+            <td class="num">{l["level"]}</td>
             <td>{l["stage"]}</td>
-            <td>{l["accuracy"]}%</td>
-            <td>{l["wrong"]}</td>
+            <td class="num">{l["accuracy"]}%</td>
+            <td class="num">{l["wrong"]}</td>
         </tr>"""
         for l in leeches[:20]
     )
     return f"""
     <h3>Your 20 most-missed items</h3>
-    <table>
+    <div class="table-wrap"><table>
         <thead><tr>
-            <th>Item</th><th>Type</th><th>Level</th><th>SRS stage</th>
-            <th>Accuracy</th><th>Times wrong</th>
+            <th>Item</th><th>Type</th><th class="num">Level</th><th>SRS stage</th>
+            <th class="num">Accuracy</th><th class="num">Times wrong</th>
         </tr></thead>
         <tbody>{rows}</tbody>
-    </table>
+    </table></div>
     """
 
 
@@ -1054,9 +1054,11 @@ def card_html(value, label, delta=None, good=None, note=None, band=None, fmt="{:
         sub = f'<div class="card-delta" style="color:{color}">{fmt.format(delta)} vs 7d ago</div>'
     elif note:
         sub = f'<div class="card-delta">{note}</div>'
-    style = f' style="border-left: 3px solid {band}"' if band else ""
+    # band = (color, text): the state is spelled out, colour only reinforces it
+    if band:
+        sub += f'<div class="card-delta" style="color:{band[0]}">{band[1]}</div>'
     return (
-        f'<div class="card"{style}><div class="card-value">{value}</div>'
+        f'<div class="card"><div class="card-value">{value}</div>'
         f'<div class="card-label">{label}</div>{sub}</div>'
     )
 
@@ -1083,7 +1085,12 @@ def build_cards(df, details, fulls, deltas, days, now):
     streak, last30 = streaks(days, today)
 
     apprentice = int(latest["apprentice"])
-    band = GOOD if apprentice < APPRENTICE_BANDS[0] else WARN if apprentice <= APPRENTICE_BANDS[1] else BAD
+    if apprentice < APPRENTICE_BANDS[0]:
+        band = (GOOD, f"healthy, under {APPRENTICE_BANDS[0]}")
+    elif apprentice <= APPRENTICE_BANDS[1]:
+        band = (WARN, f"heavy, {APPRENTICE_BANDS[0]}–{APPRENTICE_BANDS[1]}")
+    else:
+        band = (BAD, f"overloaded, over {APPRENTICE_BANDS[1]}")
 
     cards = [
         card_html(
@@ -1145,31 +1152,59 @@ class Renderer:
 
 
 CSS = f"""
+    :root {{
+        --bg: {BG}; --surface: {CARD_BG}; --line: {BORDER};
+        --ink: #ffffff; --text: #b9b9c7; --muted: {MUTED};
+        --good: {GOOD}; --bad: {BAD}; --warn: {WARN};
+        --focus: {TYPE_COLORS["kanji"]};
+        --radius: 8px; --gutter: 24px;
+        color-scheme: dark;
+    }}
+    *, *::before, *::after {{ box-sizing: border-box; }}
     body {{
-        background-color: {BG}; color: #b9b9c7;
+        background: var(--bg); color: var(--text);
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
             'Hiragino Sans', 'Noto Sans JP', sans-serif;
-        margin: 0 auto; padding: 24px; max-width: 1300px; line-height: 1.6;
+        font-variant-numeric: tabular-nums;
+        margin: 0 auto; padding: var(--gutter); max-width: 1300px; line-height: 1.5;
     }}
-    h1 {{ text-align: center; color: #fff; font-weight: 300; margin-bottom: 4px; }}
-    h2 {{ color: #fff; font-weight: 400; margin: 44px 0 2px; }}
-    h3 {{ color: #ddd; font-weight: 400; margin: 28px 0 10px; }}
-    .sub {{ text-align: center; color: {MUTED}; margin-bottom: 28px; }}
-    .section-sub {{ color: {MUTED}; margin-bottom: 16px; font-size: 0.95em; }}
-    .cards {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 12px; margin-bottom: 18px; }}
-    .card {{ background: {CARD_BG}; border: 1px solid {BORDER}; border-radius: 10px; padding: 12px 14px; }}
-    .card-value {{ font-size: 1.45em; white-space: nowrap; color: #fff; font-weight: 600; line-height: 1.2; }}
-    .card-label {{ font-size: 0.75em; color: {MUTED}; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }}
-    .card-delta {{ font-size: 0.8em; color: {MUTED}; margin-top: 4px; }}
-    .grid2 {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(440px, 1fr)); gap: 16px; }}
-    .chart {{ padding: 8px; border-radius: 10px; border: 1px solid {BORDER}; background-color: {CARD_BG}; margin: 16px 0; min-width: 0; }}
+    a {{ color: inherit; }}
+    :focus-visible {{ outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 2px; }}
+    header {{ margin-bottom: 8px; }}
+    h1 {{ color: var(--ink); font-size: 1.6rem; font-weight: 600; margin: 0 0 2px; }}
+    h2 {{ color: var(--ink); font-size: 1.3rem; font-weight: 600; margin: 48px 0 2px; }}
+    h3 {{ color: var(--ink); font-size: 1.05rem; font-weight: 600; margin: 32px 0 10px; }}
+    .sub {{ color: var(--muted); font-size: 0.9rem; margin: 0; }}
+    .section-sub {{ color: var(--muted); margin: 0 0 16px; font-size: 0.95rem; }}
+    .cards {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(min(132px, 100%), 1fr)); gap: 12px; margin-bottom: 16px; }}
+    .card {{ background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; min-width: 0; }}
+    .card-value {{ font-size: 1.45rem; white-space: nowrap; color: var(--ink); font-weight: 600; line-height: 1.2; }}
+    .card-label {{ font-size: 0.85rem; color: var(--text); margin-top: 4px; }}
+    .card-delta {{ font-size: 0.8rem; color: var(--muted); margin-top: 2px; }}
+    .grid2 {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(min(440px, 100%), 1fr)); gap: 16px; }}
+    .chart {{ padding: 8px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); margin: 16px 0; min-width: 0; }}
     .grid2 .chart {{ margin: 0; }}
-    table {{ width: 100%; border-collapse: collapse; background: {CARD_BG};
-             border: 1px solid {BORDER}; border-radius: 10px; overflow: hidden; }}
-    th, td {{ padding: 9px 14px; text-align: left; border-bottom: 1px solid {BORDER}; }}
-    th {{ color: {MUTED}; text-transform: uppercase; font-size: 0.75em; letter-spacing: 0.05em; }}
-    td.item {{ font-size: 1.35em; }}
-    footer {{ text-align: center; color: {MUTED}; font-size: 0.8em; margin-top: 40px; }}
+    .table-wrap {{ overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }}
+    table {{ width: 100%; border-collapse: collapse; }}
+    th, td {{ padding: 9px 14px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }}
+    tbody tr:last-child td {{ border-bottom: 0; }}
+    th {{ color: var(--muted); font-size: 0.85rem; font-weight: 500; }}
+    td.num, th.num {{ text-align: right; }}
+    td.item {{ font-size: 1.35rem; }}
+    td.item a {{ text-decoration: none; }}
+    td.item a:hover {{ text-decoration: underline; }}
+    footer {{ color: var(--muted); font-size: 0.85rem; margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); }}
+    footer p {{ margin: 0 0 4px; }}
+    @media (max-width: 600px) {{
+        :root {{ --gutter: 16px; }}
+        h1 {{ font-size: 1.35rem; }}
+        h2 {{ margin-top: 36px; }}
+        .card-value {{ font-size: 1.25rem; }}
+        .chart {{ padding: 4px; }}
+    }}
+    @media (prefers-reduced-motion: reduce) {{
+        *, *::before, *::after {{ transition: none !important; animation: none !important; }}
+    }}
 """
 
 
@@ -1187,7 +1222,7 @@ def build_dashboard(inline_plotly=False):
     freshness = f"hourly snapshot {latest_snapshot:%b %d %H:%M}" if latest_snapshot else f"archive {df.iloc[-1]['date']}"
 
     return f"""<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>WaniKani Stats</title>
     <meta charset="utf-8">
@@ -1195,8 +1230,10 @@ def build_dashboard(inline_plotly=False):
     <style>{CSS}</style>
 </head>
 <body>
-    <h1>WaniKani Statistics</h1>
-    <div class="sub">{freshness} · nightly archive {df.iloc[-1]["date"]} · times in {LOCAL_TZ.key} · read-only</div>
+    <header>
+        <h1>WaniKani Statistics</h1>
+        <p class="sub">Updated from the {freshness} and the nightly archive of {df.iloc[-1]["date"]}. Times are {LOCAL_TZ.key}.</p>
+    </header>
 
     <h2>Now</h2>
     <div class="section-sub">Where you stand today. Deltas compare with 7 days ago; green is progress.</div>
@@ -1230,7 +1267,10 @@ def build_dashboard(inline_plotly=False):
     {leech_table_html(details)}
 
     <script>window.addEventListener("load", () => window.dispatchEvent(new Event("resize")));</script>
-    <footer>{len(df)} daily archives · {len(deltas)} active hours recorded · <a href="/download" style="color:{MUTED}">standalone copy</a></footer>
+    <footer>
+        <p>Built from {len(df)} daily archives and {len(deltas)} recorded active hours. Read-only.</p>
+        <p><a href="/download">Download a standalone copy</a></p>
+    </footer>
 </body>
 </html>"""
 
