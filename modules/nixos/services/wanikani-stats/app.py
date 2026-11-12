@@ -888,11 +888,11 @@ def fig_progression(df, now):
         go.Scatter(
             x=df["date"], y=df["progression"], mode="lines", name="Progression",
             line=dict(width=2.5, color="#faaa1e"), fill="tozeroy", fillcolor="rgba(250, 170, 30, 0.15)",
-            hovertemplate="%{y:.2f}%<extra></extra>",
+            hovertemplate="%{y:.4f}%<extra></extra>",
         )
     )
     fig.update_layout(
-        title=f"Overall progression — {latest:.1f}% (100% means every item is burned)",
+        title=f"Overall progression — {latest:.4f}% (100% means every item is burned)",
         yaxis_title="Progression (%)",
         showlegend=False,
         **{**PLOT_LAYOUT, "height": SMALL + 40},
@@ -1114,11 +1114,11 @@ def build_cards(df, details, fulls, deltas, days, now):
         card_html(int(latest["guru"]), "guru", delta=daily_delta("guru"), good="up"),
         card_html(int(latest["burned"]), "burned", delta=daily_delta("burned"), good="up"),
         card_html(
-            f"{latest['progression']:.1f}%",
+            f"{latest['progression']:.4f}%",
             "progression",
             delta=(latest["progression"] - week_ago["progression"]) if week_ago is not None else None,
             good="up",
-            fmt="{:+.2f} pts",
+            fmt="{:+.4f} pts",
         ),
         card_html(
             f"{acc7:.0f}%" if acc7 is not None else "—",
