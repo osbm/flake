@@ -29,6 +29,7 @@
     ./syncthing.nix
     ./anki-sync-server.nix
     ./tailscale.nix
+    ./ttyd.nix
     ./vaultwarden.nix
 
     # custom services

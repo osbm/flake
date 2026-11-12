@@ -28,6 +28,7 @@
     services = {
       ollama.enable = true;
       syncthing.enable = true;
+      ttyd.enable = true;
 
       # Backup client - pulls vaultwarden backup from apollo
       backup-client = {

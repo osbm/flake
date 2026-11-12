@@ -115,6 +115,40 @@
               proxy_set_header Connection "upgrade";
             }
           }
+
+          server {
+            listen 443 ssl;
+            server_name ~^(?<device>.+)\.(?<svc>term|vnc)\.osbm\.dev$;
+
+            ssl_certificate /var/lib/acme/term.osbm.dev/fullchain.pem;
+            ssl_certificate_key /var/lib/acme/term.osbm.dev/key.pem;
+
+            allow 100.64.0.0/10;
+            allow fd7a:115c:a1e0::/48;
+            deny all;
+
+            resolver 100.100.100.100;
+
+            set $port 7681;
+            if ($svc = vnc) {
+              set $port 6080;
+            }
+
+            location / {
+              set $backend http://$device.curl-boga.ts.net:$port;
+              proxy_pass $backend;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection "upgrade";
+              proxy_read_timeout 1d;
+              proxy_send_timeout 1d;
+              proxy_buffering off;
+            }
+          }
         '';
       };
 
@@ -129,6 +163,16 @@
         defaults.dnsResolver = "1.1.1.1:53";
         certs."sync.osbm.dev" = {
           domain = "*.sync.osbm.dev";
+          dnsProvider = "cloudflare";
+          dnsPropagationCheck = true;
+          credentialFiles = {
+            "CF_DNS_API_TOKEN_FILE" = config.age.secrets.cloudflare-apollo-zone-dns-edit.path;
+          };
+          group = "nginx";
+        };
+        certs."term.osbm.dev" = {
+          domain = "*.term.osbm.dev";
+          extraDomainNames = [ "*.vnc.osbm.dev" ];
           dnsProvider = "cloudflare";
           dnsPropagationCheck = true;
           credentialFiles = {

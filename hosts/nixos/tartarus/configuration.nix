@@ -14,6 +14,7 @@
     services = {
       # Backup client - pulls vaultwarden backup from apollo
       syncthing.enable = true;
+      ttyd.enable = true;
       backup-client = {
         enable = true;
         backups = {

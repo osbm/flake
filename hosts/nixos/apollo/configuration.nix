@@ -7,6 +7,7 @@
   osbmModules = {
     services = {
       glance.enable = true;
+      ttyd.enable = true;
       mailserver.enable = true;
       nginx.enable = true;
       forgejo.enable = true;

@@ -16,6 +16,7 @@
     familyUser.enable = true;
     services = {
       syncthing.enable = true;
+      ttyd.enable = true;
 
       # Monitoring stack
       ntfy = {

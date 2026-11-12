@@ -131,6 +131,7 @@
       wger.enable = lib.mkEnableOption "wger workout/nutrition tracker";
       hledger.enable = lib.mkEnableOption "hledger-web + hledger CLI";
       syncthing.enable = lib.mkEnableOption "syncthing";
+      ttyd.enable = lib.mkEnableOption "browser terminal (ttyd on tailscale0, fronted by apollo as <host>.term.osbm.dev)";
       vault-backup = {
         enable = lib.mkEnableOption "nightly git commit+push of the synced obsidian vault (sole-committer host only)";
         path = lib.mkOption {
