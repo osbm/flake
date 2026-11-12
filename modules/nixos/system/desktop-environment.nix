@@ -22,6 +22,9 @@ in
           pkgs.epson-escpr
           pkgs.epson-escpr2
         ];
+        # plasma enables this by default; its udev hook re-runs on every
+        # switch, finds the queue already configured and exits 1
+        system-config-printer.enable = false;
       };
 
       # Scanner support (Epson L3250)
