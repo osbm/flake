@@ -157,11 +157,23 @@
         443
       ];
 
+      systemd.services.nginx = {
+        wants = [
+          "acme-sync.osbm.dev.service"
+          "acme-term.osbm.dev.service"
+        ];
+        after = [
+          "acme-sync.osbm.dev.service"
+          "acme-term.osbm.dev.service"
+        ];
+      };
+
       security.acme = {
         acceptTerms = true;
         defaults.email = "osbm@osbm.dev";
         defaults.dnsResolver = "1.1.1.1:53";
         certs."sync.osbm.dev" = {
+          reloadServices = [ "nginx.service" ];
           domain = "*.sync.osbm.dev";
           dnsProvider = "cloudflare";
           dnsPropagationCheck = true;
@@ -171,6 +183,7 @@
           group = "nginx";
         };
         certs."term.osbm.dev" = {
+          reloadServices = [ "nginx.service" ];
           domain = "*.term.osbm.dev";
           extraDomainNames = [ "*.vnc.osbm.dev" ];
           dnsProvider = "cloudflare";
