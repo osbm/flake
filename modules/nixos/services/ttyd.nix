@@ -18,8 +18,13 @@ in
       ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
+      path = [
+        "/run/current-system/sw"
+        "/etc/profiles/per-user/${config.osbmModules.defaultUser}"
+      ];
       serviceConfig = {
         User = config.osbmModules.defaultUser;
+        WorkingDirectory = "~";
         ExecStart = lib.concatStringsSep " " [
           "${pkgs.ttyd}/bin/ttyd"
           "--port ${toString port}"
