@@ -96,7 +96,19 @@ collect-garbage:
   sudo nix-collect-garbage --delete-older-than 3d
 
 list-generations:
-  nixos-rebuild list-generations
+  #!/usr/bin/env bash
+  set -euo pipefail
+  running=$(nixos-version --configuration-revision 2>/dev/null || echo unknown)
+  fmt() { git show -s --date=format:'%Y-%m-%d %H:%M' --format='%cd  %s' "$1" 2>/dev/null || echo "?  (not in local git)"; }
+  printf 'running: %s  %s\n' "${running:0:7}" "$(fmt "$running")"
+  printf 'HEAD:    %s  %s\n\n' "$(git rev-parse --short=7 HEAD)" "$(fmt HEAD)"
+  nixos-rebuild list-generations --json \
+    | jq -r '.[] | [ (.generation|tostring) + (if .current then "*" else "" end), .date, .nixosVersion, .kernelVersion, .configurationRevision ] | @tsv' \
+    | while IFS=$'\t' read -r gen built nixos kernel rev; do
+        printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$gen" "$built" "$nixos" "$kernel" "${rev:0:7}" "$(fmt "$rev")"
+      done \
+    | { printf 'GEN\tBUILT\tNIXOS\tKERNEL\tREV\tCOMMIT\n'; cat; } \
+    | column -t -s $'\t'
 
 build-sd-image-harmonica: check-git
   nom build -L .#nixosConfigurations.harmonica-sd.config.system.build.sdImage
