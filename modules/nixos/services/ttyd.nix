@@ -33,6 +33,8 @@ in
           "--max-clients 4"
           "--client-option fontSize=14"
           "--client-option disableLeaveAlert=true"
+          # macOS: Option+drag selects natively (bypasses tmux mouse mode) so ttyd copies on select
+          "--client-option macOptionClickForcesSelection=true"
           "${pkgs.tmux}/bin/tmux new-session -A -s web"
         ];
         Restart = "always";
