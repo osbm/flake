@@ -40,6 +40,9 @@
         openFirewall = false;
       };
 
+      # japanese study app: flake owns the frame, the agents own the contents
+      jp.enable = true;
+
       # Backup server - exposes data for pull-based backups
       backup-server = {
         enable = true;

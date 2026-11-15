@@ -216,6 +216,15 @@
       anki-sync-server.enable = lib.mkEnableOption "anki-sync-server";
       wanikani-fetch-data.enable = lib.mkEnableOption "wanikani-fetch-data";
 
+      jp = {
+        enable = lib.mkEnableOption "jp.osbm.dev study app frame (agent-maintained code in /var/lib/jp)";
+        port = lib.mkOption {
+          type = lib.types.port;
+          default = 8790;
+          description = "Loopback port the jp app listens on";
+        };
+      };
+
       wanikani-stats = {
         enable = lib.mkEnableOption "wanikani-stats";
 

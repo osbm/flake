@@ -165,6 +165,11 @@
                           url = "https://wanikani-stats.osbm.dev";
                         }
                         {
+                          icon = "si:duolingo";
+                          title = "JP";
+                          url = "https://jp.osbm.dev";
+                        }
+                        {
                           icon = "si:anthropic";
                           title = "Hermes";
                           url = "https://hermes.osbm.dev";

@@ -28,6 +28,7 @@
     ./radicale.nix
     ./syncthing.nix
     ./anki-sync-server.nix
+    ./jp.nix
     ./tailscale.nix
     ./ttyd.nix
     ./vaultwarden.nix
