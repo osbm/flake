@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   config = lib.mkMerge [
@@ -6,6 +11,10 @@
       services.paperless = {
         enable = true;
         port = 28981;
+        # nixpkgs ships torch 2.15 but paperless-ngx pins torch<2.15; drop once nixpkgs relaxes it
+        package = pkgs.paperless-ngx.overrideAttrs (old: {
+          pythonRelaxDeps = (old.pythonRelaxDeps or [ ]) ++ [ "torch" ];
+        });
         settings.PAPERLESS_URL = "https://paperless.osbm.dev";
       };
     })
