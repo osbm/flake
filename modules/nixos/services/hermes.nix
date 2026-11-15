@@ -32,17 +32,15 @@ in
         # patch doesn't apply (and isn't needed). Rebuild the pm tool set with
         # patchelf's overrideAttrs neutralised; drop once upstream guards the
         # patch by version.
-        package =
-          inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default.override
-            {
-              pmPackages = lib.filterAttrs (_: lib.isDerivation) (
-                pkgs.callPackage "${inputs.hermes-agent}/nix/pm-packages.nix" {
-                  patchelf = pkgs.patchelf // {
-                    overrideAttrs = _: pkgs.patchelf;
-                  };
-                }
-              );
-            };
+        package = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+          pmPackages = lib.filterAttrs (_: lib.isDerivation) (
+            pkgs.callPackage "${inputs.hermes-agent}/nix/pm-packages.nix" {
+              patchelf = pkgs.patchelf // {
+                overrideAttrs = _: pkgs.patchelf;
+              };
+            }
+          );
+        };
         # hermes CLI/TUI/dashboard for interactive use, shares the service HERMES_HOME
         addToSystemPackages = true;
         environmentFiles = [
@@ -53,45 +51,28 @@ in
           # CALDAV_* for the calendar skill (radicale user "hermes":
           # read on osbm's collections, write on osbm/hermes-agenda)
           config.age.secrets.radicale-hermes-env.path
-          # DEEPSEEK_API_KEY for the deepseek fallback_model entry below —
-          # a separate provider so it survives full Anthropic-pool exhaustion
-          # (haiku can't, it shares the subscription bucket)
+          # DEEPSEEK_API_KEY: deepseek is the only provider hermes uses
           config.age.secrets.deepseek-env.path
         ];
-        # Claude Max subscription via `hermes login anthropic` (auth.json);
         # nix-managed keys win over TUI edits on every activation
         settings = {
-          # dict form with an explicit provider: since hermes 0.20.0 (#29285),
-          # exported API keys outrank the OAuth login in provider auto-detection,
-          # so a bare model string let DEEPSEEK_API_KEY (loaded for the fallback
-          # below) hijack every new session onto deepseek. `provider` pins the
-          # primary to the Max subscription; `default` is the canonical model-id
-          # key ("model"/"name" are legacy aliases).
+          # no Anthropic models in hermes (osbm's call, 2026-11-16): the Max
+          # OAuth login had silently lapsed and every chat was already running
+          # on the deepseek fallback, while cron jobs pinned to claude just
+          # failed. deepseek-chat / deepseek-reasoner are retired; the API
+          # only accepts v4-pro / v4-flash. `default` is the canonical
+          # model-id key ("model"/"name" are legacy aliases).
           model = {
-            provider = "anthropic";
-            default = "claude-opus-4-8";
+            provider = "deepseek";
+            default = "deepseek-v4-pro";
           };
-          # fallback chain, tried in order when the subscription pool is
-          # throttled/exhausted
-          # haiku shares the subscription pool but has its own rate-limit
-          # bucket, so it keeps telegram alive when sonnet/opus are throttled
+          # same key and balance, but a separate model: keeps chat and cron
+          # alive when v4-pro is overloaded or rate-limited
           fallback_model = [
             {
-              provider = "anthropic";
-              model = "claude-haiku-4-5";
-            }
-            # separate provider (own API key + balance), so it keeps chat AND
-            # cron alive when the whole Anthropic subscription pool is
-            # exhausted — the case haiku above can't cover. deepseek-chat /
-            # deepseek-reasoner are retired; the API only accepts v4-pro/v4-flash.
-            {
               provider = "deepseek";
-              model = "deepseek-v4-pro";
+              model = "deepseek-v4-flash";
             }
-            # {
-            #   provider = "gemini";
-            #   model = "gemini-3.1-pro-preview";
-            # }
           ];
         };
       };
