@@ -27,6 +27,22 @@ in
     (lib.mkIf cfg.enable {
       services.hermes-agent = {
         enable = true;
+        # upstream's pm-packages.nix patches patchelf for a 0.19.2 bug
+        # (NixOS/patchelf#674), but our nixpkgs has patchelf 0.15.2 where the
+        # patch doesn't apply (and isn't needed). Rebuild the pm tool set with
+        # patchelf's overrideAttrs neutralised; drop once upstream guards the
+        # patch by version.
+        package =
+          inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default.override
+            {
+              pmPackages = lib.filterAttrs (_: lib.isDerivation) (
+                pkgs.callPackage "${inputs.hermes-agent}/nix/pm-packages.nix" {
+                  patchelf = pkgs.patchelf // {
+                    overrideAttrs = _: pkgs.patchelf;
+                  };
+                }
+              );
+            };
         # hermes CLI/TUI/dashboard for interactive use, shares the service HERMES_HOME
         addToSystemPackages = true;
         environmentFiles = [
