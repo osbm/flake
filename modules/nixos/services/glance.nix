@@ -263,6 +263,42 @@
                         }
                       ];
                     }
+                    {
+                      # browser terminals (ttyd): one per host with
+                      # osbmModules.services.ttyd.enable, fronted by the
+                      # *.term.osbm.dev vhost in nginx.nix. tailnet-only, but
+                      # glance probes from apollo's own tailnet address
+                      cache = "1m";
+                      title = "Terminals";
+                      type = "monitor";
+                      sites = [
+                        {
+                          title = "apollo";
+                          url = "https://apollo.term.osbm.dev";
+                          icon = "mdi:console";
+                        }
+                        {
+                          title = "ymir";
+                          url = "https://ymir.term.osbm.dev";
+                          icon = "mdi:console";
+                        }
+                        {
+                          title = "pochita";
+                          url = "https://pochita.term.osbm.dev";
+                          icon = "mdi:console";
+                        }
+                        {
+                          title = "tartarus";
+                          url = "https://tartarus.term.osbm.dev";
+                          icon = "mdi:console";
+                        }
+                        {
+                          title = "ares";
+                          url = "https://ares.term.osbm.dev";
+                          icon = "mdi:console";
+                        }
+                      ];
+                    }
                   ];
                 }
               ];
@@ -281,6 +317,10 @@
                         {
                           title = "Japanese Study";
                           links = [
+                            {
+                              title = "jp (N3 drills)";
+                              url = "https://jp.osbm.dev";
+                            }
                             {
                               title = "WaniKani";
                               url = "https://www.wanikani.com";
