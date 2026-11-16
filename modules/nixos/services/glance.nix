@@ -120,7 +120,8 @@
                           url = "https://immich.osbm.dev";
                         }
                         {
-                          icon = "sh:hledger";
+                          # no hledger logo in any icon set glance can load
+                          icon = "mdi:scale-balance";
                           title = "hledger";
                           url = "https://hledger.osbm.dev";
                         }
@@ -130,7 +131,8 @@
                           url = "https://openwebui.osbm.dev";
                         }
                         {
-                          icon = "sh:activitywatch";
+                          # no ActivityWatch logo in any icon set either
+                          icon = "mdi:monitor-eye";
                           title = "ActivityWatch";
                           url = "https://aw.osbm.dev";
                         }
