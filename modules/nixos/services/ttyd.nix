@@ -33,6 +33,8 @@ in
           "--max-clients 4"
           "--client-option fontSize=14"
           "--client-option disableLeaveAlert=true"
+          # sixel images (yazi previews etc.); tmux is built with sixel and passes them through
+          "--client-option enableSixel=true"
           # macOS: Option+drag selects natively (bypasses tmux mouse mode) so ttyd copies on select
           "--client-option macOptionClickForcesSelection=true"
           "${pkgs.tmux}/bin/tmux new-session -A -s web"
