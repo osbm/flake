@@ -32,6 +32,8 @@ in
           "--writable"
           "--max-clients 4"
           "--client-option fontSize=14"
+          # yazi/eza file icons need Nerd Font glyphs; font must be installed on the *viewing* device
+          "--client-option \"fontFamily='FiraCode Nerd Font Mono', 'Symbols Nerd Font Mono', monospace\""
           "--client-option disableLeaveAlert=true"
           # sixel images (yazi previews etc.); tmux is built with sixel and passes them through
           "--client-option enableSixel=true"
