@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 {
@@ -8,6 +9,19 @@
     (lib.mkIf config.osbmModules.services.nginx.enable {
       services.nginx = {
         enable = true;
+
+        # TEMP: NGINX2Root (CVE-2026-123007 et al.), fixed in 1.30.7 which is on
+        # nixpkgs master (f0a5d452ddf1) but not yet nixos-unstable. Remove once
+        # the pinned nixpkgs ships 1.30.7 — the assert below fails loudly then.
+        package =
+          assert lib.versionOlder pkgs.nginxStable.version "1.30.7";
+          pkgs.nginxStable.overrideAttrs (_: rec {
+            version = "1.30.7";
+            src = pkgs.fetchurl {
+              url = "https://nginx.org/download/nginx-${version}.tar.gz";
+              hash = "sha256-JWW1yDcFDpWPcPsPc8SOK8pFQq00n9NW9G+wxyYQvG4=";
+            };
+          });
 
         # Catch-all default server: return 404 for unknown subdomains
         virtualHosts."_" = {
