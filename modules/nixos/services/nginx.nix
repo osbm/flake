@@ -14,7 +14,8 @@
         # nixpkgs master (f0a5d452ddf1) but not yet nixos-unstable. Remove once
         # the pinned nixpkgs ships 1.30.7 — the assert below fails loudly then.
         package =
-          assert lib.versionOlder pkgs.nginxStable.version "1.30.7";
+          assert lib.assertMsg (pkgs.nginxStable.version == "1.30.6")
+            "nixpkgs nginxStable is now ${pkgs.nginxStable.version}: remove the TEMP NGINX2Root override in modules/nixos/services/nginx.nix";
           pkgs.nginxStable.overrideAttrs (_: rec {
             version = "1.30.7";
             src = pkgs.fetchurl {
