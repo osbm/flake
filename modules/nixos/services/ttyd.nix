@@ -35,6 +35,8 @@ in
           # Nerd Font glyphs for yazi/eza icons; served as webfonts by apollo's nginx (services/nginx.nix)
           "--client-option \"fontFamily='FiraCode Nerd Font Mono', 'Symbols Nerd Font Mono', 'Noto Sans Symbols 2', monospace\""
           "--client-option disableLeaveAlert=true"
+          # browser tab title = hostname, so apollo/ymir/... tabs are distinguishable
+          "--client-option titleFixed=${config.networking.hostName}"
           # sixel images (yazi previews etc.); tmux is built with sixel and passes them through
           "--client-option enableSixel=true"
           # macOS: Option+drag selects natively (bypasses tmux mouse mode) so ttyd copies on select
