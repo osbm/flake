@@ -22,6 +22,23 @@
         isx86_64 = prev.stdenv.hostPlatform.isx86_64;
       };
     })
+    # the enchilada kernel is monolithic (no lib/modules). nixpkgs' buildEnv
+    # now creates the pathsToLink dirs even when empty, so aggregateModules'
+    # "no modules" check passes and depmod dies on an empty kernel version.
+    # Bail out early on an empty lib/modules until fixed upstream.
+    (_final: prev: {
+      aggregateModules =
+        modules:
+        (prev.aggregateModules modules).overrideAttrs (old: {
+          postBuild = ''
+            if [ -z "$(ls -A "$out/lib/modules" 2>/dev/null)" ]; then
+              echo "No modules found."
+              exit 0
+            fi
+          ''
+          + old.postBuild;
+        });
+    })
   ];
 
   osbmModules = {
