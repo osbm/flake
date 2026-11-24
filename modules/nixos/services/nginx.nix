@@ -22,6 +22,18 @@ let
     ''@font-face{font-family:"FiraCode Nerd Font Mono";src:url(/_fonts/FiraCodeNerdFontMono-Bold.ttf) format("truetype");font-weight:700}''
     ''@font-face{font-family:"Noto Sans Symbols 2";src:url(/_fonts/NotoSansSymbols2-Regular.ttf) format("truetype")}''
     "</style>"
+    # xterm measures cells before the webfont arrives and keeps the fallback
+    # metrics until reload; once fonts load, bounce fontFamily so ttyd's
+    # window.term re-measures and refits. (double quotes only; no single quotes, backslashes or $:
+    # it sits inside an nginx sub_filter string)
+    "<script>"
+    "(()=>{const fix=()=>{const t=window.term;if(!t)return;"
+    "const f=t.options.fontFamily;t.options.fontFamily=\"monospace\";"
+    "t.options.fontFamily=f;t.fit&&t.fit()};"
+    "document.fonts.addEventListener(\"loadingdone\",fix);"
+    "document.fonts.load(\"14px FiraCode Nerd Font Mono\").then(()=>{"
+    "let n=0;const w=()=>window.term?fix():n++<50&&setTimeout(w,100);w()})})()"
+    "</script>"
   ];
 in
 {
