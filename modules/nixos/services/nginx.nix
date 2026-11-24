@@ -19,6 +19,7 @@ let
   '';
   fontCss = lib.concatStrings [
     ''<link rel="preload" href="/_fonts/FiraCodeNerdFontMono-Regular.ttf" as="font" type="font/ttf" crossorigin>''
+    ''<link rel="preload" href="/_fonts/NotoSansSymbols2-Regular.otf" as="font" type="font/otf" crossorigin>''
     "<style>"
     ''@font-face{font-family:"FiraCode Nerd Font Mono";src:url(/_fonts/FiraCodeNerdFontMono-Regular.ttf) format("truetype");font-weight:400}''
     ''@font-face{font-family:"FiraCode Nerd Font Mono";src:url(/_fonts/FiraCodeNerdFontMono-Bold.ttf) format("truetype");font-weight:700}''
@@ -33,7 +34,9 @@ let
     "const f=t.options.fontFamily;t.options.fontFamily=\"monospace\";"
     "t.options.fontFamily=f;t.fit&&t.fit()};"
     "document.fonts.addEventListener(\"loadingdone\",fix);"
-    "document.fonts.load(\"14px FiraCode Nerd Font Mono\").then(()=>{"
+    # canvas text never triggers a webfont download, so request every face
+    "Promise.all([\"FiraCode Nerd Font Mono\",\"Noto Sans Symbols 2\"]"
+    ".map(f=>document.fonts.load(\"14px \"+f))).then(()=>{"
     "let n=0;const w=()=>window.term?fix():n++<50&&setTimeout(w,100);w()})})()"
     "</script>"
   ];
