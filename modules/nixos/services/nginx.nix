@@ -13,14 +13,16 @@ let
       cp "$(find ${pkgs.nerd-fonts.fira-code} -name $f | head -n1)" $out/$f
     done
     # symbols missing from FiraCode (claude code's ⏵ ⏺ ✻ etc.)
-    cp "$(find ${pkgs.noto-fonts} -name NotoSansSymbols2-Regular.ttf | head -n1)" $out/
+    cp "$(find ${
+      pkgs.noto-fonts.override { variants = [ "NotoSansSymbols2" ]; }
+    } -name NotoSansSymbols2-Regular.otf | head -n1)" $out/
   '';
   fontCss = lib.concatStrings [
     ''<link rel="preload" href="/_fonts/FiraCodeNerdFontMono-Regular.ttf" as="font" type="font/ttf" crossorigin>''
     "<style>"
     ''@font-face{font-family:"FiraCode Nerd Font Mono";src:url(/_fonts/FiraCodeNerdFontMono-Regular.ttf) format("truetype");font-weight:400}''
     ''@font-face{font-family:"FiraCode Nerd Font Mono";src:url(/_fonts/FiraCodeNerdFontMono-Bold.ttf) format("truetype");font-weight:700}''
-    ''@font-face{font-family:"Noto Sans Symbols 2";src:url(/_fonts/NotoSansSymbols2-Regular.ttf) format("truetype")}''
+    ''@font-face{font-family:"Noto Sans Symbols 2";src:url(/_fonts/NotoSansSymbols2-Regular.otf) format("opentype")}''
     "</style>"
     # xterm measures cells before the webfont arrives and keeps the fallback
     # metrics until reload; once fonts load, bounce fontFamily so ttyd's
