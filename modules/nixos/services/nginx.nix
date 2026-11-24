@@ -5,19 +5,22 @@
   ...
 }:
 let
-  # ttyd's page asks for 'FiraCode Nerd Font Mono'; serve it so phones etc.
-  # render text + yazi/eza icons without installing anything.
+  # ttyd's page asks for these fonts (fontFamily in services/ttyd.nix); serve
+  # them so phones etc. render text + yazi/eza icons without installing anything.
   termFonts = pkgs.runCommand "term-webfonts" { } ''
     mkdir $out
     for f in FiraCodeNerdFontMono-Regular.ttf FiraCodeNerdFontMono-Bold.ttf; do
       cp "$(find ${pkgs.nerd-fonts.fira-code} -name $f | head -n1)" $out/$f
     done
+    # symbols missing from FiraCode (claude code's ⏵ ⏺ ✻ etc.)
+    cp "$(find ${pkgs.noto-fonts} -name NotoSansSymbols2-Regular.ttf | head -n1)" $out/
   '';
   fontCss = lib.concatStrings [
     ''<link rel="preload" href="/_fonts/FiraCodeNerdFontMono-Regular.ttf" as="font" type="font/ttf" crossorigin>''
     "<style>"
     ''@font-face{font-family:"FiraCode Nerd Font Mono";src:url(/_fonts/FiraCodeNerdFontMono-Regular.ttf) format("truetype");font-weight:400}''
     ''@font-face{font-family:"FiraCode Nerd Font Mono";src:url(/_fonts/FiraCodeNerdFontMono-Bold.ttf) format("truetype");font-weight:700}''
+    ''@font-face{font-family:"Noto Sans Symbols 2";src:url(/_fonts/NotoSansSymbols2-Regular.ttf) format("truetype")}''
     "</style>"
   ];
 in
