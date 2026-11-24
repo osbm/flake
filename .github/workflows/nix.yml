@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
-      - uses: cachix/install-nix-action@v31
+      - uses: cachix/install-nix-action@v32
       - uses: nix-community/cache-nix-action@v6
         with:
           # cache the store (flake inputs, eval deps) keyed on the lockfile
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
-      - uses: cachix/install-nix-action@v31
+      - uses: cachix/install-nix-action@v32
       - uses: nix-community/cache-nix-action@v6
         with:
           # one shared cache for all hosts; jobs with an exact-key hit skip saving
