@@ -36,7 +36,9 @@ let
     "document.fonts.addEventListener(\"loadingdone\",fix);"
     # canvas text never triggers a webfont download, so request every face
     "Promise.all([\"FiraCode Nerd Font Mono\",\"Noto Sans Symbols 2\"]"
-    ".map(f=>document.fonts.load(\"14px \"+f))).then(()=>{"
+    # (family names must be quoted: "2" is not a valid bare name; charCode 34 = ")
+    ".map(f=>document.fonts.load(\"14px \"+String.fromCharCode(34)+f+String.fromCharCode(34))))"
+    ".catch(()=>{}).then(()=>{"
     "let n=0;const w=()=>window.term?fix():n++<50&&setTimeout(w,100);w()})})()"
     "</script>"
   ];
