@@ -4,6 +4,23 @@
   pkgs,
   ...
 }:
+let
+  # ttyd's page asks for 'FiraCode Nerd Font Mono'; serve it so phones etc.
+  # render text + yazi/eza icons without installing anything.
+  termFonts = pkgs.runCommand "term-webfonts" { } ''
+    mkdir $out
+    for f in FiraCodeNerdFontMono-Regular.ttf FiraCodeNerdFontMono-Bold.ttf; do
+      cp "$(find ${pkgs.nerd-fonts.fira-code} -name $f | head -n1)" $out/$f
+    done
+  '';
+  fontCss = lib.concatStrings [
+    ''<link rel="preload" href="/_fonts/FiraCodeNerdFontMono-Regular.ttf" as="font" type="font/ttf" crossorigin>''
+    "<style>"
+    ''@font-face{font-family:"FiraCode Nerd Font Mono";src:url(/_fonts/FiraCodeNerdFontMono-Regular.ttf) format("truetype");font-weight:400}''
+    ''@font-face{font-family:"FiraCode Nerd Font Mono";src:url(/_fonts/FiraCodeNerdFontMono-Bold.ttf) format("truetype");font-weight:700}''
+    "</style>"
+  ];
+in
 {
   config = lib.mkMerge [
     (lib.mkIf config.osbmModules.services.nginx.enable {
@@ -162,6 +179,14 @@
               proxy_read_timeout 1d;
               proxy_send_timeout 1d;
               proxy_buffering off;
+              # inject the webfont into ttyd's page (needs uncompressed upstream)
+              proxy_set_header Accept-Encoding "";
+              sub_filter '</head>' '${fontCss}</head>';
+            }
+
+            location /_fonts/ {
+              alias ${termFonts}/;
+              add_header Cache-Control "public, max-age=31536000, immutable";
             }
           }
         '';
