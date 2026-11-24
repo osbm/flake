@@ -16,8 +16,6 @@ let
     cp "$(find ${
       pkgs.noto-fonts.override { variants = [ "NotoSansSymbols2" ]; }
     } -name NotoSansSymbols2-Regular.otf | head -n1)" $out/
-    # debug page: https://<host>.term.osbm.dev/_fonts/test.html
-    cp ${./term-font-test.html} $out/test.html
   '';
   fontCss = lib.concatStrings [
     ''<link rel="preload" href="/_fonts/FiraCodeNerdFontMono-Regular.ttf" as="font" type="font/ttf" crossorigin>''
@@ -36,10 +34,10 @@ let
     "const f=t.options.fontFamily;t.options.fontFamily=\"monospace\";"
     "t.options.fontFamily=f;t.fit&&t.fit()};"
     "document.fonts.addEventListener(\"loadingdone\",fix);"
-    # canvas text never triggers a webfont download, so request every face
+    # canvas text never triggers a webfont download, so request every face (regular + bold)
     "Promise.all([\"FiraCode Nerd Font Mono\",\"Noto Sans Symbols 2\"]"
     # (family names must be quoted: "2" is not a valid bare name; charCode 34 = ")
-    ".map(f=>document.fonts.load(\"14px \"+String.fromCharCode(34)+f+String.fromCharCode(34))))"
+    ".flatMap(f=>[\"\",\"bold \"].map(w=>document.fonts.load(w+\"14px \"+String.fromCharCode(34)+f+String.fromCharCode(34)))))"
     ".catch(()=>{}).then(()=>{"
     "let n=0;const w=()=>window.term?fix():n++<50&&setTimeout(w,100);w()})})()"
     "</script>"
