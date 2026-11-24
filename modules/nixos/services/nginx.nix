@@ -16,6 +16,8 @@ let
     cp "$(find ${
       pkgs.noto-fonts.override { variants = [ "NotoSansSymbols2" ]; }
     } -name NotoSansSymbols2-Regular.otf | head -n1)" $out/
+    # debug page: https://<host>.term.osbm.dev/_fonts/test.html
+    cp ${./term-font-test.html} $out/test.html
   '';
   fontCss = lib.concatStrings [
     ''<link rel="preload" href="/_fonts/FiraCodeNerdFontMono-Regular.ttf" as="font" type="font/ttf" crossorigin>''
