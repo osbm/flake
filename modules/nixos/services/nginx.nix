@@ -49,20 +49,6 @@ in
       services.nginx = {
         enable = true;
 
-        # TEMP: NGINX2Root (CVE-2026-123007 et al.), fixed in 1.30.7 which is on
-        # nixpkgs master (f0a5d452ddf1) but not yet nixos-unstable. Remove once
-        # the pinned nixpkgs ships 1.30.7 — the assert below fails loudly then.
-        package =
-          assert lib.assertMsg (pkgs.nginxStable.version == "1.30.6")
-            "nixpkgs nginxStable is now ${pkgs.nginxStable.version}: remove the TEMP NGINX2Root override in modules/nixos/services/nginx.nix";
-          pkgs.nginxStable.overrideAttrs (_: rec {
-            version = "1.30.7";
-            src = pkgs.fetchurl {
-              url = "https://nginx.org/download/nginx-${version}.tar.gz";
-              hash = "sha256-JWW1yDcFDpWPcPsPc8SOK8pFQq00n9NW9G+wxyYQvG4=";
-            };
-          });
-
         # Catch-all default server: return 404 for unknown subdomains
         virtualHosts."_" = {
           default = true;
@@ -238,7 +224,6 @@ in
           reloadServices = [ "nginx.service" ];
           domain = "*.sync.osbm.dev";
           dnsProvider = "cloudflare";
-          dnsPropagationCheck = true;
           credentialFiles = {
             "CF_DNS_API_TOKEN_FILE" = config.age.secrets.cloudflare-apollo-zone-dns-edit.path;
           };
@@ -249,7 +234,6 @@ in
           domain = "*.term.osbm.dev";
           extraDomainNames = [ "*.vnc.osbm.dev" ];
           dnsProvider = "cloudflare";
-          dnsPropagationCheck = true;
           credentialFiles = {
             "CF_DNS_API_TOKEN_FILE" = config.age.secrets.cloudflare-apollo-zone-dns-edit.path;
           };
@@ -258,7 +242,6 @@ in
         certs."osbm.dev" = {
           domain = "*.osbm.dev";
           dnsProvider = "cloudflare";
-          dnsPropagationCheck = true;
           credentialFiles = {
             "CF_DNS_API_TOKEN_FILE" = config.age.secrets.cloudflare-apollo-zone-dns-edit.path;
           };
