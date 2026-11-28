@@ -11,6 +11,35 @@ in
   config = lib.mkMerge [
     # Plasma Desktop Environment
     (lib.mkIf cfg.desktopEnvironment.plasma.enable {
+      # kwin 6.8.3 segfaults in InputRedirection::syncTabletWithMouse() when the
+      # mouse moves while it is starting up (https://bugs.kde.org/528824).
+      # Fixed upstream for 6.8.4; backport the fix until nixpkgs moves on.
+      nixpkgs.overlays = [
+        (_final: prev: {
+          kdePackages = prev.kdePackages.overrideScope (
+            _kf: kp: {
+              kwin =
+                if kp.kwin.version != "6.8.3" then
+                  throw ''
+                    kwin in nixpkgs is now ${kp.kwin.version}, the bug 528824 backport was written for 6.8.3.
+                    Remove the kwin overlay in modules/nixos/system/desktop-environment.nix
+                    (the fix ships in 6.8.4), or re-check that it is still needed.
+                  ''
+                else
+                  kp.kwin.overrideAttrs (old: {
+                    patches = (old.patches or [ ]) ++ [
+                      (prev.fetchpatch {
+                        name = "kwin-init-input-backends-after-InputRedirection.patch";
+                        url = "https://invent.kde.org/plasma/kwin/-/commit/19404161bc367b87b794361915b85a14c034ec63.patch";
+                        hash = "sha256-66OL7ypS/yaK4lMD6sM2E6wVajQ8BkNZy0f6hmPbkLg=";
+                      })
+                    ];
+                  });
+            }
+          );
+        })
+      ];
+
       services = {
         xserver.enable = true;
         displayManager.sddm.enable = true;
